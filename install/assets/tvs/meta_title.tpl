@@ -1,11 +1,11 @@
 /**
- * meta_keywords
+ * meta_title
  *
  *  
  *
  * @category        tv
- * @name            meta_keywords
- * @internal        @caption META: Ключевые слова
+ * @name            meta_title
+ * @internal        @caption META: Заголовок
  * @internal        @input_type textarea
  * @internal        @input_options
  * @internal        @input_default

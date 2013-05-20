@@ -22,4 +22,4 @@ mm_widget_showimagetvs(); // Always give a preview of Image TVs
 
 
 mm_createTab('SEO: meta','seo_params');
-mm_moveFieldsToTab('meta_keywords,meta_description','seo_params');
+mm_moveFieldsToTab('meta_title,meta_keywords,meta_description','seo_params');

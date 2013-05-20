@@ -13,7 +13,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-  <title>[*longtitle:ifempty=`[*pagetitle*] - [(site_name)]`*]</title>
+  <title>[*meta_title:ifempty=`[*longtitle:ifempty=`[*pagetitle*] - [(site_name)]`*]`*]</title>
   <meta name="description" content="[*meta_description:specialchar*]" />
   <meta name="keywords" content="[*meta_keywords:specialchar*]" />
   <link href="/design/style.css" rel="stylesheet" type="text/css"/>

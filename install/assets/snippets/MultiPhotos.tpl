@@ -1,10 +1,16 @@
-<?php
+//<?php
 /**
  * MultiPhotos - вывод фотографий
+ *
+ * вывод фотографий привязанных к странице
+ *
  * @category 	snippet
  * @version 	1.2.4
  * @license 	http://www.gnu.org/copyleft/gpl.html GNU Public License (GPL)
  * @author      Temus (temus3@gmail.com)
+ * @internal	@properties
+ * @internal	@modx_category Gallery
+ * @internal    @installset base
  */
  
 $tvname = isset($tvname) ? $tvname : 'photos';

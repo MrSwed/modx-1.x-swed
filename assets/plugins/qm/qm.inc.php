@@ -493,7 +493,7 @@ class Qm {
                         }
             
                         // Insert jQuery and ColorBox in head if needed
-                        if ($this->loadfrontendjq == 'true') $head .= '<script src="'.$this->modx->config['site_url'].$this->jqpath.'" type="text/javascript"></script>';
+                        if ($this->loadfrontendjq == 'true' and !empty($this->jqpath)) $head .= '<script src="'.$this->modx->config['site_url'].$this->jqpath.'" type="text/javascript"></script>';
                         if ($this->loadtb == 'true') {
                             $head .= '
                             <link type="text/css" media="screen" rel="stylesheet" href="'.$this->modx->config['site_url'].'assets/plugins/qm/css/colorbox.css" />

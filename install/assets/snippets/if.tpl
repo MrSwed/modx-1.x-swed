@@ -10,6 +10,7 @@
  * @internal	@properties 
  * @internal    @installset base, sample 
  * @internal	@modx_category Navigation
+ * @internal    @installset base
  * @author  	Created By Bumkaka (bumkaka@yandex.ru)
  */
  

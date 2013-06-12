@@ -5,11 +5,12 @@
  * (Placeholders Xtended) Adds the capability of output modifiers when using placeholders, template variables and settings tags
  *
  * @category    plugin
- * @version     2.1.4
- * @author		Armand "bS" Pondman (apondman@zerobarrier.nl)
+ * @version     2.2.0
+ * @author	Armand "bS" Pondman (apondman@zerobarrier.nl)
  * @internal    @properties &phxdebug=Log events;int;0 &phxmaxpass=Max. Passes;int;50
  * @internal    @events OnParseDocument
  * @internal    @modx_category Manager and Admin
+ * @internal    @installset base, sample
  */
 
 include_once $modx->config['rb_base_dir'] . "plugins/phx/phx.parser.class.inc.php";

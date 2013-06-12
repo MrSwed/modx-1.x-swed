@@ -145,8 +145,14 @@ class Wayfinder {
     function renderRow(&$resource,$numChildren) {
         global $modx;
         $output = '';
+
+      // Set id of reference to original document ID if it is inner doc
+      if (($this->_config['referenceUseOriginalID'] !== 'FALSE') && $resource['type'] == 'reference' && is_numeric($resource['content'])) {
+				  $resource['id'] = $resource['content'];
+		}
+
 		//Determine which template to use
-        if ($this->_config['displayStart'] && $resource['level'] == 0) {
+      if ($this->_config['displayStart'] && $resource['level'] == 0) {
 			$usedTemplate = 'startItemTpl';
 		} elseif ($resource['id'] == $modx->documentObject['id'] && $resource['isfolder'] && $this->_templates['parentRowHereTpl'] && ($resource['level'] < $this->_config['level'] || $this->_config['level'] == 0) && $numChildren) {
             $usedTemplate = 'parentRowHereTpl';
@@ -178,7 +184,7 @@ class Wayfinder {
             $useId = '';
         }
 		//Load row values into placholder array
-        $phArray = array($useSub,$useClass,$classNames,$resource['link'],$resource['title'],$resource['linktext'],$useId,$resource['alias'],$resource['link_attributes'],$resource['id'],$resource['introtext'],$resource['description'],$numChildren);
+        $phArray = array($useSub,$useClass,$classNames,$resource['link'],htmlspecialchars($resource['title']),$resource['linktext'],$useId,$resource['alias'],$resource['link_attributes'],$resource['id'],$resource['introtext'],$resource['description'],$numChildren);
 		//If tvs are used add them to the placeholder array
 		if (!empty($this->tvList)) {
 			$usePlaceholders = array_merge($this->placeHolders['rowLevel'],$this->placeHolders['tvs']);

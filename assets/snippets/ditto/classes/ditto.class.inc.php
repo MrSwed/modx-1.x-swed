@@ -577,7 +577,7 @@ class ditto {
 		if (($summarize == 0 && $summarize != "all") || count($IDs) == 0 || ($IDs == false && $IDs != "0")) {
 			return array();
 		}
-		
+
 		// Get starting IDs;
 		switch($IDType) {
 			case "parents":
@@ -651,17 +651,23 @@ class ditto {
 			if ($this->debug) {
 				$dbg_resource = $resource;
 			} 
-			if ($filter != false) {
-				$filterObj = new filter();
-				$resource = $filterObj->execute($resource, $filter);
-			}
-			if (count($resource) < 1) return array();
+//			if ($filter != false) {
+//				$filterObj = new filter();
+//				$resource = $filterObj->execute($resource, $filter);
+//			}
+//			if (count($resource) < 1) return array();
 			if ($this->advSort == true && $randomize==0) {
 				$resource = $this->multiSort($resource,$orderBy);
 			}
 			if (count($orderBy['custom']) > 0) {
 				$resource = $this->userSort($resource,$orderBy);
 			}
+// filter after sorting
+			if ($filter != false) {
+				$filterObj = new filter();
+				$resource = $filterObj->execute($resource, $filter);
+			}
+			if (count($resource) < 1) return array();
 			
 			$fields = (array_intersect($this->fields["backend"],$this->fields["display"]));
 			$readyFields = array();
@@ -1087,7 +1093,7 @@ class ditto {
 	// Paginate the documents
 	// ---------------------------------------------------
 		
-	function paginate($start, $stop, $total, $summarize, $tplPaginateNext, $tplPaginatePrevious, $tplPaginateNextOff, $tplPaginatePreviousOff, $tplPaginatePage, $tplPaginateCurrentPage, $paginateAlwaysShowLinks, $paginateSplitterCharacter) {
+	function paginate($start, $stop, $total, $summarize, $tplPaginateNext, $tplPaginatePrevious, $tplPaginateNextOff, $tplPaginatePreviousOff, $tplPaginatePage, $tplPaginateCurrentPage, $paginateAlwaysShowLinks, $paginateSplitterCharacter,$paginateLinksMax=10,$paginateSkipString="...") {
 		global $modx, $dittoID,$ditto_lang;
 
 		if ($stop == 0 || $total == 0 || $summarize==0) {
@@ -1121,15 +1127,28 @@ class ditto {
 		}
 		$totalpages = ceil($total / $summarize);
 
+		$curPage = ($start+$summarize)/$summarize;
+		if ($paginateLinksMax and $totalpages > $paginateLinksMax) {
+			$L_Limit = $curPage - ceil($paginateLinksMax/2);                                    // left visible limit from current
+			$R_Limit = $curPage + ceil($paginateLinksMax/2)-2;                                    // right viseble limit
+			if ($L_Limit<=0) $R_Limit-=$L_Limit-1;                                       // decrease right limit if left limit <=0
+			if ($R_Limit>=$totalpages-1) $L_Limit-=$R_Limit-$totalpages+2;     // decrease left limit if right limit >= numbers of names
+		}
 		for ($x = 0; $x <= $totalpages -1; $x++) {
 			$inc = $x * $summarize;
 			$display = $x +1;
+		 if ($paginateLinksMax and $totalpages > $paginateLinksMax and 
+		    (($x>0 and $x<$L_Limit)or($x>=$R_Limit and $x<$totalpages-2))) {
+		  $x = $x > $curPage?$totalpages-2:$L_Limit;     // go to next visible item
+		  $pages .= $paginateSkipString;// . "!!! $curPage  ($start+$summarize)/$summarize !!!!";
+		 } else {
 			if ($inc != $start) {
 				$pages .= $this->template->replace(array('url'=>$this->buildURL("start=$inc"),'page'=>$display),$tplPaginatePage);
 			} else {
 				$modx->setPlaceholder($dittoID."currentPage", $display);
 				$pages .= $this->template->replace(array('page'=>$display),$tplPaginateCurrentPage);
 			}
+		 }
 		}
 		$modx->setPlaceholder($dittoID."next", $nextplaceholder);
 		$modx->setPlaceholder($dittoID."previous", $previousplaceholder);

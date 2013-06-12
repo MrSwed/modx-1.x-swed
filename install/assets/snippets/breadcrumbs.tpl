@@ -5,7 +5,7 @@
  * Configurable breadcrumb page-trail navigation
  * 
  * @category	snippet
- * @version 	1.0.3
+ * @version 	1.0.3 (modified by Swed)
  * @license 	http://www.gnu.org/copyleft/gpl.html GNU Public License (GPL)
  * @internal	@properties
  * @internal	@modx_category Navigation
@@ -26,6 +26,17 @@
 /* General setup
  * -----------------------------------------------------------------------------
  */
+
+/* $documentID [ integer ]
+ * Set ID for document if need use not current document
+ */
+ ( isset($documentID) )? $documentID : $documentID = $modx->documentObject['id'];
+
+/* $crumbSeparator [ integer ]
+ * Set custom separator
+ */
+ ( isset($crumbSeparator) )? $crumbSeparator : $crumbSeparator = ' &raquo; ';
+
 
 /* $maxCrumbs [ integer ]
  * Max number of elemetns to have in a breadcrumb path. The default 100 is an
@@ -199,7 +210,7 @@
 $templates = array(
     'defaultString' => array(
         'crumb' => '[+crumb+]',
-        'separator' => ' &raquo; ',
+        'separator' => $crumbSeparator,
         'crumbContainer' => '<span class="[+crumbBoxClass+]">[+crumbs+]</span>',
         'lastCrumbWrapper' => '<span class="[+lastCrumbClass+]">[+lastCrumbSpanA+]</span>',
         'firstCrumbWrapper' => '<span class="[+firstCrumbClass+]">[+firstCrumbSpanA+]</span>'
@@ -220,7 +231,7 @@ $templates = array(
  */
 
 // Return blank if necessary: on home page
-if ( !$showCrumbsAtHome && $homeId == $modx->documentObject['id'] )
+if ( !$showCrumbsAtHome && $homeId == $documentID )
 {
     return '';
 }
@@ -245,7 +256,7 @@ if ( $hideOn || $hideUnder )
         $hideOn = array_merge($hideOn,$hiddenKids);
     }
 
-    if ( in_array($modx->documentObject['id'],$hideOn) )
+    if ( in_array($documentID,$hideOn) )
     {
         return '';
     }
@@ -265,12 +276,14 @@ $linkDescField = explode(',',$linkDescField);
 $ignoreIds = str_replace(' ','',$ignoreIds);
 $ignoreIds = explode(',',$ignoreIds);
 
+$documentInfo = ( $documentID == $modx->documentObject['id'] ) ? $modx->documentObject : $modx->getDocument($documentID);
+
 /* $crumbs
  * Crumb elements are: id, parent, pagetitle, longtitle, menutitle, description,
  * published, hidemenu
  */
 $crumbs = array();
-$parent = $modx->documentObject['parent'];
+$parent = $documentInfo['parent'];
 $output = '';
 $maxCrumbs += ($showCurrentCrumb) ? 1 : 0;
 
@@ -283,12 +296,12 @@ $crumbGap = str_replace('||','=',$crumbGap);
 if ( $showCurrentCrumb )
 {
     $crumbs[] = array(
-        'id' => $modx->documentObject['id'],
-        'parent' => $modx->documentObject['parent'],
-        'pagetitle' => $modx->documentObject['pagetitle'],
-        'longtitle' => $modx->documentObject['longtitle'],
-        'menutitle' => $modx->documentObject['menutitle'],
-        'description' => $modx->documentObject['description']);
+        'id' => $documentInfo['id'],
+        'parent' => $documentInfo['parent'],
+        'pagetitle' => $documentInfo['pagetitle'],
+        'longtitle' => $documentInfo['longtitle'],
+        'menutitle' => $documentInfo['menutitle'],
+        'description' => $documentInfo['description']);
 }
 
 // Intermediate crumbs ---------------------------------------------------------
@@ -338,7 +351,7 @@ while ( $parent && $parent!=$modx->config['site_start'] && $loopSafety < 1000 )
 
 // Home crumb ------------------------------------------------------------------
 
-if ( $showHomeCrumb && $homeId != $modx->documentObject['id'] && $homeCrumb = $modx->getPageInfo($homeId,0,"id,parent,pagetitle,longtitle,menutitle,description,published,hidemenu") )
+if ( $showHomeCrumb && $homeId != $documentInfo['id'] && $homeCrumb = $modx->getPageInfo($homeId,0,"id,parent,pagetitle,longtitle,menutitle,description,published,hidemenu") )
 {
     $crumbs[] = array(
     'id' => $homeCrumb['id'],
@@ -388,7 +401,7 @@ foreach ( $crumbs as $c )
     {
         $crumbClass = $stylePrefix.'homeCrumb';
     }
-    else if ( $modx->documentObject['id'] == $c['id'] )
+    else if ( $documentInfo['id'] == $c['id'] )
     {
         $crumbClass = $stylePrefix.'currentCrumb';
     }
@@ -399,8 +412,8 @@ foreach ( $crumbs as $c )
 
     // Make link
     if (
-        ( $c['id'] != $modx->documentObject['id'] && $showCrumbsAsLinks ) ||
-        ( $c['id'] == $modx->documentObject['id'] && $currentAsLink )
+        ( $c['id'] != $documentInfo['id'] && $showCrumbsAsLinks ) ||
+        ( $c['id'] == $documentInfo['id'] && $currentAsLink )
     )
     {
         // Determine appropriate title for link: home link specified

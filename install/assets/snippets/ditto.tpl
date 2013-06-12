@@ -5,7 +5,7 @@
  * Summarizes and lists pages to create blogs, catalogs, PR archives, bio listings and more
  *
  * @category 	snippet
- * @version 	2.1.0
+ * @version 	2.1.0 (modified by Swed)
  * @license 	http://www.gnu.org/copyleft/gpl.html GNU Public License (GPL)
  * @internal	@properties 
  * @internal	@modx_category Content
@@ -337,6 +337,9 @@ $paginate = isset($paginate)? $paginate : 0;
     - <paginateSplitterCharacter>
     - <display>
 */
+$paginateLinksMax = isset($paginateLinksMax)?$paginateLinksMax:10;
+$paginateSkipString = isset($paginateSkipString)?$paginateSkipString:"...";
+
 $dateSource = isset($dateSource) ? $dateSource : "createdon";
 /*
     Param: dateSource
@@ -589,6 +592,21 @@ $start = (isset($_GET[$dittoID.'start'])) ? intval($_GET[$dittoID.'start']) : 0;
     Default:
     0
 */
+
+$orderBy = $ditto->parseOrderBy($orderBy,$randomize);
+/*
+    Param: orderBy
+
+    Purpose:
+    Sort the result set
+
+    Options:
+    Any valid MySQL style orderBy statement
+
+    Default:
+    createdon DESC
+*/
+
 $globalFilterDelimiter = isset($globalFilterDelimiter) ? $globalFilterDelimiter : "|";
 /*
     Param: globalFilterDelimiter
@@ -790,19 +808,7 @@ $templates = array(
     Default:
     &tpl
 */
-$orderBy = $ditto->parseOrderBy($orderBy,$randomize);
-/*
-    Param: orderBy
 
-    Purpose:
-    Sort the result set
-
-    Options:
-    Any valid MySQL style orderBy statement
-
-    Default:
-    createdon DESC
-*/
 //-------------------------------------------------------------------- */
 $templates = $ditto->template->process($templates);
     // parse the templates for TV's and store them for later use
@@ -986,7 +992,7 @@ if ($count > 0) {
             - <paginateSplitterCharacter>
         */
         
-        $ditto->paginate($start, $stop, $total, $display, $tplPaginateNext, $tplPaginatePrevious, $tplPaginateNextOff, $tplPaginatePreviousOff, $tplPaginatePage, $tplPaginateCurrentPage, $paginateAlwaysShowLinks, $paginateSplitterCharacter);
+        $ditto->paginate($start, $stop, $total, $display, $tplPaginateNext, $tplPaginatePrevious, $tplPaginateNextOff, $tplPaginatePreviousOff, $tplPaginatePage, $tplPaginateCurrentPage, $paginateAlwaysShowLinks, $paginateSplitterCharacter, $paginateLinksMax, $paginateSkipString);
             // generate the pagination placeholders
     }
 

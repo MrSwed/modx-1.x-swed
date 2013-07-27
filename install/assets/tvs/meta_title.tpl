@@ -1,7 +1,7 @@
 /**
  * meta_title
  *
- *  
+ * META: Заголовок
  *
  * @category        tv
  * @name            meta_title

@@ -1,7 +1,7 @@
 /**
  * meta_description
  *
- *  
+ *  META: Описание
  *
  * @category        tv
  * @name            meta_description

@@ -1,7 +1,7 @@
 /**
  * meta_keywords
  *
- *  
+ *  META: Ключевые слова
  *
  * @category        tv
  * @name            meta_keywords

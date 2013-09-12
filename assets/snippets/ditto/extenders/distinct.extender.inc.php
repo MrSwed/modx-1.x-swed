@@ -1,23 +1,26 @@
 <?php
-
-/*
- * Title: Distinct
- * Purpose:
- *  	Return only distinct / unique results, based on a fieldname supplied as &distinct parameter
- * Version: 1.0.2
- * Author: Nick Crossland (ncrossland), Sergey Davydov <web@collection.com.ua>
- * Installation: Put file "distinct.extender.inc.php" into /assets/snippets/ditto/extenders
- * Usage: In the Ditto call, add "distinct" to the extenders param, and specify the &distinct parameter with the name(s) of the field which you would like to be unique.
- *        If you would like to make the combined values of more than one field unique, separate them with commas
- * e.g. [[Ditto? &tpl=`myTemplate` &extenders=`distinct` &distinct=`pagetitle`]] -- will return only unique page titles.
- * e.g. [[Ditto? &tpl=`myTemplate` &extenders=`distinct` &distinct=`pagetitle,pub_date`]] -- will return only unique page titles for each date.
+/**
+ * Distinct extender for Ditto Evo
+ * @version 1.0.3 (2012-04-05)
  *
- * Changelog:
- * 1.0: initial release
- * 1.0.1: Bugfixes only
- * 1.0.2: (By Sergey Davydov) Set placeholders distinctCount - common count and  distinctIds - ids of distinted items 
-*/
-
+ * Return only distinct / unique results, based on a fieldname supplied as &distinct parameter
+ * 
+ * @Installation: Put file "distinct.extender.inc.php" into /assets/snippets/ditto/extenders
+ * 
+ * @Usage:
+ * 	In the Ditto call, add "distinct" to the extenders param, and specify the &distinct parameter with the name(s) of the field which you would like to be unique.
+ * 	If you would like to make the combined values of more than one field unique, separate them with commas
+ * 	e.g. [[Ditto? &tpl=`myTemplate` &extenders=`distinct` &distinct=`pagetitle`]] -- will return only unique page titles.
+ * 	e.g. [[Ditto? &tpl=`myTemplate` &extenders=`distinct` &distinct=`pagetitle,pub_date`]] -- will return only unique page titles for each date.
+ * 
+ * @Changelog:
+ * 	1.0.3 (2012-04-05) by DivanDesign: Now use the DittoID (need for many Ditto calls).
+ * 	1.0.2 (2011-12-30) By Sergey Davydov: Set placeholders distinctCount - common count and  distinctIds - ids of distinted items 
+ * 	1.0.1 by Nick Crossland: Bugfixes only.
+ * 	1.0 by Nick Crossland: initial release.
+ * 
+ * @Author: Nick Crossland (ncrossland), DivanDesign (http://www.DivanDesign.biz)
+ */
 
 $distinct = isset($distinct) ? $distinct : false;
 /*
@@ -33,48 +36,55 @@ $distinct = isset($distinct) ? $distinct : false;
 	"default"
 */
 
-
 // If no fieldname value has been supplied, don't do anything else
 if ($distinct === false) {
-	return false;	
+	return false;
 }
 
 // It would be nice if this was class based, so it doesn't pollute the global namespace
 // But - create an array of document values we've seen, and the fieldnames we're making distinct
+global $dittoID;
+global $ddDittoID;
+$ddDittoID = (trim($dittoID) == '') ? 'dd' : $dittoID;
+
 global $seen;
 global $distinct_fieldname;
-$distinct_fieldname = explode(',',$distinct); 
+$distinct_fieldname = array($ddDittoID => explode(',', $distinct)); 
 
 // Remove any extra spaces from the fieldnames (in case they have been supplied with commas and spaces)
-$distinct_fieldname = array_map('trim', $distinct_fieldname);	
+$distinct_fieldname[$ddDittoID] = array_map('trim', $distinct_fieldname[$ddDittoID]);
 
-$placeholders['distinctCount'] = array(implode(',',$distinct_fieldname),"distinctCount");
+$placeholders['distinctCount'] = array(implode(',',$distinct_fieldname[$ddDittoID]),"distinctCount");
 
 if(!function_exists('distinctCount')){
  function distinctCount($resource){ //Not sure if the $resource is needed
   global $seen;
   global $distinct_fieldname;
+  global $ddDittoID;
 
-  foreach ($distinct_fieldname as $f) {
+  $distinct_string = '';
+  foreach ($distinct_fieldname[$ddDittoID] as $f) {
    $distinct_string .= '~'. $f.'|'.$resource[$f];
   }
-  if (isset($GLOBALS['seen'][$distinct_string]))
-   return count($GLOBALS['seen'][$distinct_string]);
+  if (isset($seen[$ddDittoID][$distinct_string]))
+   return count($seen[$ddDittoID][$distinct_string]);
  }
 }
 
-$placeholders['distinctIds'] = array(implode(',',$distinct_fieldname),"distinctIds");
+$placeholders['distinctIds'] = array(implode(',',$distinct_fieldname[$ddDittoID]),"distinctIds");
 
 if(!function_exists('distinctIds')){
  function distinctIds($resource){ //Not sure if the $resource is needed
   global $seen;
   global $distinct_fieldname;
+  global $ddDittoID;
 
-  foreach ($distinct_fieldname as $f) {
+  $distinct_string = '';
+  foreach ($distinct_fieldname[$ddDittoID] as $f) {
    $distinct_string .= '~'. $f.'|'.$resource[$f];
   }
-  if (isset($GLOBALS['seen'][$distinct_string]))
-   return implode(",",$GLOBALS['seen'][$distinct_string]);
+  if (isset($seen[$ddDittoID][$distinct_string]))
+   return implode(",",$seen[$ddDittoID][$distinct_string]);
  }
 }
 
@@ -83,23 +93,24 @@ if(!function_exists('distinctIds')){
 if (!function_exists("makeDistinct")) {
 	
 	function makeDistinct($resource) {
+		global $ddDittoID;
 		global $seen;
 		global $distinct_fieldname;
-		
+
 		// Make a unique string based on the fieldname and value of each field we've been asked to make distinct
 		$distinct_string = '';
-		foreach ($distinct_fieldname as $f) {
+		foreach ($distinct_fieldname[$ddDittoID] as $f) {
 			$distinct_string .= '~'. $f.'|'.$resource[$f];
 		}
 			
 		// Check if this string has been seen yet -- if it has, don't include it in the results
-//		if (isset($seen[$distinct_string]) && ($seen[$distinct_string])==true ) {	// If this value of the fieldname has been seen before, remove it from the list
-		if (isset($seen[$distinct_string]) && $seen[$distinct_string] ) {	// If this value of the fieldname has been seen before, remove it from the list
- $seen[$distinct_string][] = $resource["id"];
+//		if (isset($seen[$ddDittoID][$distinct_string]) && ($seen[$ddDittoID][$distinct_string])==true ) {	// If this value of the fieldname has been seen before, remove it from the list
+		if (isset($seen[$ddDittoID][$distinct_string]) && $seen[$ddDittoID][$distinct_string] ) {	// If this value of the fieldname has been seen before, remove it from the list
+ $seen[$ddDittoID][$distinct_string][] = $resource["id"];
 			return false;
 		} else {
-//			$seen[$distinct_string] = true;	// Otherwise, remember the value has been seen, and allow it in the list (this time)
-   $seen[$distinct_string] = array($resource["id"]);
+//			$seen[$ddDittoID][$distinct_string] = true;	// Otherwise, remember the value has been seen, and allow it in the list (this time)
+   $seen[$ddDittoID][$distinct_string] = array($resource["id"]);
 			return true;
 		}	
 		
@@ -107,7 +118,5 @@ if (!function_exists("makeDistinct")) {
 }
 
 // Add the custom function
-$filters["custom"]["distinct"] =  array(implode(',',$distinct_fieldname) ,"makeDistinct"); 
-
-
+$filters["custom"]["distinct"] =  array(implode(',',$distinct_fieldname[$ddDittoID]) ,"makeDistinct"); 
 ?>

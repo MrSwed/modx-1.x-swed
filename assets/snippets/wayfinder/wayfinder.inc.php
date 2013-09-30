@@ -146,13 +146,13 @@ class Wayfinder {
         global $modx;
         $output = '';
 
-      // Set id of reference to original document ID if it is inner doc
+      // Addet by MrSwed. Set id of reference to original document ID if it is inner doc
       if (($this->_config['referenceUseOriginalID'] !== 'FALSE') && $resource['type'] == 'reference' && is_numeric($resource['content'])) {
-				  $resource['id'] = $resource['content'];
-		}
+       $resource['id'] = $resource['content'];
+      }
 
 		//Determine which template to use
-      if ($this->_config['displayStart'] && $resource['level'] == 0) {
+        if ($this->_config['displayStart'] && $resource['level'] == 0) {
 			$usedTemplate = 'startItemTpl';
 		} elseif ($resource['id'] == $modx->documentObject['id'] && $resource['isfolder'] && $this->_templates['parentRowHereTpl'] && ($resource['level'] < $this->_config['level'] || $this->_config['level'] == 0) && $numChildren) {
             $usedTemplate = 'parentRowHereTpl';
@@ -185,7 +185,11 @@ class Wayfinder {
         }
 		//Load row values into placholder array
         $charset = $modx->config['modx_charset'];	
-        $phArray = array($useSub,$useClass,$classNames,$resource['link'],htmlentities($resource['title'], ENT_COMPAT, $charset),htmlentities($resource['linktext'], ENT_COMPAT, $charset),$useId,$resource['alias'],$resource['link_attributes'],$resource['id'],htmlentities($resource['introtext'], ENT_COMPAT, $charset),htmlentities($resource['description'], ENT_COMPAT, $charset),$numChildren);
+		if ($this->_config['entityEncode']) {
+			$phArray = array($useSub,$useClass,$classNames,$resource['link'],htmlspecialchars($resource['title'], ENT_COMPAT, $charset),htmlspecialchars($resource['linktext'], ENT_COMPAT, $charset),$useId,$resource['alias'],$resource['link_attributes'],$resource['id'],htmlspecialchars($resource['introtext'], ENT_COMPAT, $charset),htmlspecialchars($resource['description'], ENT_COMPAT, $charset),$numChildren);
+		} else {
+			$phArray = array($useSub,$useClass,$classNames,$resource['link'],$resource['title'],$resource['linktext'],$useId,$resource['alias'],$resource['link_attributes'],$resource['id'],$resource['introtext'],$resource['description'],$numChildren);
+		}
 		//If tvs are used add them to the placeholder array
 		if (!empty($this->tvList)) {
 			$usePlaceholders = array_merge($this->placeHolders['rowLevel'],$this->placeHolders['tvs']);
@@ -383,9 +387,9 @@ class Wayfinder {
 	        $access = ($modx->isFrontend() ? "sc.privateweb=0" : "1='{$_SESSION['mgrRole']}' OR sc.privatemgr=0").(!$docgrp ? "" : " OR dg.document_group IN ({$docgrp})");
 			$sql = "SELECT DISTINCT {$fields} FROM {$tblsc} sc LEFT JOIN {$tbldg} dg ON dg.document = sc.id WHERE sc.published=1 AND sc.deleted=0 AND ({$access}){$menuWhere} AND sc.id IN (".implode(',',$ids).") GROUP BY sc.id ORDER BY {$sort} {$this->_config['sortOrder']} {$sqlLimit};";
 			//run the query
-			$result = $modx->dbQuery($sql);
+			$result = $modx->db->query($sql);
 	        $resourceArray = array();
-			$numResults = @$modx->recordCount($result);
+			$numResults = @$modx->db->getRecordCount($result);
 			$level = 1;
 			$prevParent = -1;
 			//Setup startlevel for determining each items level
@@ -398,7 +402,7 @@ class Wayfinder {
 			$resultIds = array();
 			//loop through the results
 			for($i=0;$i<$numResults;$i++)  {
-				$tempDocInfo = $modx->fetchRow($result);
+				$tempDocInfo = $modx->db->getRow($result);
 				$resultIds[] = $tempDocInfo['id'];
 				//Create the link
 				$linkScheme = $this->_config['fullLink'] ? 'full' : '';
@@ -465,7 +469,7 @@ class Wayfinder {
 	function appendTV($tvname,$docIDs){
 		global $modx;
 		
-		$baspath= $modx->config["base_path"] . "manager/includes";
+		$baspath= MODX_MANAGER_PATH."includes";
 	    include_once $baspath . "/tmplvars.format.inc.php";
 	    include_once $baspath . "/tmplvars.commands.inc.php";
 
@@ -479,7 +483,7 @@ class Wayfinder {
 		$tot = $modx->db->getRecordCount($rs);
 		$resourceArray = array();
 		for($i=0;$i<$tot;$i++)  {
-			$row = @$modx->fetchRow($rs);
+			$row = @$modx->db->getRow($rs);
 			$resourceArray["#{$row['contentid']}"][$row['name']] = getTVDisplayFormat($row['name'], $row['value'], $row['display'], $row['display_params'], $row['type'],$row['contentid']);   
 		}
 
@@ -488,7 +492,7 @@ class Wayfinder {
 			$query .= " FROM $tb2";
 			$query .= " WHERE name='".$tvname."' LIMIT 1";
 			$rs = $modx->db->query($query);
-			$row = @$modx->fetchRow($rs);
+			$row = @$modx->db->getRow($rs);
 			$defaultOutput = getTVDisplayFormat($row['name'], $row['default_text'], $row['display'], $row['display_params'], $row['type']);
 			foreach ($docIDs as $id) {
 				if (!isset($resourceArray["#{$id}"])) {

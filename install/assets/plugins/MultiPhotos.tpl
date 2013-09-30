@@ -61,7 +61,7 @@ BrowseServerMultiple = function (ctrl) {
         lastImageCtrl = ctrl;
         var w = screen.width * 0.7;
         var h = screen.height * 0.7;
-        OpenServerBrowser('media/browser/mcpuk2/browse.php?opener=tinymce&type=images&langCode=ru', w, h);
+        OpenServerBrowser('media/browser/mcpuk/browse.php?opener=tinymce&type=images&langCode=ru', w, h);
         }
 var MultiPhotos = new Class({
         initialize: function(fid){

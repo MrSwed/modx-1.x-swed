@@ -22,6 +22,5 @@ var mce_valid_elements = "@[id|class|style|title|dir<ltr?rtl|lang|xml::lang|oncl
 + "input[accept|alt|checked|disabled|maxlength|name|readonly|size|src|type|value],"
 + "kbd,label[for],legend,noscript,optgroup[label|disabled],option[disabled|label|selected|value],"
 + "q[cite],samp,select[disabled|multiple|name|size],small,"
++ "iframe[src|title|width|height|allowfullscreen|frameborder|class|id],object[classid|width|height|codebase|*],param[name|value|_value|*],embed[type|width|height|src|*]"
 + "textarea[cols|rows|disabled|name|readonly],tt,var,big";
-var mce_extended_valid_elements = "iframe[name|src|framespacing|border|frameborder|scrolling|title|height|width],object[declare|classid|codebase|data|type|codetype|archive|standby|height|width|usemap|name|tabindex|align|border|hspace|vspace]";
-var mce_invalid_elements = "";

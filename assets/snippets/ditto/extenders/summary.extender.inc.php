@@ -5,9 +5,7 @@
  * Purpose:
  *  	Legacy support for the [+summary+] placeholder
 */
-
-if (function_exists('mb_internal_encoding')) mb_internal_encoding($modx->config['modx_charset']);
-
+mb_internal_encoding("UTF-8");
 $placeholders['summary'] = array("introtext,content","determineSummary","@GLOBAL ditto_summary_type");
 $placeholders['link'] = array("id","determineLink");
 
@@ -250,7 +248,7 @@ if (!class_exists("truncate")) {
 					$tag = trim($openTags[1][$i]);
 
 					if (mb_strstr($tag, ' ')) {
-						$tag = mb_substr($tag, 0, mb_strpos($tag, ' '));
+						$tag = mb_substr($tag, 0, strpos($tag, ' '));
 					}
 					if ($debug == 1) {
 						echo $tag . '==' . $closeTags[1][$c] . "\n";
@@ -274,7 +272,7 @@ if (!class_exists("truncate")) {
 					$tag = trim($tag);
 
 					if (mb_strstr($tag, ' ')) {
-						$tag = mb_substr($tag, 0, mb_strpos($tag, ' '));
+						$tag = mb_substr($tag, 0, strpos($tag, ' '));
 					}
 					if (!mb_stristr($tag, 'br') && !mb_stristr($tag, 'img') && !empty ($tag)) {
 						$endTags .= '</' . $tag . '>';

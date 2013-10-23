@@ -17,6 +17,7 @@
 if($modx->db->getValue("SELECT COUNT(id) FROM " . $modx->getFullTableName('site_tmplvars') . " WHERE name='documentTags'")) {
     mm_widget_tags('documentTags',' '); // Give blog tag editing capabilities to the 'documentTags (3)' TV
 }
+
 mm_widget_showimagetvs(); // Always give a preview of Image TVs
 
 

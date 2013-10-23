@@ -1,41 +1,44 @@
 <?
 /* ----------------------------------------------------------------------------
-Добавить снипет getImage следующего содержания :
+Р”РѕР±Р°РІРёС‚СЊ СЃРЅРёРїРµС‚ getImage СЃР»РµРґСѓСЋС‰РµРіРѕ СЃРѕРґРµСЂР¶Р°РЅРёСЏ :
 
 <?php
-// Script Name: GetImage Class (modx evo 1.xx)
+// Script Name: GetImage version 2.1 (modx evo 1.xx)
 // Creation Date: 30.05.2013
-// Last Modified: 04.06.2013
+// Last Modified: 03.08.2013
 // Autor: Swed <webmaster@collection.com.ua>
 // Purpose: Get image (adress) for document from tv params, content, or other
 
-// Получить изображение (адрес) для ресурса из tv параметров, контента (или другого поля)
-// Параметры: (умолчания)
-//  &id        = [*id*]             // ID документа
-//  &field     = "content"          // поле из которого парсить, указать пусто или 0, что бы не использовать
-//  &urlOnly   = true               // получить только путь (если парсится источник), при false будет возвращен тег изображения (Не доработано на 04.06.2013)
-//  &tv        = ""                 // Искать в tv (несколько, через запятую, порядок играет роль, первый найденный используется). Например, "image,photos"
-//                                  // Поддерживются параметры для multiPhoto после знака "=", через ";" выбор номера элемента, по умолчанию =0;0.
-//                                  // Воможно указать =rand,0 - для выбора случайного
-//  &data      = ""                 // Использовать содержимое этой переменной для обработки (может использоваться как альтернатива)
-//  &parseData = false              // Если data не пусто, если true, то искать также как в контенте - <img src="" .. />, при false - просто использовать
-//  &parseTv   = false              // при true считать TV как Html и парсить как контент
-//  &order     = "tv,document,data" // Порядок поиска, через запятую. Например, data,tv,document.
-//  &rand      =  false             // Выбрать случайное из всех найденных
-//  &all       =  false             // обработать все (станет true если rand true), при rand false выведе все (при ulrOnly=true через запятую)
-//  &save      =  ""                // не возвращать, сохранить в указанный плейсхолдер
+// РџРѕР»СѓС‡РёС‚СЊ РёР·РѕР±СЂР°Р¶РµРЅРёРµ (Р°РґСЂРµСЃ) РґР»СЏ СЂРµСЃСѓСЂСЃР° РёР· tv РїР°СЂР°РјРµС‚СЂРѕРІ, РєРѕРЅС‚РµРЅС‚Р° (РёР»Рё РґСЂСѓРіРѕРіРѕ РїРѕР»СЏ)
+// РџР°СЂР°РјРµС‚СЂС‹: (СѓРјРѕР»С‡Р°РЅРёСЏ)
+//  &id        = [*id*]             // ID РґРѕРєСѓРјРµРЅС‚Р°
+//  &field     = "content"          // РїРѕР»Рµ РёР· РєРѕС‚РѕСЂРѕРіРѕ РїР°СЂСЃРёС‚СЊ, СѓРєР°Р·Р°С‚СЊ РїСѓСЃС‚Рѕ РёР»Рё 0, С‡С‚Рѕ Р±С‹ РЅРµ РёСЃРїРѕР»СЊР·РѕРІР°С‚СЊ
+//  &urlOnly   = true               // РїРѕР»СѓС‡РёС‚СЊ С‚РѕР»СЊРєРѕ РїСѓС‚СЊ (РµСЃР»Рё РїР°СЂСЃРёС‚СЃСЏ РёСЃС‚РѕС‡РЅРёРє), РїСЂРё false Р±СѓРґРµС‚ РІРѕР·РІСЂР°С‰РµРЅ С‚РµРі РёР·РѕР±СЂР°Р¶РµРЅРёСЏ (РќРµ РґРѕСЂР°Р±РѕС‚Р°РЅРѕ РЅР° 04.06.2013)
+//  &tv        = ""                 // РСЃРєР°С‚СЊ РІ tv (РЅРµСЃРєРѕР»СЊРєРѕ, С‡РµСЂРµР· Р·Р°РїСЏС‚СѓСЋ, РїРѕСЂСЏРґРѕРє РёРіСЂР°РµС‚ СЂРѕР»СЊ, РїРµСЂРІС‹Р№ РЅР°Р№РґРµРЅРЅС‹Р№ РёСЃРїРѕР»СЊР·СѓРµС‚СЃСЏ). РќР°РїСЂРёРјРµСЂ, "image,photos"
+//                                  // РџРѕРґРґРµСЂР¶РёРІСЋС‚СЃСЏ РїР°СЂР°РјРµС‚СЂС‹ РґР»СЏ multiPhoto РїРѕСЃР»Рµ Р·РЅР°РєР° "=", С‡РµСЂРµР· ";" РІС‹Р±РѕСЂ РЅРѕРјРµСЂР° СЌР»РµРјРµРЅС‚Р°, РїРѕ СѓРјРѕР»С‡Р°РЅРёСЋ =0;0.
+//                                  // Р’РѕРјРѕР¶РЅРѕ СѓРєР°Р·Р°С‚СЊ =rand,0 - РґР»СЏ РІС‹Р±РѕСЂР° СЃР»СѓС‡Р°Р№РЅРѕРіРѕ
+//  &data      = ""                 // РСЃРїРѕР»СЊР·РѕРІР°С‚СЊ СЃРѕРґРµСЂР¶РёРјРѕРµ СЌС‚РѕР№ РїРµСЂРµРјРµРЅРЅРѕР№ РґР»СЏ РѕР±СЂР°Р±РѕС‚РєРё (РјРѕР¶РµС‚ РёСЃРїРѕР»СЊР·РѕРІР°С‚СЊСЃСЏ РєР°Рє Р°Р»СЊС‚РµСЂРЅР°С‚РёРІР°)
+//  &parseData = false              // Р•СЃР»Рё data РЅРµ РїСѓСЃС‚Рѕ, РµСЃР»Рё true, С‚Рѕ РёСЃРєР°С‚СЊ С‚Р°РєР¶Рµ РєР°Рє РІ РєРѕРЅС‚РµРЅС‚Рµ - <img src="" .. />, РїСЂРё false - РїСЂРѕСЃС‚Рѕ РёСЃРїРѕР»СЊР·РѕРІР°С‚СЊ
+//  &parseTv   = false              // РїСЂРё true СЃС‡РёС‚Р°С‚СЊ TV РєР°Рє Html Рё РїР°СЂСЃРёС‚СЊ РєР°Рє РєРѕРЅС‚РµРЅС‚
+//  &order     = "tv,document,data" // РџРѕСЂСЏРґРѕРє РїРѕРёСЃРєР°, С‡РµСЂРµР· Р·Р°РїСЏС‚СѓСЋ. РќР°РїСЂРёРјРµСЂ, data,tv,document.
+//  &rand      =  false             // Р’С‹Р±СЂР°С‚СЊ СЃР»СѓС‡Р°Р№РЅРѕРµ РёР· РІСЃРµС… РЅР°Р№РґРµРЅРЅС‹С…
+//  &all       =  false             // РѕР±СЂР°Р±РѕС‚Р°С‚СЊ РІСЃРµ (СЃС‚Р°РЅРµС‚ true РµСЃР»Рё rand true), РїСЂРё rand false РІС‹РІРµРґРµ РІСЃРµ (РїСЂРё ulrOnly=true С‡РµСЂРµР· Р·Р°РїСЏС‚СѓСЋ)
+//  &save      =  ""                // РЅРµ РІРѕР·РІСЂР°С‰Р°С‚СЊ, СЃРѕС…СЂР°РЅРёС‚СЊ РІ СѓРєР°Р·Р°РЅРЅС‹Р№ РїР»РµР№СЃС…РѕР»РґРµСЂ
 
-// Примеры:
-//  [[getImage]] - Получить для текущего документа из контента
-//  [[getImage? &tv=`image,photos`]] - из текущего из контента сначала искать в TV `image,photos`
-//  [[getImage? &field=`anotation`]] - использовать другое поле
-//  [[getImage? &tv=`image,photos` &data=`<img src="/images/no_image.jpg" atl="" />` $parseData=`1`]] Использовать альтернативный html если в остальных не найдено
-//  [[getImage? &tv=`image,photos` &data=`/images/no_image.jpg` ]] Использовать адрес изображения если в остальных не найдено
-//  [[getImage? &id=`32` &tv=`photos=rand;0,image` ]] Получить случайное из multiphoto, если нет то из image или из документа
-//  [[getImage? &id=`32` &tv=`image,photos` &rand=`1` &data=`/images/image.jpg`  ]] Случайное из всего списка: &data, tv, content
-//  [[getImage? &id=`32` &tv=`image,photos=rand;0` &rand=`1` &data=`/images/image.jpg`  ]] тоже самое
-//  [[getImage? &id=`32` &tv=`image, photos=0;1` &order=`document,tv` ]] Сначала искать в контенте, а потом в TV. Для мультифото photo использовать большую картинку
-//  [[getImage? &id=`32` &tv=`image, photos` &save=`myplace` ]] Сохранить результат в плейсхолдер [+myplace+], не выдавая его
+// РџСЂРёРјРµСЂС‹:
+//  [[getImage]] - РџРѕР»СѓС‡РёС‚СЊ РґР»СЏ С‚РµРєСѓС‰РµРіРѕ РґРѕРєСѓРјРµРЅС‚Р° РёР· РєРѕРЅС‚РµРЅС‚Р°
+//  [[getImage? &tv=`image,photos`]] - РёР· С‚РµРєСѓС‰РµРіРѕ РёР· РєРѕРЅС‚РµРЅС‚Р° СЃРЅР°С‡Р°Р»Р° РёСЃРєР°С‚СЊ РІ TV `image,photos`
+//  [[getImage? &field=`anotation`]] - РёСЃРїРѕР»СЊР·РѕРІР°С‚СЊ РґСЂСѓРіРѕРµ РїРѕР»Рµ
+//  [[getImage? &tv=`image,photos` &data=`<img src="/images/no_image.jpg" atl="" />` $parseData=`1`]] РСЃРїРѕР»СЊР·РѕРІР°С‚СЊ Р°Р»СЊС‚РµСЂРЅР°С‚РёРІРЅС‹Р№ html РµСЃР»Рё РІ РѕСЃС‚Р°Р»СЊРЅС‹С… РЅРµ РЅР°Р№РґРµРЅРѕ
+//  [[getImage? &tv=`image,photos` &data=`/images/no_image.jpg` ]] РСЃРїРѕР»СЊР·РѕРІР°С‚СЊ Р°РґСЂРµСЃ РёР·РѕР±СЂР°Р¶РµРЅРёСЏ РµСЃР»Рё РІ РѕСЃС‚Р°Р»СЊРЅС‹С… РЅРµ РЅР°Р№РґРµРЅРѕ
+//  [[getImage? &id=`32` &tv=`image, photos` &save=`myplace` ]] РЎРѕС…СЂР°РЅРёС‚СЊ СЂРµР·СѓР»СЊС‚Р°С‚ РІ РїР»РµР№СЃС…РѕР»РґРµСЂ [+myplace+], РЅРµ РІС‹РґР°РІР°СЏ РµРіРѕ
+//  [[getImage? &id=`32` &tv=`image,photos` &rand=`1` &data=`/images/image.jpg`  ]] РЎР»СѓС‡Р°Р№РЅРѕРµ РёР· РІСЃРµРіРѕ СЃРїРёСЃРєР°: &data, tv, content
+//  [[getImage? &id=`32` &tv=`image, photos=0;1` &order=`document,tv` ]] РЎРЅР°С‡Р°Р»Р° РёСЃРєР°С‚СЊ РІ РєРѕРЅС‚РµРЅС‚Рµ, Р° РїРѕС‚РѕРј РІ TV. Р”Р»СЏ РјСѓР»СЊС‚РёС„РѕС‚Рѕ photo РёСЃРїРѕР»СЊР·РѕРІР°С‚СЊ РїРµСЂРІСѓСЋ Р±РѕР»СЊС€СѓСЋ РєР°СЂС‚РёРЅРєСѓ
+//  [[getImage? &id=`32` &tv=`photos=rand;0,image` ]] РџРѕР»СѓС‡РёС‚СЊ СЃР»СѓС‡Р°Р№РЅРѕРµ РёР· multiphoto, РµСЃР»Рё РЅРµС‚ С‚Рѕ РёР· image РёР»Рё РёР· РґРѕРєСѓРјРµРЅС‚Р°
+//  [[getImage? &id=`32` &tv=`image,photos=rand;0` &rand=`1` &data=`/images/image.jpg`  ]] РЎР»СѓС‡Р°Р№РЅРѕРµ, РґР»СЏ РјСѓР»СЊС‚РёС„РѕС‚Рѕ - СЃР»СѓС‡Р°Р№РЅРѕРµ РёР· 1РіРѕ РїРѕР»СЏ (РјР°Р»РµРЅСЊРєР°СЏ)
+//  [[getImage? &id=`32` &tv=`image,photos=rand:0=/name/i;0` &rand=`1` &data=`/images/image.jpg`  ]] С‚РѕР¶Рµ СЃР°РјРѕРµ, РЅРѕ СЃ СѓСЃР»РѕРІРёРµРј, С‡С‚Рѕ РІ СЌС‚РѕРј РїРѕР»Рµ РµСЃС‚СЊ "name" (regexp)
+//  [[getImage? &id=`32` &tv=`image,photos=rand:2=/РєР°СЂС‚РёРЅРєР°/i;0` &rand=`1` &data=`/images/image.jpg`  ]] -- СЃ СѓСЃР»РѕРІРёРµРј, С‡С‚Рѕ РІ РЅР°Р·РІР°РЅРёРё (3Рµ РїРѕР»Рµ) РµСЃС‚СЊ "РєР°СЂС‚РёРЅРєР°" (regexp)
+//  [[getImage? &id=`32` &tv=`image,photos=rand:2=РЎР»Р°Р№Рґ;0` &rand=`1` &data=`/images/image.jpg`  ]] -- СЃ СѓСЃР»РѕРІРёРµРј, С‡С‚Рѕ РЅР°Р·РІР°РЅРёРµ СЂР°РІРЅРѕ "РЎР»Р°Р№Рґ"
 
 if (file_exists($includeFile = $modx->config['base_path']."assets/snippets/getImage/getImage.php")) {
  include_once($includeFile);
@@ -63,9 +66,9 @@ if (file_exists($includeFile = $modx->config['base_path']."assets/snippets/getIm
 ?>
 
 /* ----------------------------------------------------------------------------  */
-/* Сделать:
-- найти все изображения в контенте (для случайного выбора)
-- указать несколько полей &field для поиска
+/* РЎРґРµР»Р°С‚СЊ:
+- РЅР°Р№С‚Рё РІСЃРµ РёР·РѕР±СЂР°Р¶РµРЅРёСЏ РІ РєРѕРЅС‚РµРЅС‚Рµ (РґР»СЏ СЃР»СѓС‡Р°Р№РЅРѕРіРѕ РІС‹Р±РѕСЂР°)
+- СѓРєР°Р·Р°С‚СЊ РЅРµСЃРєРѕР»СЊРєРѕ РїРѕР»РµР№ &field РґР»СЏ РїРѕРёСЃРєР°
 */
 
 class getImage {
@@ -91,20 +94,11 @@ class getImage {
   $this->p=&$p;
   if (!is_array($p["order"])) {
    $p["order"] = preg_split("/\s*,\s*/",$p["order"],-1,PREG_SPLIT_NO_EMPTY);
-//   foreach($p["order"] as $k =>$v) if (!in_array($v,$pd["order"])) unset($p["order"][$k]); // remove unknown
    foreach($pd["order"] as $v) if (!in_array($v,$p["order"])) $p["order"][] = $v; // add default
   }
   if ($p["rand"]) $p["all"] = true;
   $this->isCurrent = $p["id"] === $modx->documentObject['id'];
-
-//echo "<pre>";
-//  print_r($p);
-//  print_r($this);
-
   foreach($p["order"] as $o) {
-
-//echo "<p> ".$p['id']." case $o :\n";
-
     switch ($o) {
      case "tv":
       if (strpos($p["tv"],"=")) $this->extendTv = true;
@@ -116,12 +110,9 @@ class getImage {
         $this->extendTv[$t[0]] = !empty($t[1])?preg_split("/\s*;\s*/",$t[1],-1,PREG_SPLIT_NO_EMPTY):"";
        }
        $p["tv"] = array_keys($this->extendTv);
-//print_r($p["tv"]);
-//print_r($this->extendTv);
       }
       $tvs = array(); // name => value
       if ( !$this->isCurrent) foreach ((array)$modx->getTemplateVars($p["tv"], "name", $p["id"]) as $d) $tvs[$d["name"]] = $d["value"];
-//print_r($tvs);
       foreach ($p["tv"] as $tvField) {
        if ($this->isCurrent) $tvs[$tvField] = $modx->documentObject[$tvField][1];
        if ($data = $this->exTv($tvField,$tvs[$tvField])) {
@@ -143,32 +134,24 @@ class getImage {
        }
        if ($data = $this->parseData($data)) $this->result[] = $data;
       }
-//echo (($this->result and !$p["all"]) ? 2 : 1). " ????  $data" ;
      break ($this->result and !$p["all"]) ? 2 : 1;
      case "data":
       if (!empty($p["data"]) and ($data = $p["parseData"]?$this->parseData($p["data"]):$p["data"])) {
        $this->result[] = $data;
       }
-//echo (($this->result and !$p["all"]) ? 2 : 1). " ???? $data" ;
-
      break ($this->result and !$p["all"]) ? 2 : 1;
      default:       // default actions
     }
   }
  }
 
-
  function result() {
   if (!$this->p["rand"] or count($this->result) <=1) $result = reset($this->result);
   else if ($this->p["rand"]) $result = $this->result[rand(0,count($this->result)-1)];
   else if ($this->p["all"])
    $result = implode($this->p["urlOnly"]?"":",",$this->result);
-
-//  if (!$this->p["save"])
    return $result;
-//  else $modx->setPlaceholder($this->p["save"], $result);
  }
-
 
  function parseData($data="") {
   $p=&$this->p;
@@ -178,26 +161,36 @@ class getImage {
   else return "";
  }
 
- function exTv($tvName,$data) { // получение изображения из формата json - multiphoto
-  if (is_array($trJson = @json_decode($data))) { // проверка на пустой массив 
+ function exTv($tvName,$data) { // РїРѕР»СѓС‡РµРЅРёРµ РёР·РѕР±СЂР°Р¶РµРЅРёСЏ РёР· С„РѕСЂРјР°С‚Р° json - multiphoto
+  if (is_array($trJson = @json_decode($data))) { // РїСЂРѕРІРµСЂРєР° РЅР° РїСѓСЃС‚РѕР№ РјР°СЃСЃРёРІ 
    if (!count($trJson)) return "";
    $o =& $this->extendTv[$tvName];
    $o = !empty($o) ? $o: array($this->p["all"]?"all":"0","0");
    if (!is_array($o)) $o = preg_split("/\s*;\s*/",$o);
    if (!isset($o[1])) $o[1] = 0;
-   if (!empty($o[0]) and strtolower($o[0])=="rand") {
+   if (substr(strtolower($o[0]),0,4)=="rand") {
+    if (preg_match("/^rand:(\d+)=(.*)$/i",$o[0],$m)) { // РЈСЃР»РѕРІРёРµ РґР»СЏ СЃР»СѓС‡Р°Р№РЅРѕ РІС‹Р±РѕСЂРєРё. РџСЂРѕРІРµСЂРєР° РїРѕ РЅРѕРјРµСЂСѓ СЌР»РµРјРµРЅС‚Р° n=Р—РЅР°С‡РµРЅРёРµ(СЂРµРіСѓР»СЏСЂРЅРѕРµ РІС‹СЂР°Р¶РµРЅРёРµ)
+      $nA = array();
+      if (preg_match("/^\/.*\/\w*$/",$m[2])) { // check by regexp
+       foreach ($trJson as $k => $a) if (preg_match($m[2],$a[$m[1]])) $nA[] = $trJson[$k];
+      } else {
+       foreach ($trJson as $k => $a) if ($a[$m[1]]==$m[2]) $nA[] = $trJson[$k];
+      }
+      if ($nA) {$trJson = $nA;unset($nA);}
+      $o[0] = rand(0,count($trJson)-1);
+    }
     $o[0] = rand(0,count($trJson)-1);
    } else
    if (strtolower($o[0])=="all") {
     $collect = array();
     foreach ($trJson as &$v) $collect[] = $v[$o[1]];
     return $collect;
-   }
+   } else
+    $o[0] = (int)$o[0];
    return $trJson[$o[0]][$o[1]];
   }
   return $data;
  }
-
 
 }
 ?>

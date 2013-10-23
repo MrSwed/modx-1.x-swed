@@ -5,16 +5,15 @@
  * Получить изображение из содержимого или tv параметров для указанного ID документа
  *
  * @category 	snippet
- * @version 	2.0
+ * @version 	2.1
  * @license 	http://www.gnu.org/copyleft/gpl.html GNU Public License (GPL)
  * @internal	@properties
  * @internal	@modx_category Utils
  * @internal   @installset base, sample
  */
-
 // Script Name: GetImage (modx evo 1.xx)
 // Creation Date: 30.05.2013
-// Last Modified: 04.06.2013
+// Last Modified: 03.08.2013
 // Autor: Swed <webmaster@collection.com.ua>
 // Purpose: Get image (adress) for document from tv params, content, or other
 
@@ -40,11 +39,14 @@
 //  [[getImage? &field=`anotation`]] - использовать другое поле
 //  [[getImage? &tv=`image,photos` &data=`<img src="/images/no_image.jpg" atl="" />` $parseData=`1`]] Использовать альтернативный html если в остальных не найдено
 //  [[getImage? &tv=`image,photos` &data=`/images/no_image.jpg` ]] Использовать адрес изображения если в остальных не найдено
-//  [[getImage? &id=`32` &tv=`photos=rand;0,image` ]] Получить случайное из multiphoto, если нет то из image или из документа
-//  [[getImage? &id=`32` &tv=`image,photos` &rand=`1` &data=`/images/image.jpg`  ]] Случайное из всего списка: &data, tv, content
-//  [[getImage? &id=`32` &tv=`image,photos=rand;0` &rand=`1` &data=`/images/image.jpg`  ]] тоже самое
-//  [[getImage? &id=`32` &tv=`image, photos=0;1` &order=`document,tv` ]] Сначала искать в контенте, а потом в TV. Для мультифото photo использовать большую картинку
 //  [[getImage? &id=`32` &tv=`image, photos` &save=`myplace` ]] Сохранить результат в плейсхолдер [+myplace+], не выдавая его
+//  [[getImage? &id=`32` &tv=`image,photos` &rand=`1` &data=`/images/image.jpg`  ]] Случайное из всего списка: &data, tv, content
+//  [[getImage? &id=`32` &tv=`image, photos=0;1` &order=`document,tv` ]] Сначала искать в контенте, а потом в TV. Для мультифото photo использовать первую большую картинку
+//  [[getImage? &id=`32` &tv=`photos=rand;0,image` ]] Получить случайное из multiphoto, если нет то из image или из документа
+//  [[getImage? &id=`32` &tv=`image,photos=rand;0` &rand=`1` &data=`/images/image.jpg`  ]] Случайное, для мультифото - случайное из 1го поля (маленькая)
+//  [[getImage? &id=`32` &tv=`image,photos=rand:0=/name/i;0` &rand=`1` &data=`/images/image.jpg`  ]] тоже самое, но с условием, что в этом поле есть "name" (regexp)
+//  [[getImage? &id=`32` &tv=`image,photos=rand:2=/картинка/i;0` &rand=`1` &data=`/images/image.jpg`  ]] -- с условием, что в названии (3е поле) есть "картинка" (regexp)
+//  [[getImage? &id=`32` &tv=`image,photos=rand:2=Слайд;0` &rand=`1` &data=`/images/image.jpg`  ]] -- с условием, что название равно "Слайд"
 
 if (file_exists($includeFile = $modx->config['base_path']."assets/snippets/getImage/getImage.php")) {
  include_once($includeFile);

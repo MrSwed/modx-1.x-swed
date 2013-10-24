@@ -180,7 +180,7 @@ if (('none' == $rte) && $mode) {
 			lineWrapping: {$lineWrapping},
 			gutters: ["CodeMirror-linenumbers", "breakpoints"],
 			styleActiveLine: {$activeLine},
-			indentWithTabs: true,
+			indentWithTabs: {$indentWithTabs},
 			extraKeys:{
 				"Ctrl-Space": function(cm){
 					var n = cm.getCursor().line;

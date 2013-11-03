@@ -9,4 +9,4 @@
  * @internal @modx_category Ditto
  * @internal    @installset base, sample
  */
-<a title="Страница [+page+]" href="[+url+]" class="active">[+page+]</a>
+<a title="Страница [+page+]" href="[~[*id*]~]" class="active">[+page+]</a>

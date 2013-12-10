@@ -330,7 +330,7 @@ class ditto {
 				unset($customPlaceholders[$name]);
 			}
 		}
-		
+
 		foreach ($customPlaceholders as $name=>$value) {
 			$placeholders = call_user_func($value,$placeholders);
 		}
@@ -427,7 +427,7 @@ class ditto {
 					$this->addField($source[0],$source[1]);	
 					$this->customPlaceholdersMap[$name] = $source[0];				
 				}	// TODO: Replace addField with addFields with callback
-			} else if(is_array($value)) {
+			} else if(is_array($value) and is_string($source)) {
 				$fields = explode(",",$source);
 				foreach ($fields as $field) {
 					if (!empty($field)) {

@@ -1,7 +1,7 @@
 //<?php
 /**
  * getParam
- * 
+ *
  * Вернуть текст в зависимости от параметра HTTP
  *
  * @category 	snippet
@@ -11,10 +11,8 @@
  * @internal	@modx_category Utils
  * @internal    @installset base, sample
  */
-
-//<?php
-/* getParam 1.2
- * Description:
+//
+/* Description:
  *  Вернуть текст если указанный параметр HTTP ($_GET, $_POST, $_REQUEST) равен указанному значению
  *  Если значение не указано, то проверка наличия параметра
  *  Если текст не указан, то вернет значение параметра HTTP
@@ -23,8 +21,8 @@
  * Author:
  *      Sergey Davydov <webmaster@collection.com.ua> for MODx CMF
  * Примеры:
- * [[getParam? &field=`year` &text=`|year,%v,1`  &notempty=`1` ]]
- * [[getParam? &field=`year|author` &text=`|%k,%v,1`  &notempty=`1` ]]
+ * [[getParam? &field=`year` &text=`|year,%v,1`  &notempty=`1` &delimiter=`;`]]
+ * [[getParam? &field=`year|author` &text=`|%k,%v,1`  &notempty=`1` &delimiter=`;` ]]
  *
  * История:
  * 1.2
@@ -57,12 +55,20 @@ if ($field) {
  $textelse = preg_split('/'.$delimiter.'/',$textelse);
  $t="";
  $te="";
+ if (!empty($debug)) {
+  print "$debug\n";
+  print_r($param);
+  print_r($field);
+ }
  foreach ($field as $i => $f) {
   if ($text and !isset($text[$i])) $text[$i] = reset($text);
   if ($textelse and !isset($textelse[$i])) $textelse[$i] = reset($textelse);
   if ($text[$i]===false) $text[$i] = $param[$f];
   if ($text[$i]) $t = str_replace(array("%k","%v"),array($f,$param[$f]),$text[$i]);
   if ($textelse[$i]) $te = str_replace(array("%k","%v"),array($f,$param[$f]),$textelse[$i]);
+  if (!empty($debug)) {
+   print "$i => $f text ".$text[$i]."\n";
+  }
   if ((isset($param[$f]) and !$notempty ) or !empty($param[$f])){
    if (isset($value)) {
     if ($param[$f]==$value and !$invert) $out .= $text!==false?$t:$param[$f];

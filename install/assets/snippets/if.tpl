@@ -8,7 +8,6 @@
  * @version 	1.2
  * @license 	http://www.gnu.org/copyleft/gpl.html GNU Public License (GPL)
  * @internal	@properties 
- * @internal    @installset base, sample 
  * @internal	@modx_category Navigation
  * @internal    @installset base
  * @author  	Created By Bumkaka (bumkaka@yandex.ru)

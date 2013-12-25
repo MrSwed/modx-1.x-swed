@@ -32,8 +32,11 @@
   "out"  => isset($out)?$out:"%s",
  );
 if (!isset($value)) {
+ if ( $p["id"] == $modx->documentObject['id']) $value = $modx->documentObject[$p["field"]];
+ else  {
   $value = $modx->getTemplateVarOutput(array($p["field"]), $id, 1);
   $value = $docfield[$p["field"]];
+ }
 }
 
 if (!$p["check"] or ( $p["check"] == "chunk" and $chunk = $modx->getChunk(sprintf($p["checkName"],$value)))) {

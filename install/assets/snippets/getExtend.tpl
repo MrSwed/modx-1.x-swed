@@ -1,4 +1,4 @@
-﻿//<?php
+﻿﻿//<?php
 /**
 * getExtend
 *
@@ -12,7 +12,6 @@
 * @internal   @installset base, sample
 */
 
- // Script Name: getExtend (modx evo 1.xx)
  // выдать поле документа в зависимости от наличия ресурса по маске искомого поля
  // &value - провериить это значение или
  // &field - поле из документа
@@ -32,13 +31,13 @@
   "out"  => isset($out)?$out:"%s",
  );
 if (!isset($value)) {
- if ( $p["id"] == $modx->documentObject['id']) $value = $modx->documentObject[$p["field"]];
- else  {
-  $value = $modx->getTemplateVarOutput(array($p["field"]), $id, 1);
-  $value = $docfield[$p["field"]];
- }
+ $value = $modx->getTemplateVarOutput(array($p["field"]), $id, 1);
+ $value = $value[$p["field"]];
 }
-
+if (!empty($debug)) {
+ print  $value." ".sprintf($p["checkName"],$value)." " .sprintf($p["out"],$value);
+ print_r($value);
+}
 if (!$p["check"] or ( $p["check"] == "chunk" and $chunk = $modx->getChunk(sprintf($p["checkName"],$value)))) {
  return sprintf($p["out"],$value) ;
 }

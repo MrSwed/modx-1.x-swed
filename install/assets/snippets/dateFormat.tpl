@@ -1,15 +1,15 @@
 //<?php
 /**
-* dateFormat
-*
-* Вывод даты текущего документа в указанном формате с учетом внешних условий
-*
-* @category 	snippet
-* @version 	1.0
-* @license 	http://www.gnu.org/copyleft/gpl.html GNU Public License (GPL)
-* @internal	@properties
-* @internal	@modx_category Utils
-* @internal   @installset base, sample
+ * dateFormat
+ *
+ * Вывод даты текущего документа в указанном формате с учетом внешних условий
+ *
+ * @category 	snippet
+ * @version 	1.0
+ * @license 	http://www.gnu.org/copyleft/gpl.html GNU Public License (GPL)
+ * @internal	@properties
+ * @internal	@modx_category Utils
+ * @internal   @installset base, sample
 */
 
 // Пример

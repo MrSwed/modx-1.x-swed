@@ -1,15 +1,15 @@
 //<?php
 /**
-* getExtend
-*
-* Получает дополнительные данные для документа
+ * getExtend
  *
-* @category 	snippet
-* @version 	2.2
-* @license 	http://www.gnu.org/copyleft/gpl.html GNU Public License (GPL)
-* @internal	@properties
-* @internal	@modx_category Utils
-* @internal   @installset base, sample
+ * Получает дополнительные данные для документа
+ *
+ * @category 	snippet
+ * @version 	2.2
+ * @license 	http://www.gnu.org/copyleft/gpl.html GNU Public License (GPL)
+ * @internal	@properties
+ * @internal	@modx_category Utils
+ * @internal   @installset base, sample
 */
 
  // выдать поле документа в зависимости от наличия ресурса по маске искомого поля

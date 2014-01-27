@@ -1,16 +1,16 @@
 //<?php
 /**
-* getInheritField
-*
-* Получить значение наследуемого параметра
+ * getInheritField
  *
-* @category 	snippet
-* @version 	1.0
-* @license 	http://www.gnu.org/copyleft/gpl.html GNU Public License (GPL)
-* @internal	@properties
-* @internal	@modx_category Utils
-* @internal   @installset base, sample
-*/
+ * Получить значение наследуемого параметра
+ *
+ * @category 	snippet
+ * @version 	1.0
+ * @license 	http://www.gnu.org/copyleft/gpl.html GNU Public License (GPL)
+ * @internal	@properties
+ * @internal	@modx_category Utils
+ * @internal   @installset base, sample
+ */
 
 // Получает значение родительского параметра, если значение не указано (или равно заданному в &toparent)
 

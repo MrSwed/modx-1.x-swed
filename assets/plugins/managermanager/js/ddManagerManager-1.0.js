@@ -1,6 +1,6 @@
 /**
- * jQuery ddMM Plugin
- * @version: 1.1.2 (2013-12-10)
+ * jQuery ddManagerManager Plugin
+ * @version: 1.0 (2013-05-22)
  * 
  * @uses jQuery 1.9.1
  *
@@ -9,31 +9,20 @@
  */
 
 (function($){
-$.ddMM = {
-	config: {
-		site_url: '',
-		datetime_format: '',
-		datepicker_offset: 0
-	},
-	urls: {
-		mm: 'assets/plugins/managermanager/'
-	},
+$.ddManagerManager = {
 	fields: {},
-	lang: {},
-	$mutate: $(),
 	
 	/**
 	 * makeArray
-	 * @version 1.1 (2013-10-24)
+	 * @version 1.0 (2013-05-22)
 	 * 
 	 * @desctiption Makes a commas separated list into an array.
 	 * 
-	 * @param csv {comma separated string} - List. @required
-	 * @param splitter {string} - Splitter. Default: ','.
+	 * @param csv {comma separated string} - List.
 	 * 
 	 * @return {array}
 	 */
-	makeArray: function(csv, splitter){
+	makeArray: function(csv){
 		// If we've already been supplied an array, just return it
 		if ($.isArray(csv)){
 			return csv;
@@ -44,12 +33,8 @@ $.ddMM = {
 			return new Array();
 		}
 		
-		if ($.type(splitter) != 'string' || splitter.length == 0){
-			splitter = ',';
-		}
-		
 		// Otherwise, turn it into an array
-		return csv.split(new RegExp('\\s*' + splitter + '\\s*'));
+		return csv.split(/\s*,\s*/);
 	},
 	
 	/**
@@ -122,9 +107,4 @@ $.ddMM = {
 		}
 	}
 };
-
-//On document.ready
-$(function(){
-	$.ddMM.$mutate = $('#mutate');
-});
 })(jQuery);

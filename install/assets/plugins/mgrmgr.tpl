@@ -1,7 +1,7 @@
 //<?php
 /**
  * ManagerManager plugin
- * @version 0.6 (2013-12-11)
+ * @version 0.5.1 (2013-07-14)
  * 
  * Customize the MODx Manager to offer bespoke admin functions for end users.
  *
@@ -12,7 +12,7 @@
  * @internal @events OnDocFormRender,OnDocFormPrerender,OnBeforeDocFormSave,OnDocFormSave,OnDocDuplicate,OnPluginFormRender,OnTVFormRender
  * @internal @modx_category Manager and Admin
  * 
- * @link http://code.divandesign.biz/modx/managermanager/0.6
+ * @link http://code.divandesign.biz/modx/managermanager/0.5.1
  * 
  * @copyright 2013
  */

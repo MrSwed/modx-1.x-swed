@@ -1,25 +1,27 @@
 <?php
 /** 
  * ddSetFieldValue
- * @version 1.0.5 (2013-10-16)
+ * @version 1.0.4 (2013-02-22)
  * 
- * Widget for ManagerManager plugin allowing ducument fields values (or TV fields values) to be strongly defined (reminds of mm_default but field value assignment is permanent).
+ * Жёстко выставляет необходимые значения заданному полю
  * 
  * @uses ManagerManager plugin 0.4.
  * 
- * @param field {string} - Field or TV name for which value setting is required. @required
- * @param value {string} - Required value. Default: ''.
- * @param roles {comma separated string} - The roles that the widget is applied to (when this parameter is empty then widget is applied to the all roles). Default: ''.
- * @param templates {comma separated string} - Id of the templates to which this widget is applied. Default: ''.
+ * @todo Основан на mm_default
  * 
- * @link http://code.divandesign.biz/modx/mm_ddsetfieldvalue/1.0.5
+ * @param field {string} - Имя поля, для которого необходимо установить значение.
+ * @param value {string} - Значение, которое необходимо установить.
+ * @param roles {comma separated string} - Id ролей. По умолчанию: для всех ролей.
+ * @param templates {comma separated string} - Id шаблонов. По умолчанию: для всех шаблонов.
+ * 
+ * @link http://code.divandesign.biz/modx/mm_ddsetfieldvalue/1.0.4
  * 
  * @copyright 2013, DivanDesign
  * http://www.DivanDesign.biz
  */
 
 function mm_ddSetFieldValue($field, $value = '', $roles = '', $templates = ''){
-	global $modx, $mm_current_page;
+	global $modx, $content, $mm_fields;
 	$e = &$modx->Event;
 	
 	if ($e->name == 'OnDocFormRender' && useThisRule($roles, $templates)){
@@ -124,7 +126,7 @@ function mm_ddSetFieldValue($field, $value = '', $roles = '', $templates = ''){
 
 				$output .= '$j("input[name=syncsite]").val("'.$value.'"); '."\n";
 			break;
-			
+
 			//Признак папки
 			case 'is_folder':
 				if ($value == '1'){
@@ -134,19 +136,7 @@ function mm_ddSetFieldValue($field, $value = '', $roles = '', $templates = ''){
 					$output .= '$j("input[name=isfoldercheck]").removeAttr("checked"); '."\n";
 				}
 			break;
-			
-			//Участвует в URL
-			case 'alias_visible':
-				if ($value == '1'){
-					$output .= '$j("input[name=alias_visible_check]").attr("checked", "checked"); '."\n";
-				}else{
-					$value = '0';
-					$output .= '$j("input[name=alias_visible_check]").removeAttr("checked"); '."\n";
-				}
-				
-				$output .= '$j("input[name=alias_visible]").val("'.$value.'"); '."\n";
-			break;
-			
+
 			//Признак использованшия визуального редактора
 			case 'is_richtext':
 				$output .= 'var originalRichtextValue = $j("#which_editor:first").val(); '."\n";
@@ -198,7 +188,16 @@ function mm_ddSetFieldValue($field, $value = '', $roles = '', $templates = ''){
 			
 			//TV
 			default:
-				$tvsMas = tplUseTvs($mm_current_page['template'], $field);
+				// Which template is this page using?
+				if (isset($content['template'])){
+					$page_template = $content['template'];
+				}else{
+					// If no content is set, it's likely we're adding a new page at top level.
+					// So use the site default template. This may need some work as it might interfere with a default template set by MM?
+					$page_template = $modx->config['default_template'];
+				}
+				
+				$tvsMas = tplUseTvs($page_template, $field);
 				
 				if ($tvsMas){
 					$output .= '$j("#tv'.$tvsMas[0]['id'].'").val("'.$value.'");' . "\n";
@@ -209,6 +208,6 @@ function mm_ddSetFieldValue($field, $value = '', $roles = '', $templates = ''){
 		$output .= "\n// ---------------- mm_ddSetFieldValue :: End -------------";
 		
 		$e->output($output . "\n");
-	}
+	} 
 }
 ?>

@@ -30,4 +30,4 @@ while ( $value == $toparent and (int)$cid and --$deep > 0) {
 if ($value == $toparent) return $default;
 return $value;
 
-// ?>
+

@@ -51,4 +51,4 @@ if ($display) {
  return strftime($format,$date);
 }
 
-// ?>
+

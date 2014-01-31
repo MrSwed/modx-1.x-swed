@@ -43,4 +43,4 @@ if (!$p["check"] or ( $p["check"] == "chunk" and $chunk = $modx->getChunk(sprint
 }
 return "";
 
-// ?>
+

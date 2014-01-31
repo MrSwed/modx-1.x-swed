@@ -20,4 +20,3 @@ $options = explode(",",$options);
 if (!isset($options[1])) $options[1] = 0;
 $fotoArr=json_decode($output);
 if ($fotoArr) return $fotoArr[$options[0]][$options[1]];
-?>

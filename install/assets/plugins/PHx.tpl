@@ -13,8 +13,9 @@
  * @internal    @installset base, sample
  */
 
-include_once $modx->config['rb_base_dir'] . "plugins/phx/phx.parser.class.inc.php";
-
+if (!class_exists("PHxParser")) {
+ include_once $modx->config['rb_base_dir'] . "plugins/phx/phx.parser.class.inc.php";
+}
 $e = &$modx->Event;
 
 $PHx = new PHxParser($phxdebug,$phxmaxpass);

@@ -1,11 +1,11 @@
 /**
  * intalias
  *
- * Используется для определения классов стилей и чанков
+ * если не указано, используется значение родителя
  *
  * @category        tv
- * @name            Внутреннее имя
- * @internal        @caption intalias
+ * @name            intalias
+ * @internal        @caption Внутреннее имя
  * @internal        @input_type text
  * @internal        @input_options
  * @internal        @input_default

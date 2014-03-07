@@ -1,13 +1,13 @@
 /**
- * hideChilds
+ * depth
  *
- * Для Ditto, при построении дерева
+ * Глубина для Ditto. <b>0</b> - все (по умолчанию)<br /><b>пусто</b> - значение родителя
  *
  * @category        tv
- * @name            hideChilds
- * @internal        @caption Скрыть дочерние
- * @internal        @input_type dropdown
- * @internal        @input_options ||Да==1||Нет==0
+ * @name            depth
+ * @internal        @caption Глубина
+ * @internal        @input_type number
+ * @internal        @input_options
  * @internal        @input_default
  * @internal        @output_widget
  * @internal        @output_widget_params

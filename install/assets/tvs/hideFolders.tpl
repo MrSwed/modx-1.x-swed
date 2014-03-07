@@ -1,11 +1,11 @@
 /**
- * hideChilds
+ * hideFolders
  *
- * Для Ditto, при построении дерева
+ * Для Ditto, при построении дерева (да - по умолчанию)
  *
  * @category        tv
- * @name            hideChilds
- * @internal        @caption Скрыть дочерние
+ * @name            hideFolders
+ * @internal        @caption Скрыть контейнеры из списка
  * @internal        @input_type dropdown
  * @internal        @input_options ||Да==1||Нет==0
  * @internal        @input_default

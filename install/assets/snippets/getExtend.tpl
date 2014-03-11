@@ -39,7 +39,7 @@ if (!empty($debug)) {
  print_r($value);
 }
 if (!$p["check"] or ( $p["check"] == "chunk" and $chunk = $modx->getChunk(sprintf($p["checkName"],$value)))) {
- return sprintf($p["out"],$value) ;
+ return sprintf($p["out"],$value);
 }
 return "";
 

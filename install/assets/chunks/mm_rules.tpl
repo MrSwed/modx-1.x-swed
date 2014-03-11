@@ -20,6 +20,12 @@ if($modx->db->getValue("SELECT COUNT(id) FROM " . $modx->getFullTableName('site_
 
 mm_widget_showimagetvs(); // Always give a preview of Image TVs
 
+mm_ddCreateSection('Параметры', 'parameters','settings');
+mm_ddMoveFieldsToSection('hidePageTitle,intalias,hideChilds,hideFolders,depth,ditto_display,ditto_orderBy,DisplayListStyle','parameters');
+
+mm_createTab('Изображения','photos');
+mm_moveFieldsToTab('image,photos','photos');
+
 
 mm_createTab('SEO: meta','seo_params');
 mm_moveFieldsToTab('meta_title,meta_keywords,meta_description','seo_params');

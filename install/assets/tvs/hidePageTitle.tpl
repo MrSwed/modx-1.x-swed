@@ -1,13 +1,13 @@
 /**
- * intalias
+ * hidePageTitle
  *
- * Используется для определения классов стилей и чанков
+ * Скрыть заголовок на странице (нет - по умолчанию)
  *
  * @category        tv
- * @name            intalias
- * @internal        @caption Внутреннее имя
- * @internal        @input_type text
- * @internal        @input_options
+ * @name            hidePageTitle
+ * @internal        @caption Скрыть заголовок
+ * @internal        @input_type dropdown
+ * @internal        @input_options ||Да==1||Нет==0
  * @internal        @input_default
  * @internal        @output_widget
  * @internal        @output_widget_params

@@ -1,26 +1,24 @@
 <?php
 /**
  * ManagerManager plugin
- * @version 0.5.1 (2013-07-14)
+ * @version 0.6.1 (2014-02-17)
  * 
  * @for MODx Evolution 1.0.x
  * 
- * @author Nick Crossland - www.rckt.co.uk, DivanDesign studio - www.DivanDesign.biz
+ * @desc Used to manipulate the display of document fields in the manager.
  * 
- * @description Used to manipulate the display of document fields in the manager.
+ * @link http://code.divandesign.biz/modx/managermanager/0.6.1
  * 
- * @installation See http://code.divandesign.biz/modx/managermanager/0.5.1
+ * @author DivanDesign studio (www.DivanDesign.biz), Nick Crossland (www.rckt.co.uk)
  * 
  * @inspiration HideEditor plugin by Timon Reinhard and Gildas; HideManagerFields by Brett @ The Man Can!
  * 
  * @license Released under the GNU General Public License: http://creativecommons.org/licenses/GPL/2.0/
  * 
- * @link http://code.divandesign.biz/modx/managermanager/0.5.1
- * 
- * @copyright 2013
+ * @copyright 2014
  */
 
-$mm_version = '0.5.1'; 
+$mm_version = '0.6.1';
 
 // Bring in some preferences which have been set on the configuration tab of the plugin, and normalise them
 
@@ -32,25 +30,26 @@ if (!isset($e->params['config_chunk'])){$e->params['config_chunk'] = '';}
 
 $jsUrls = array(
 	'jq' => $modx->config['site_url'].'assets/plugins/managermanager/js/jquery-1.9.1.min.js',
-	'mm' => $modx->config['site_url'].'assets/plugins/managermanager/js/ddManagerManager-1.0.js'
+	'mm' => $modx->config['site_url'].'assets/plugins/managermanager/js/jquery.ddMM.js',
+	'ddTools' => $modx->config['site_url'].'assets/plugins/managermanager/js/jquery.ddTools-1.8.1.min.js'
 );
 
 $pluginDir = $modx->config['base_path'].'assets/plugins/managermanager/';
 
 // Set variables
-global $content, $template, $default_template, $mm_current_page, $mm_fields, $mm_includedJs;
+global $content, $template, $default_template, $mm_current_page, $mm_fields, $mm_includedJsCss;
 
-if (!is_array($mm_includedJs)){
-	$mm_includedJs = array();
+if (!is_array($mm_includedJsCss)){
+	$mm_includedJsCss = array();
 }
 
 //Include ddTools (needed for some widgets)
-include_once($pluginDir.'modx.ddtools.class.php'); 
+include_once($pluginDir.'modx.ddtools.class.php');
 //Include Utilites
 include_once($pluginDir.'utilities.inc.php');
 
 // When loading widgets, ignore folders / files beginning with these chars
-$ignore_first_chars = array('.', '_', '!'); 
+$ignore_first_chars = array('.', '_', '!');
 
 // Include widgets
 // We look for a PHP file with the same name as the directory - e.g.
@@ -92,9 +91,11 @@ $mm_fields = array(
 	'menutitle' => array('fieldtype' => 'input', 'fieldname' => 'menutitle','dbname' => 'menutitle', 'tv' => false),
 	'menuindex' => array('fieldtype' => 'input', 'fieldname' => 'menuindex', 'dbname' => 'menuindex', 'tv' => false),
 	'show_in_menu' => array('fieldtype' => 'input', 'fieldname' => 'hidemenucheck','dbname' => 'hidemenu', 'tv' => false),
-	'hide_menu' => array('fieldtype' => 'input', 'fieldname' => 'hidemenucheck', 'dbname' => 'hidemenu', 'tv' => false), // synonym for show_in_menu
+	// synonym for show_in_menu
+	'hide_menu' => array('fieldtype' => 'input', 'fieldname' => 'hidemenucheck', 'dbname' => 'hidemenu', 'tv' => false),
 	'parent' => array('fieldtype' => 'input', 'fieldname' => 'parent', 'dbname' => 'parent', 'tv' => false),
 	'is_folder' => array('fieldtype' => 'input', 'fieldname' => 'isfoldercheck', 'dbname' => 'isfolder', 'tv' => false),
+	'alias_visible' => array('fieldtype' => 'input', 'fieldname' => 'alias_visible_check', 'dbname' => 'alias_visible', 'tv' => false),
 	'is_richtext' => array('fieldtype' => 'input', 'fieldname' => 'richtextcheck','dbname' => 'richtext', 'tv' => false),
 	'log' => array('fieldtype' => 'input', 'fieldname' => 'donthitcheck', 'dbname' => 'donthit', 'tv' => false),
 	'published' => array('fieldtype' => 'input', 'fieldname' => 'publishedcheck','dbname' => 'published', 'tv' => false),
@@ -116,12 +117,14 @@ $mm_fields = array(
 // Add in TVs to the list of available fields
 $all_tvs = $modx->db->makeArray($modx->db->select('name,type,id', $modx->db->config['table_prefix'].'site_tmplvars', '', 'name ASC'));
 foreach ($all_tvs as $thisTv){
-	$n = $thisTv['name']; // What is the field name?
+	// What is the field name?
+	$n = $thisTv['name'];
 	
 	// Checkboxes place an underscore in the ID, so accommodate this...
 	$fieldname_suffix = '';
 	
-	switch ($thisTv['type']){ // What fieldtype is this TV type?
+	// What fieldtype is this TV type?
+	switch ($thisTv['type']){
 		case 'textarea':
 		case 'rawtextarea':
 		case 'textareamini':
@@ -154,7 +157,7 @@ foreach ($all_tvs as $thisTv){
 		$mm_fields[$n] = array('fieldtype' => $t, 'fieldname' => 'tv'.$thisTv['id'].$fieldname_suffix, 'dbname' => '', 'tv' => true);
 	}
 	
-	//For backward compatibility
+	//For backward compatibility =(
 	$mm_fields['tv'.$n] = array('fieldtype' => $t, 'fieldname' => 'tv'.$thisTv['id'].$fieldname_suffix, 'dbname' => '', 'tv' => true);
 	$mm_fields['tv'.$thisTv['id']] = array('fieldtype' => $t, 'fieldname' => 'tv'.$thisTv['id'].$fieldname_suffix, 'dbname' => '', 'tv' => true);
 }
@@ -183,11 +186,29 @@ if (!function_exists('make_changes')){
 	}
 }
 
+if (!function_exists('initJQddManagerManager')){
+	function initJQddManagerManager(){
+		global $modx, $mm_fields;
+		
+		$output =
+'
+$j.ddMM.config.site_url = "'.$modx->config['site_url'].'";
+$j.ddMM.config.datetime_format = "'.$modx->config['datetime_format'].'";
+$j.ddMM.config.datepicker_offset = '.$modx->config['datepicker_offset'].';
+
+$j.ddMM.fields = $j.parseJSON(\''.json_encode($mm_fields).'\');
+';
+		
+		return $output;
+	}
+}
+
 // The start of adding or editing a document (before the main form)
 switch ($e->name){
 	// if it's the plugin config form, give us a copy of all the relevant values
 	case 'OnPluginFormRender':
-		$plugin_id_editing = $e->params['id']; // The ID of the plugin we're editing
+		// The ID of the plugin we're editing
+		$plugin_id_editing = $e->params['id'];
 		$result = $modx->db->select('name, id', $modx->db->config['table_prefix'].'site_plugins', 'id='.$plugin_id_editing);
 		$plugin_editing_name = $modx->db->getValue($result);
 		
@@ -247,14 +268,15 @@ switch ($e->name){
 			$roles_table .= '</table>';
 			
 			// Load the jquery library
-			$output = '<!-- Begin ManagerManager output -->' . "\n";
-			$output .= includeJs($jsUrls['jq'], 'html', 'jquery', '1.9.1');
-			$output .= includeJs($jsUrls['mm'], 'html', 'ddManagerManager', '1.0');
+			$output = '<!-- Begin ManagerManager output -->'."\n";
+			$output .= includeJsCss($jsUrls['jq'], 'html', 'jquery', '1.9.1');
+			$output .= includeJsCss($jsUrls['mm'], 'html', 'ddMM', '1.1.2');
 			
-			$output .= '<script type="text/javascript">' . "\n";
-			$output .= "var \$j = jQuery.noConflict(); \n"; //produces var  $j = jQuery.noConflict();
+			$output .= '<script type="text/javascript">'."\n";
+			//produces var  $j = jQuery.noConflict();
+			$output .= "var \$j = jQuery.noConflict(); \n";
 			
-			$output .= '$j.ddManagerManager.fields = $j.parseJSON(\''.json_encode($mm_fields).'\');';
+			$output .= initJQddManagerManager();
 			
 			$output .= "mm_lastTab = 'tabEvents'; \n";
 			$e->output($output);
@@ -262,51 +284,32 @@ switch ($e->name){
 			mm_createTab('Templates, TVs &amp; Roles', 'rolestemplates', '', '', '<p>These are the IDs for current templates,tvs and roles in your site.</p>'.$template_table.'&nbsp;'.$tvs_table.'&nbsp;'.$roles_table);
 			
 			$e->output('</script>');
-			$e->output('<!-- End ManagerManager output -->' . "\n");
+			$e->output('<!-- End ManagerManager output -->'."\n");
 		}
 	break;
 	
 	case 'OnDocFormPrerender':
-		// Are we clashing with the ShowImageTVs (or any other) plugins?
-		//$conflicted_plugins = array('ShowImageTVs');
-		//$conflicts = array();
-		//foreach ($conflicted_plugins as $plg){
-			
-		//	$sql= "SELECT * FROM " . $this->getFullTableName("site_plugins") . " WHERE name='" . $plg . "' OR name='" . strtolower($plg) . "'AND disabled=0;";
-	       // $result= $modx->db->query($sql);
-	       //	if ($modx->db->getRecordCount($result) > 0){
-	       //	$conflicts[] = $plg;
-		//	}
-		//}
-		//if (count($conflicts) > 0){
-		//	echo '		
-		//	<script type="text/javascript">
-		//		alert("You appear to be running '.(count($conflicts)>1?'some plugins which are':'a plugin which is').' incompatible with ManagerManager: \n\n  '.implode('  \n  ', $conflicts).'\n\nYou may experience errors or unpredictable behaviour. \n\nPlease see the ManagerManager documentation for details of how to fix this.");
-		//	<script>	
-		//	';	
-		//}
-		
-		
-		echo '<!-- Begin ManagerManager output -->';
-		// Load the jquery library
-		echo includeJs($jsUrls['jq'], 'html', 'jquery', '1.9.1');
-		echo includeJs($jsUrls['mm'], 'html', 'ddManagerManager', '1.0');
+		$e->output("<!-- Begin ManagerManager output -->\n");
+		// Load the js libraries
+		$e->output(includeJsCss($jsUrls['jq'], 'html', 'jquery', '1.9.1'));
+		$e->output(includeJsCss($jsUrls['mm'], 'html', 'ddMM', '1.1.2'));
+		$e->output(includeJsCss($jsUrls['ddTools'], 'html', 'jquery.ddTools', '1.8.1'));
 		
 		// Create a mask to cover the page while the fields are being rearranged
-		echo '
+		$e->output(
+'
 <div id="loadingmask">&nbsp;</div>
 <script type="text/javascript">
-	var $j = jQuery.noConflict();
-	
-	$j.ddManagerManager.fields = $j.parseJSON(\''.json_encode($mm_fields).'\');
-	
-	$j("#loadingmask").css( {width: "100%", height: $j("body").height(), position: "absolute", zIndex: "1000", backgroundColor: "#ffffff"} );
-</script>	
-		';
-		echo '<!-- End ManagerManager output -->';
+window.$j = jQuery.noConflict();
+'.initJQddManagerManager().'
+$j("#loadingmask").css( {width: "100%", height: $j("body").height(), position: "absolute", zIndex: "1000", backgroundColor: "#ffffff"} );
+</script>
+');
 		
 		//Just run widgets
 		make_changes($e->params['config_chunk']);
+		
+		$e->output("<!-- End ManagerManager output -->\n");
 	break;
 	
 	// The main document editing form
@@ -318,8 +321,6 @@ switch ($e->name){
 <!-- You are logged into the following role: '. $mm_current_page['role'] .' -->
 
 <script type="text/javascript" charset="'.$modx->config['modx_charset'].'">
-	var $j = jQuery.noConflict();
-	
 	var mm_lastTab = "tabGeneral";
 	var mm_sync_field_count = 0;
 	var synch_field = new Array();
@@ -392,10 +393,9 @@ switch ($e->name){
 		$remove_deprecated_tv_types = ($e->params['remove_deprecated_tv_types_pref'] == 'yes') ? true : false;
 		
 		if ($remove_deprecated_tv_types){
-			
 			// Load the jquery library
 			echo '<!-- Begin ManagerManager output -->';
-			echo includeJs($jsUrls['jq'], 'html', 'jquery', '1.9.1');
+			echo includeJsCss($jsUrls['jq'], 'html', 'jquery', '1.9.1');
 			
 			// Create a mask to cover the page while the fields are being rearranged
 			echo '

@@ -7,7 +7,7 @@
  * @name            DisplayListStyle
  * @internal        @caption Стиль отображения списка
  * @internal        @input_type dropdown
- * @internal        @input_options ||Список==list||Плитка==tile
+ * @internal        @input_options ||Список==list||Плитка==tile||Таблица==table
  * @internal        @input_default
  * @internal        @output_widget
  * @internal        @output_widget_params

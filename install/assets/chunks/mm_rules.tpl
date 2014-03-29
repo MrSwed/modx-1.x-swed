@@ -20,6 +20,14 @@ if($modx->db->getValue("SELECT COUNT(id) FROM " . $modx->getFullTableName('site_
 
 mm_widget_showimagetvs(); // Always give a preview of Image TVs
 
+/* Переменные для использования * /
+$cid = isset($content['id'])?$content['id']:false;
+$pid = $cid?$content['parent']:$_GET["pid"];
+$tpl = $content['template'];
+$pidAr = array_merge(array($pid),$modx->getParentIds($pid)); // роительский путь
+/**/
+
+
 mm_ddCreateSection('Параметры', 'parameters','settings');
 mm_ddMoveFieldsToSection('hidePageTitle,intalias,hideChilds,hideFolders,depth,ditto_display,ditto_orderBy,DisplayListStyle','parameters');
 
@@ -30,16 +38,3 @@ mm_moveFieldsToTab('image,photos','photos');
 mm_createTab('SEO: meta','seo_params');
 mm_moveFieldsToTab('meta_title,meta_keywords,meta_description','seo_params');
 
-/* Магазин * /
-if (1) { // if exist tvvars var1,var_*, var2 ?
-mm_createTab('Магазин','shop');
-mm_moveFieldsToTab('price','shop');
-}
-/**/
-
-/* Выкл для "без шаблона" * /
-if ($content['template']==0) {
-mm_hideTabs('seo_params,photos');
-mm_hideSections('parameters');
-}
-/**/

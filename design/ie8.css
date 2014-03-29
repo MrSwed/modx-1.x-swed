@@ -1,0 +1,8 @@
+
+.gradient {
+ filter:none; 
+ -pie-background: linear-gradient(#ffff00 0%, #ff7700 100%);
+ behavior: url(PIE.htc);
+}
+
+

@@ -4,7 +4,7 @@ if(!defined('MODX_BASE_PATH')){die('What are you doing? Get out of here!');}
 ::::::::::::::::::::::::::::::::::::::::
  Snippet name: Wayfinder
  Short Desc: builds site navigation
- Version: 2.0.1
+ Version: 2.0.2
  Authors: 
 	Kyle Jaebker (muddydogpaws.com)
 	Ryan Thrash (vertexworks.com)
@@ -62,6 +62,7 @@ $wf->_config = array(
 	'entityEncode' => isset($entityEncode) ? $entityEncode : TRUE,
 // for local references - use original ID of document (useful for set class="active" in references)
 	'referenceUseOriginalID' => isset($referenceUseOriginalID) ? $referenceUseOriginalID: TRUE, 
+	'hereId' => isset($hereId) ? intval($hereId) : $modx->documentIdentifier
 );
 
 //get user class definitions

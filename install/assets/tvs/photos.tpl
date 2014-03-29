@@ -1,7 +1,7 @@
 /**
  * photos
  *
- * Фотографии MultiPhotos
+ * Фотографии (Несколько, не подходит для больших галерей - указать ID в плагине MultiPhotos)
  *
  * @category        tv
  * @name            photos

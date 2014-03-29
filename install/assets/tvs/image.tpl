@@ -1,11 +1,11 @@
 /**
  * image
  *
- * Маленькое изображение (превьюшка)
+ * Мзображение - превьюшка в перечне ресурсов
  *
  * @category        tv
  * @name            image
- * @internal        @caption image
+ * @internal        @caption Маленькое изображение
  * @internal        @input_type image
  * @internal        @input_options
  * @internal        @input_default

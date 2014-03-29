@@ -32,7 +32,7 @@ RewriteRule .* - [F,L]
 #RewriteRule ^(.*)$ http://%1/$1 [R=301,L]
 
 # Exclude /assets and /manager directories and images from rewrite rules
-RewriteRule ^(manager|assets)/.*$ - [L]
+RewriteRule ^(manager|assets|js|css|images|img)/.*$ - [L]
 RewriteRule \.(jpg|jpeg|png|gif|ico)$ - [L]
 
 # For Friendly URLs

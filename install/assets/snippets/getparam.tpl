@@ -13,7 +13,7 @@
  */
 //
 /* Description:
- *  Вернуть текст если указанный параметр HTTP ($_GET, $_POST, $_REQUEST) равен указанному значению
+ *  Вернуть текст, если указанный параметр ($_GET, $_POST, $_REQUEST, $_SEESION, $_COOKIE) равен указанному значению
  *  Если значение не указано, то проверка наличия параметра
  *  Если текст не указан, то вернет значение параметра HTTP
  *  invert - вернуть текст если условие не выполенно (нет параметра)
@@ -21,10 +21,14 @@
  * Author:
  *      Sergey Davydov <webmaster@collection.com.ua> for MODx CMF
  * Примеры:
- * [[getParam? &field=`year` &text=`|year,%v,1`  &notempty=`1` &delimiter=`;`]]
- * [[getParam? &field=`year|author` &text=`|%k,%v,1`  &notempty=`1` &delimiter=`;` ]]
+ *  Для фильтра Ditto: если есть $_GET["year"] вернет |year,<Значение>,1
+ *   [[getParam? &field=`year` &text=`|year,%v,1`  &notempty=`1` &delimiter=`;`]]
+ *  Для фильтра Ditto: проверяет наличие year и author и вернет строку |year,<Значение>,1;|author
+ *  [[getParam? &field=`year|author` &text=`|%k,%v,1`  &notempty=`1` &delimiter=`;` ]]
  *
  * История:
+ * 1.2.1
+ *  [+] cookie, session
  * 1.2
  *  [+] - проверка нескольких
 */
@@ -42,12 +46,14 @@ $quotemeta = isset($quotemeta)?$quotemeta:false; // quotemeta()
 
 if ($field) {
  $param = array();
- if (!in_array($type,explode(",","REQUEST,POST,GET"))) $type = "GET";
+ if (!in_array($type,explode(",","REQUEST,POST,GET,SESSION,COOKIE"))) $type = "GET";
  $out = "";
- switch($type) {
+ switch($type) { // $param = ${"_$type"} not worked. see php manual
   case "GET": $param = $_GET; break;
   case "POST": $param = $_POST; break;
   case "REQUEST": $param = $_REQUEST; break;
+  case "SESSION": $param = $_SESSION; break;
+  case "COOKIE": $param = $_COOKIE; break;
  }
  if (preg_match('/('.$delimiter.')/',$field,$m)) $delimiter = $m[1];
  $field = preg_split('/'.$delimiter.'/',$field);
@@ -56,9 +62,11 @@ if ($field) {
  $t="";
  $te="";
  if (!empty($debug)) {
-  print "$debug\n";
-  print_r($param);
-  print_r($field);
+  print "<pre>$debug: type=$type \n";
+  echo "param: ";print_r($param);
+  echo "field: ";print_r($field);
+  echo "param: ";print_r($param);
+  print "</pre>";
  }
  foreach ($field as $i => $f) {
   if ($text and !isset($text[$i])) $text[$i] = reset($text);
@@ -67,7 +75,7 @@ if ($field) {
   if ($text[$i]) $t = str_replace(array("%k","%v"),array($f,$param[$f]),$text[$i]);
   if ($textelse[$i]) $te = str_replace(array("%k","%v"),array($f,$param[$f]),$textelse[$i]);
   if (!empty($debug)) {
-   print "$i => $f text ".$text[$i]."\n";
+   print "<pre>$i => $f text ".$text[$i]."\n </pre>";
   }
   if ((isset($param[$f]) and !$notempty ) or !empty($param[$f])){
    if (isset($value)) {

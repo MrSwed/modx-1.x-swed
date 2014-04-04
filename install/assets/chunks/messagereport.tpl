@@ -14,4 +14,4 @@
 Имя:                [+name+]
 Email:              [+email+]
 Сообщение:
-[+text+]
+[+notes+]

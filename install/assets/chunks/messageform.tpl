@@ -25,7 +25,7 @@
    </tr>
    <tr>
     <th><label for="notes"><sup>*</sup> Сообщение:</label></th>
-    <td><textarea id="notes" value="[+text+]" name="notes" eform="Сообщение::1"></textarea></td>
+    <td><textarea id="notes" name="notes" eform="Сообщение::1">[+notes+]</textarea></td>
    </tr>
    <tr>
     <th><label for="vericode"><sup>*</sup>Введите код:</label></th>

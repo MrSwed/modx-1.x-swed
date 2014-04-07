@@ -1,3 +1,7 @@
 [submodule "assets/modules/component-sync"]
 	path = assets/modules/component-sync
 	url = https://github.com/mapledesign/modx-component-sync.git
+[submodule "assets/tvs/multiTV"]
+	path = assets/tvs/multiTV
+	url = git@github.com:MrSwed/multiTV.git
+	branch = submodule

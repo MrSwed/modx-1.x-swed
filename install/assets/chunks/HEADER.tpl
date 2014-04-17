@@ -22,11 +22,10 @@
  <script type="text/javascript" src="/js/jquery.mousewheel.js"></script>
  <script type="text/javascript" src="/js/fancybox/jquery.fancybox.js"></script>
  <script type="text/javascript" src="/js/fancybox/helpers/jquery.fancybox-buttons.js"></script>
- <script type="text/javascript" src="/js/fancybox/helpers/jquery.fancybox-media.js  "></script>
- <script type="text/javascript" src="js/fancybox/helpers/jquery.fancybox-thumbs.js "></script>
+ <script type="text/javascript" src="/js/fancybox/helpers/jquery.fancybox-media.js"></script>
  <link rel="stylesheet" type="text/css" href="/js/fancybox/jquery.fancybox.css" media="screen"/>
  <link rel="stylesheet" type="text/css" href="/js/fancybox/helpers/jquery.fancybox-buttons.css" media="screen"/>
- <link rel="stylesheet" type="text/css" href="/js/fancybox/helpers/jquery.fancybox-thumbs.css " media="screen"/>
+ <link rel="stylesheet" type="text/css" href="/js/fancybox/helpers/jquery.fancybox-thumbs.css" media="screen"/>
  <script src="/js/logic.js" type="text/javascript" charset="utf-8"></script>
  <link href="/design/style.css" rel="stylesheet" type="text/css"/>
  <base href="/" />

@@ -1816,7 +1816,7 @@ class DocumentParser {
 		), $this->getFullTableName('event_log'));
 		if (isset($this->config['send_errormail']) && $this->config['send_errormail'] !== '0') {
 			if ($this->config['send_errormail'] <= $type) {
-				$modx->sendmail(array(
+				$this->sendmail(array(
 						'subject' => 'MODX System Error on ' . $this->config['site_name'],
 						'body' => 'Source: ' . $source . ' - The details of the error could be seen in the MODX system events log.',
 						'type' => 'text')
@@ -2284,7 +2284,7 @@ class DocumentParser {
      */
     function makeUrl($id, $alias= '', $args= '', $scheme= '') {
         $url= '';
-        $virtualDir= '';
+        $virtualDir= $this->config['virtual_dir'];
         $f_url_prefix = $this->config['friendly_url_prefix'];
         $f_url_suffix = $this->config['friendly_url_suffix'];
         if (!is_numeric($id)) {

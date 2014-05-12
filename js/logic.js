@@ -10,6 +10,7 @@ $(function(){
     $(this).attr("rel",function(){return $(this).attr("rel")?$(this).attr("rel"):"gallery"})
      .fancybox()
    });
+ $("a[rel='gallelry']").fancybox();
  
 });
 //})(jQuery);

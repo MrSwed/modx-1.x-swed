@@ -1,12 +1,12 @@
 /**
  * social-share
  *
- * Кнопки "Поделиться"
+ * РљРЅРѕРїРєРё "РџРѕРґРµР»РёС‚СЊСЃСЏ"
  *
  * @category	chunk
  * @version 	1.0
  * @license 	http://www.gnu.org/copyleft/gpl.html GNU Public License (GPL)
- * @internal @modx_category Шаблоны
+ * @internal @modx_category РЁР°Р±Р»РѕРЅС‹
  * @internal    @installset base, sample
 */
 

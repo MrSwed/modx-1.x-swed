@@ -39,10 +39,11 @@ if (class_exists('Wayfinder')) {
 }
 
 $wf->_config = array(
-	'id' => isset($startId) ? $startId : $modx->documentIdentifier,
-	'level' => isset($level) ? $level : 0,
+	'id' => isset($startId) ? intval($startId) : $modx->documentIdentifier,
+	'level' => isset($level) ? intval($level) : 0,
 	'includeDocs' => isset($includeDocs) ? $includeDocs : 0,
 	'excludeDocs' => isset($excludeDocs) ? $excludeDocs : 0,
+	'where' => isset($where) ? $where : '',
 	'ph' => isset($ph) ? $ph : FALSE,
 	'debug' => isset($debug) ? TRUE : FALSE,
 	'ignoreHidden' => isset($ignoreHidden) ? $ignoreHidden : FALSE,

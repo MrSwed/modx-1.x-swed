@@ -28,7 +28,6 @@
  <link rel="stylesheet" type="text/css" href="/js/fancybox/helpers/jquery.fancybox-thumbs.css" media="screen"/>
  <script src="/js/logic.js" type="text/javascript" charset="utf-8"></script>
  <link href="/design/style.css" rel="stylesheet" type="text/css"/>
- <base href="/" />
 
  <!--[if lte IE 8 ]>
  <link rel="stylesheet" type="text/css" href="/design/ie8.css"/>

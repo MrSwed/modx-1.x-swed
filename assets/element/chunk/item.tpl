@@ -1,14 +1,3 @@
-/**
- * item
- * 
- * Шаблон элемента Ditto
- * 
- * @category	chunk
- * @version 	1.1
- * @license 	http://www.gnu.org/copyleft/gpl.html GNU Public License (GPL)
- * @internal	@modx_category Ditto
- * @internal	@installset base, sample
- */
 <div class="item">
  <div class="date">[+date+]</div>
  <a href="[(site_url)][~[+id+]~]" class="caption">[+title+]</a>

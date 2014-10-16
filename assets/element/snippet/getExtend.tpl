@@ -5,7 +5,7 @@
  * Получает дополнительные данные для документа
  *
  * @category 	snippet
- * @version 	2.2
+ * @version 	2.21
  * @license 	http://www.gnu.org/copyleft/gpl.html GNU Public License (GPL)
  * @internal	@properties
  * @internal	@modx_category Utils
@@ -29,16 +29,20 @@
   "check"  => isset($check)?$check:false,
   "checkName"  => isset($checkName)?$checkName:"%s",
   "out"  => isset($out)?$out:"%s",
+  "value" => isset($value)?$value:null,
  );
-if (!isset($value)) {
- $value = $modx->getTemplateVarOutput(array($p["field"]), $id, 1);
- $value = $value[$p["field"]];
+if (is_null($p["value"])) {
+ $p["value"] = $modx->getTemplateVarOutput(array($p["field"]), $id, 1);
+ $p["value"] = $p["value"][$p["field"]];
 }
 if (!empty($debug)) {
- print  $value." ".sprintf($p["checkName"],$value)." " .sprintf($p["out"],$value);
- print_r($value);
+ print  "<pre>debug/\n";
+ print_r($p);
+ print_r($p["value"]);
+ print $p["value"]." ".sprintf($p["checkName"],$p["value"])." " .sprintf($p["out"],$p["value"]);
+ print "\n/debug</pre>";
 }
-if (!$p["check"] or ( $p["check"] == "chunk" and $chunk = $modx->getChunk(sprintf($p["checkName"],$value)))) {
+if (!$p["check"] or ( $p["check"] == "chunk" and $chunk = $modx->getChunk(sprintf($p["checkName"],$p["value"])))) {
  return sprintf($p["out"],$value);
 }
 return "";

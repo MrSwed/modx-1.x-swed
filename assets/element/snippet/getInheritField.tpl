@@ -5,7 +5,7 @@
  * Получить значение наследуемого параметра
  *
  * @category 	snippet
- * @version 	1.1
+ * @version 	1.2
  * @license 	http://www.gnu.org/copyleft/gpl.html GNU Public License (GPL)
  * @internal	@properties
  * @internal	@modx_category Utils
@@ -20,6 +20,7 @@ $default = isset($default)?$default:""; // если не нашли значен
 $toparent = isset($toparent)?$toparent:""; // использовать другой флаг получения значения родителя
 $deep = isset($deep)?$deep:100;
 $out = isset($out)?$out:"%s";
+$outEmpty = isset($outEmpty)?$outEmpty:"%s";
 
 $value = $toparent;
 $cid = $id;
@@ -29,4 +30,6 @@ while ( $value == $toparent and (int)$cid and --$deep > 0) {
  $value = $value[$field];
 }
 if ($value == $toparent) $value = $default;
-return $out?sprintf($out,$value):"";
+return $value?
+ ($out?sprintf($out,$value):""):
+ ($outEmpty?sprintf($outEmpty,$value):"");

@@ -1,0 +1,1 @@
+[!AjaxSearch? &showInputForm=`0` &ajaxSearch=`0`!]

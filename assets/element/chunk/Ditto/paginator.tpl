@@ -1,1 +1,3 @@
-<center><div class="paginator"><span class="caption">Страница: </span> [+pages+] <a href="[~[*id*]~]?all">Все</a></div></center>
+<div class="paginator[+totalPages:is=`1`:then=` hide`+]">
+ <div class="inner"><span class="caption">Страница: </span> [+previous+][+pages+][+next+]</div>
+</div>

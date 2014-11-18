@@ -1,1 +1,1 @@
-<a title="Предыдушая страница" href="[+url+]" class="prev">Назад</a>
+<a title="Предыдушая страница" href="[+url+]" class="prev">&laquo;</a>

@@ -1,1 +1,1 @@
-<a title="Страница [+page+]" href="[~[*id*]~]" class="active">[+page+]</a>
+<a title="Страница [+page+]" class="active">[+page+]</a>

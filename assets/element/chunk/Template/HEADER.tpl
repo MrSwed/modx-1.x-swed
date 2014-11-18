@@ -1,5 +1,5 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
+<!DOCTYPE html>
+<html>
 <head>
  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
  <title>[*meta_title:ifempty=`[*longtitle:ifempty=`[*pagetitle*] - [*parent:isnot=`0`:then=`[!getDocumentField? &id=`[*parent*]`!] - `*][(site_name)]`*]`*]</title>
@@ -34,3 +34,13 @@
  Обновите Браузер. Интернет Эксплорер ниже 8-й версии не поддерживается
 </div>
 <![endif]-->
+<div class="main">
+ <div class="header">
+  <a href="/" class="logo">[(site_name)]</a>
+  <div class="search">
+   {{HeaderSearchForm}}
+  </div>
+  <div class="menu">
+   [!Wayfinder? &startId=`0` &level=`2` &useWeblinkUrl=1 &where=`isfolder = 1 or parent = 0 `!]
+  </div>
+ </div>

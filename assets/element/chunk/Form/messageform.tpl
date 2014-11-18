@@ -2,6 +2,7 @@
 <div class="message">[+validationmessage+]</div>
 <form action="[~[*id*]~]?review=1" method="post">
  <input type="hidden" name="formid" value="messageForm" />
+ <span style="display:none"><input type="text" name="veridata" eform="&nbsp;:date:0::#REGEX /^$/" value=""/></span>
  <table border="0" >
   <tbody>
    <tr>

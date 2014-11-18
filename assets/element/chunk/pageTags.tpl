@@ -1,0 +1,1 @@
+<div class="pagetags">[!tagLinks? &tv=`tags` &label=`<b>Тэги:</b> ` &separator=`, ` &path=`[~[ID HERE]~]` !]</div>

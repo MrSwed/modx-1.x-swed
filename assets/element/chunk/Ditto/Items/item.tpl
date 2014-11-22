@@ -5,3 +5,4 @@
   [+introtext+]
  <div class="more"><a href="[(site_url)][~[+id+]~]">Подробнее</a></div>
 </div>
+</div>

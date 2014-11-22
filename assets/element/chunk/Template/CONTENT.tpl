@@ -1,6 +1,6 @@
 <div class="content">
- <div class="inner">
-  <div class="crumbs">[[Breadcrumbs? &showCurrentCrumb=`0` &respectHidemenu=`0`]]</div>
+ <div class="inner">[+phx:input=`[[getInheritField? &id=`[*id*]` &field=`hideBreadcrumbs`]]`:ne=`1`:then=`
+  <div class="crumbs">[[Breadcrumbs? &showCurrentCrumb=`1` &respectHidemenu=`0`]]</div>`+] 
   [+phx:input=`[*parent*]`:ne=`1`:and:if=`[[getInheritField? &id=`[*id*]` &field=`showParentTitle`]]`:is=`1`:then=`
    <h1>[+phx:input=`[*parent*]`:docfield+]</h1>
    [+phx:input=`[*hidePageTitle*]`:ne=`1`:then=`<h2>[*pagetitle*]</h2>`+]
@@ -9,7 +9,6 @@
  `+]
   [+phx:input=`[*isfolder*]`:ne=`1`:and:if=`[[getInheritField? &id=`[*id*]` &field=`showDateInContent`]]`:is=`1`:then=`<div class="date">[*phx:input=`[*pub_date:ne=`0`:then=`[*pub_date*]`:else=`[*publishedon*]`*]`:dateformat=`%d.%m.%Y`*]</div>`+]
  [*beforeContent*]
- [+phx:input=`[*hidePageTitle*]`:ne=`1`:then=`<h1>[*pagetitle*]</h1>`+]
  <div class="text">
   [*content*]
  </div>

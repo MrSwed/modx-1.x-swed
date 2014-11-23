@@ -2,7 +2,7 @@
 
 /* By Swed
     * description: See if the output string is in one of the option delimited by one of: ;, (like 'is' ).
-    * usage: [+variable:in=`1,2,3;4;5`+]
+    * usage: [+variable:in=`1,2,3;4;5`:then=`some text`+]
     * 
 */	
 

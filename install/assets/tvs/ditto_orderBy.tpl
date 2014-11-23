@@ -7,7 +7,7 @@
  * @name            ditto_orderBy
  * @internal        @caption Порядок элементов
  * @internal        @input_type dropdown
- * @internal        @input_options ||Позиция в меню (Возрастание)==menuindex asc||Позиция в меню (Убывание)==menuindex desc||Дата (Возрастание)==pub_date ASC,createdon asc||Дата (Убывание)==pub_date DESC,createdon desc
+ * @internal        @input_options ||Позиция в меню (По возрастанию)==menuindex asc||Позиция в меню (По убыванию)==menuindex desc||Заголовок (По возрастанию)==pagetitle asc||Заголовок (По убыванию)==pagetitle desc||Дата публикации (По возрастанию)==pub_date ASC,publishedon asc||Дата публикации (По убыванию)==pub_date DESC,publishedon desc
  * @internal        @input_default
  * @internal        @output_widget
  * @internal        @output_widget_params

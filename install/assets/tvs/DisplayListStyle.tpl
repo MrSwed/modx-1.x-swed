@@ -1,7 +1,7 @@
 /**
  * DisplayListStyle
  *
- * Стиль отображения списка подчиненных элементов
+ * Стиль отображения списка
  *
  * @category        tv
  * @name            DisplayListStyle

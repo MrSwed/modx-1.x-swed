@@ -1,4 +1,3 @@
-
 // more example rules are in assets/plugins/managermanager/example_mm_rules.inc.php
 
 // example of how PHP is allowed - check that a TV named documentTags exists before creating rule
@@ -16,8 +15,15 @@ $pidAr = array_merge(array($pid),$modx->getParentIds($pid)); // роительс
 /**/
 
 
-mm_ddCreateSection('Параметры', 'parameters','settings');
-mm_ddMoveFieldsToSection('hidePageTitle,intalias,hideChilds,hideFolders,depth,ditto_display,ditto_orderBy,DisplayListStyle','parameters');
+
+mm_ddCreateSection('Параметры (наследуемые, пустое значение наследует родителя)', 'parameters','settings');
+mm_ddMoveFieldsToSection('hidePageTitle,hideBreadcrumbs,showParentTitle','parameters');
+
+mm_ddCreateSection('Параметры дочерних (наследуемые, пустое значение наследует родителя)', 'parameters_child','settings');
+mm_ddMoveFieldsToSection('hideChilds,hideFolders,depth,ditto_display,ditto_orderBy,DisplayListStyle,intalias','parameters_child');
+
+mm_ddCreateSection('Дополнительные тексты', 'addTexts','settings');
+mm_ddMoveFieldsToSection('beforeContent,afterContent','addTexts');
 
 mm_createTab('Изображения','photos');
 mm_moveFieldsToTab('image,photos','photos');

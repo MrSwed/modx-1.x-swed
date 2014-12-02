@@ -1,15 +1,15 @@
 <?php
 
-/* description: Return formatted date
-usage:[+variable:date=`<Format To>[|Format From]`+]
-for timestamp
- [+createdon:date=`%H:%M %d.%m.%Y`+]
-
-for reformat date string from other format
-[+tv_var:date=`%H:%M %d.%m.%Y|%d-%m-%Y %H:%M:%S`+]
-
-added by: MrSwed
+/*
+  * description: Return an formatted date
+  * usage:[+variable:dateformat=`<Format To>[|Format From]`+]
+  *  for timestamp
+  *   [+createdon:dateformat=`%H:%M %d.%m.%Y`+]
+  *  for reformat date string from other format
+  *   [+tv_var:dateformat=`%H:%M %d.%m.%Y|%d-%m-%Y %H:%M:%S`+]
+  *  added by: MrSwed
 */
+
 $debug="";
 if (empty($options)) $options = "%H:%M %d.%m.%Y";
 $options = explode("|",$options);

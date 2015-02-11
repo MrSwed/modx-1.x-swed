@@ -34,7 +34,7 @@
  Обновите Браузер. Интернет Эксплорер ниже 8-й версии не поддерживается
 </div>
 <![endif]-->
-<div class="main">
+<div class="main">{{debug_maket}}
  <div class="header">
   <a href="/" class="logo">[(site_name)]</a>
   <div class="search">

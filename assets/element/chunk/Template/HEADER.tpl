@@ -23,7 +23,7 @@
  <![endif]-->
 </head>
 
-<body>
+<body[!getInheritField? &id=`[*id*]` &field=`bodyclass` &out=` class="%s"`!]>
 <!--[if lte IE 7 ]>
 <style>
  .main, .footer {

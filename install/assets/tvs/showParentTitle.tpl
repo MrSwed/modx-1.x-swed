@@ -4,7 +4,7 @@
  * Первым будет заголовок раздела
  *
  * @category        tv
- * @name            hideFolders
+ * @name            showParentTitle
  * @internal        @caption Показать заголовок Родителя
  * @internal        @input_type dropdown
  * @internal        @input_options ||Да==1||Нет==0

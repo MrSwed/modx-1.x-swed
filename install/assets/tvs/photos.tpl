@@ -1,12 +1,12 @@
 /**
  * photos
  *
- * Фотографии (Несколько, не подходит для больших галерей - указать ID в плагине MultiPhotos)
+ * Фотографии
  *
  * @category        tv
  * @name            photos
  * @internal        @caption Фотографии
- * @internal        @input_type textarea
+ * @internal        @input_type image
  * @internal        @input_options
  * @internal        @input_default
  * @internal        @output_widget

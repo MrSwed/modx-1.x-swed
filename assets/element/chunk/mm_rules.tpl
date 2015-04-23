@@ -9,7 +9,7 @@ mm_widget_showimagetvs(); // Always give a preview of Image TVs
 
 /* Переменные для использования * /
 $cid = isset($content['id'])?$content['id']:false;
-$pid = $cid?$content['parent']:$_GET["pid"];
+$pid = !empty($content['parent'])?$content['parent']:$_GET["pid"];
 $tpl = $content['template'];
 $pidAr = array_merge(array($pid),$modx->getParentIds($pid)); // роительский путь
 /**/
@@ -17,13 +17,13 @@ $pidAr = array_merge(array($pid),$modx->getParentIds($pid)); // роительс
 
 
 mm_ddCreateSection('Параметры (наследуемые, пустое значение наследует родителя)', 'parameters','settings');
-mm_ddMoveFieldsToSection('hidePageTitle,hideBreadcrumbs,showParentTitle,showDateInContent,inheritAfterContent,enableShare,enableComments,bodyclass','parameters');
+mm_ddMoveFieldsToSection('hidePageTitle,hideBreadcrumbs,showParentTitle,showDateInContent,enableShare,enableComments,bodyclass','parameters');
 
 mm_ddCreateSection('Параметры дочерних (наследуемые, пустое значение наследует родителя)', 'parameters_child','settings');
 mm_ddMoveFieldsToSection('hideChilds,hideFolders,depth,ditto_display,ditto_orderBy,DisplayListStyle,intalias','parameters_child');
 
 mm_ddCreateSection('Дополнительные тексты', 'addTexts','settings');
-mm_ddMoveFieldsToSection('beforeContent,afterContent','addTexts');
+mm_ddMoveFieldsToSection('beforeContent,inheritBeforeContent,afterContent,inheritAfterContent','addTexts');
 
 mm_ddCreateSection('Отладка', 'debug','settings');
 mm_ddMoveFieldsToSection('image_maket','debug');

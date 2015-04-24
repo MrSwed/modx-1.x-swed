@@ -6,20 +6,20 @@
  <meta name="description" content="[*meta_description:specialchar*]" />
  <meta name="keywords" content="[*meta_keywords:specialchar*]" />
  <base href='[(site_url)]' />
- <script src="/js/jquery-1.9.0-min.js" type="text/javascript" charset="utf-8"></script>
+ <script src="/assets/js/jquery-1.9.0-min.js" type="text/javascript" charset="utf-8"></script>
 
- <script type="text/javascript" src="/js/jquery.mousewheel.js"></script>
- <script type="text/javascript" src="/js/fancybox/jquery.fancybox.js"></script>
- <script type="text/javascript" src="/js/fancybox/helpers/jquery.fancybox-buttons.js"></script>
- <script type="text/javascript" src="/js/fancybox/helpers/jquery.fancybox-media.js"></script>
- <link rel="stylesheet" type="text/css" href="/js/fancybox/jquery.fancybox.css" media="screen"/>
- <link rel="stylesheet" type="text/css" href="/js/fancybox/helpers/jquery.fancybox-buttons.css" media="screen"/>
- <link rel="stylesheet" type="text/css" href="/js/fancybox/helpers/jquery.fancybox-thumbs.css" media="screen"/>
- <script src="/js/logic.js" type="text/javascript" charset="utf-8"></script>
- <link href="/design/style.css" rel="stylesheet" type="text/css"/>
+ <script type="text/javascript" src="/assets/js/jquery.mousewheel.js"></script>
+ <script type="text/javascript" src="/assets/js/fancybox/jquery.fancybox.js"></script>
+ <script type="text/javascript" src="/assets/js/fancybox/helpers/jquery.fancybox-buttons.js"></script>
+ <script type="text/javascript" src="/assets/js/fancybox/helpers/jquery.fancybox-media.js"></script>
+ <link rel="stylesheet" type="text/css" href="/assets/js/fancybox/jquery.fancybox.css" media="screen"/>
+ <link rel="stylesheet" type="text/css" href="/assets/js/fancybox/helpers/jquery.fancybox-buttons.css" media="screen"/>
+ <link rel="stylesheet" type="text/css" href="/assets/js/fancybox/helpers/jquery.fancybox-thumbs.css" media="screen"/>
+ <script src="/assets/templates/design/js/logic.js" type="text/javascript" charset="utf-8"></script>
+ <link href="/assets/templates/design/style.css" rel="stylesheet" type="text/css"/>
 
  <!--[if lte IE 8 ]>
- <link rel="stylesheet" type="text/css" href="/design/ie8.css"/>
+ <link rel="stylesheet" type="text/css" href="/assets/templates/design/ie8.css"/>
  <![endif]-->
 </head>
 

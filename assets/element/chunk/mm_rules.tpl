@@ -1,3 +1,4 @@
+<?
 // more example rules are in assets/plugins/managermanager/example_mm_rules.inc.php
 
 // example of how PHP is allowed - check that a TV named documentTags exists before creating rule
@@ -11,7 +12,7 @@ mm_widget_showimagetvs(); // Always give a preview of Image TVs
 $cid = isset($content['id'])?$content['id']:false;
 $pid = !empty($content['parent'])?$content['parent']:$_GET["pid"];
 $tpl = $content['template'];
-$pidAr = array_merge(array($pid),$modx->getParentIds($pid)); // роительский путь
+$pidAr = array_merge(array($pid),$modx->getParentIds($pid)); // родительский путь
 /**/
 
 
@@ -30,7 +31,8 @@ mm_ddMoveFieldsToSection('image_maket','debug');
 
 mm_createTab('Изображения','photos');
 mm_moveFieldsToTab('image,photos','photos');
-mm_ddMultipleFields('photos', '', '', 'field,text,text', 'Изображение,Название,Описание');
+mm_changeFieldHelp('photos','Используйте чанк <b>{{photos}}</b> для включения фотографий в контент');
+mm_ddMultipleFields('photos', '', '', 'image,text,text', 'Изображение,Название,Описание');
 
 mm_createTab('SEO: meta','seo_params');
 mm_moveFieldsToTab('meta_title,meta_keywords,meta_description','seo_params');

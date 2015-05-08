@@ -828,10 +828,10 @@ INSERT IGNORE INTO `{PREFIX}system_settings`
 ('auto_template_logic','{AUTOTEMPLATELOGIC}'),
 ('default_template','3'),
 ('old_template',''),
-('publish_default','0'),
+('publish_default','1'),
 ('cache_default','1'),
 ('search_default','1'),
-('friendly_urls','0'),
+('friendly_urls','1'),
 ('friendly_url_prefix',''),
 ('friendly_url_suffix','.html'),
 ('friendly_alias_urls','1'),
@@ -878,7 +878,7 @@ INSERT IGNORE INTO `{PREFIX}system_settings`
 ('session.cookie.lifetime','604800'),
 ('mail_check_timeperiod','60'),
 ('manager_direction','ltr'),
-('tinymce_editor_theme','editor'),
+('tinymce_editor_theme','full'),
 ('tinymce_custom_plugins','style,advimage,advlink,searchreplace,print,contextmenu,paste,fullscreen,nonbreaking,xhtmlxtras,visualchars,media'),
 ('tinymce_custom_buttons1','undo,redo,selectall,separator,pastetext,pasteword,separator,search,replace,separator,nonbreaking,hr,charmap,separator,image,link,unlink,anchor,media,separator,cleanup,removeformat,separator,fullscreen,print,code,help'),
 ('tinymce_custom_buttons2','bold,italic,underline,strikethrough,sub,sup,separator,bullist,numlist,outdent,indent,separator,justifyleft,justifycenter,justifyright,justifyfull,separator,styleselect,formatselect,separator,styleprops'),
@@ -905,7 +905,7 @@ INSERT IGNORE INTO `{PREFIX}system_settings`
 ('denyZipDownload', '0'),
 ('denyExtensionRename', '0'),
 ('showHiddenFiles', '0'),
-('docid_incrmnt_method', '0'),
+('docid_incrmnt_method', '1'),
 ('make_folders', '0');
 
 

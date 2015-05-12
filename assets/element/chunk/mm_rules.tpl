@@ -18,7 +18,8 @@ $pidAr = array_merge(array($pid),$modx->getParentIds($pid)); // родитель
 
 
 mm_ddCreateSection('Параметры (наследуемые, пустое значение наследует родителя)', 'parameters','settings');
-mm_ddMoveFieldsToSection('hidePageTitle,hideBreadcrumbs,showParentTitle,showDateInContent,enableShare,enableComments,bodyclass','parameters');
+mm_ddMoveFieldsToSection('hidePageTitle,hideBreadcrumbs,showParentTitle,showDateInContent,socialwidgets,bodyclass','parameters');
+mm_ddMultipleFields("socialwidgets",'','','select,select','Поделиться {{share}},Комментарии {{comments}}','auto','||','::','','',1,1,'[["",""],[0,"Нет"],[1,"Да"],[2,"Да, кроме контейнеров"]]');
 
 mm_ddCreateSection('Параметры дочерних (наследуемые, пустое значение наследует родителя)', 'parameters_child','settings');
 mm_ddMoveFieldsToSection('hideChilds,hideFolders,depth,ditto_display,ditto_orderBy,DisplayListStyle,intalias','parameters_child');

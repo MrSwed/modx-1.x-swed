@@ -44,8 +44,8 @@
  <div class="endcol"></div>
  `+]
 
-[+phx:input=`[[getInheritField? &id=`[*id*]` &field=`enableShare`]]`:math=`?+(3*[*isfolder*])`:in=`1,2,4`:then=`{{share}}`+]
-[+phx:input=`[[getInheritField? &id=`[*id*]` &field=`enableComments`]]`:math=`?+(3*[*isfolder*])`:in=`1,2,4`:then=`{{comments}}`+]
+ [+phx:input=`[[getInheritField? &id=`[*id*]` &field=`socialwidgets`]]`:element=`0::`:math=`?+(3*[*isfolder*])`:in=`1,2,4`:then=`{{share}}`+]
+ [+phx:input=`[[getInheritField? &id=`[*id*]` &field=`socialwidgets`]]`:element=`1::`:math=`?+(3*[*isfolder*])`:in=`1,2,4`:then=`{{comments}}`+]
 
 </div>
 </div>

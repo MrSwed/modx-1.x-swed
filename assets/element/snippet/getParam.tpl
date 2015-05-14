@@ -5,11 +5,12 @@
  * Вернуть текст в зависимости от параметра HTTP
  *
  * @category 	snippet
- * @version 	1.2 (04.11.2013)
+ * @version 	1.2.1 (04.11.2013)
  * @license 	http://www.gnu.org/copyleft/gpl.html GNU Public License (GPL)
  * @internal	@properties
  * @internal	@modx_category Utils
- * @internal    @installset base, sample
+ * @internal	@installset base, sample
+ * @internal	@author MrSwed <webmaster@sdcollection.com>
  */
 //
 /* Description:
@@ -24,7 +25,7 @@
  *  Для фильтра Ditto: если есть $_GET["year"] вернет |year,<Значение>,1
  *   [[getParam? &field=`year` &text=`|year,%v,1`  &notempty=`1` &delimiter=`;`]]
  *  Для фильтра Ditto: проверяет наличие year и author и вернет строку |year,<Значение>,1;|author
- *  [[getParam? &field=`year|author` &text=`|%k,%v,1`  &notempty=`1` &delimiter=`;` ]]
+ *  [[getParam? &field=`year;author` &text=`|%k,%v,1`  &notempty=`1` &delimiter=`;` ]]
  *
  * История:
  * 1.2.1

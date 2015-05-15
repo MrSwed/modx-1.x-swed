@@ -14,19 +14,34 @@ $pid = !empty($content['parent'])?$content['parent']:$_GET["pid"];
 $tpl = $content['template'];
 $pidAr = array_merge(array($pid),$modx->getParentIds($pid)); // родительский путь
 /**/
-
+$p = array(
+ "sel_ynp" => json_encode(array(
+  array("",""), // use parent setting
+  array(1,"Да"),array(0,"Нет")
+ )),
+ "sel_ynp_nof" => json_encode(array(
+  array("",""), // use parent setting
+  array(0,"Нет"),array(1,"Да"),array(2,"Да, кроме контейнеров")
+ )),
+ "text_places" => json_encode(array(
+  array("beforeText","Перед основным текстом"),
+  array("afterText","После основного текста"),
+ ))
+);
 
 
 mm_ddCreateSection('Параметры (наследуемые, пустое значение наследует родителя)', 'parameters','settings');
 mm_ddMoveFieldsToSection('hidePageTitle,hideBreadcrumbs,showParentTitle,showDateInContent,socialwidgets,bodyclass','parameters');
-mm_ddMultipleFields("socialwidgets",'','','select,select','Поделиться {{share}},Комментарии {{comments}}','auto','||','::','','',1,1,'[["",""],[0,"Нет"],[1,"Да"],[2,"Да, кроме контейнеров"]]');
+mm_ddMultipleFields("socialwidgets",'','','select,select','Поделиться {{share}},Комментарии {{comments}}','auto','||','::','','',1,1,$p["sel_ynp_nof"]);
 
 mm_ddCreateSection('Параметры дочерних (наследуемые, пустое значение наследует родителя)', 'parameters_child','settings');
 mm_ddMoveFieldsToSection('hideChilds,hideFolders,depth,ditto_display,ditto_orderBy,DisplayListStyle,intalias','parameters_child');
 
 mm_ddCreateSection('Дополнительные тексты', 'addTexts','settings');
-mm_ddMoveFieldsToSection('beforeContent,inheritBeforeContent,afterContent,inheritAfterContent','addTexts');
+mm_ddMoveFieldsToSection('addtexts','addTexts');
 
+mm_ddMultipleFields("addtexts",'','','richtext,select,select','Текст,Месторасположение,Наследовать поле::Значение поля родителя будет передаваться дочерним ресурсам','auto','||','::',0,0,0,0,"||{$p['text_places']}||{$p['sel_ynp']}");
+    
 mm_ddCreateSection('Отладка', 'debug','settings');
 mm_ddMoveFieldsToSection('image_maket','debug');
 

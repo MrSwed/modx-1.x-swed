@@ -38,7 +38,7 @@
   &tplPaginatePreviousOff=`ditto-prev-off`
   &noResults=`&nbsp;`
   &debug=`0`
-  ]]
+  !]
  </div> <!-- /items -->
  {{paginator}}
  <div class="endcol"></div>

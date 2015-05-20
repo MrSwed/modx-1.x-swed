@@ -2,7 +2,7 @@
 <html>
 <head>
  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
- <title>[*meta_title:ifempty=`[*longtitle:ifempty=`[*pagetitle*] - [*parent:isnot=`0`:then=`[!getDocumentField? &id=`[*parent*]`!] - `*][(site_name)]`*]`*]</title>
+ <title>[*meta_title:ifempty=`[*longtitle:ifempty=`[*pagetitle*] - [*parent:isnot=`0`:then=`[!getDocumentField? &id=`[*parent*]`!] - `*][(site_name)]`*]`:striptags*]</title>
  <meta name="description" content="[*meta_description:specialchar*]" />
  <meta name="keywords" content="[*meta_keywords:specialchar*]" />
  <base href='[(site_url)]' />

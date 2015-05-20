@@ -81,7 +81,9 @@ if ($handle = opendir($widget_dir)){
 $mm_current_page = array();
 
 //Get page template
-if (isset($_POST['template'])){
+if (isset($e->params['template'])){
+	$mm_current_page['template'] = $e->params['template'];
+}else if (isset($_POST['template'])){
 	$mm_current_page['template'] = $_POST['template'];
 }else if (isset($content['template'])){
 	$mm_current_page['template'] = $content['template'];
@@ -185,7 +187,7 @@ if (!function_exists('make_changes')){
 		$chunk_output = $modx->getChunk($chunk);
 		if (!empty($chunk_output)){
 			// If there is, run it.
-			eval($chunk_output);
+			eval(preg_replace("/\<\?(php)?|\?>/im",'',$chunk_output));
 			return "// Getting rules from chunk: $chunk \n\n";
 		//If there's no chunk output, read in the file.
 		}else if (is_readable($config_file)){
@@ -206,6 +208,8 @@ if (!function_exists('initJQddManagerManager')){
 $j.ddMM.config.site_url = "'.$modx->config['site_url'].'";
 $j.ddMM.config.datetime_format = "'.$modx->config['datetime_format'].'";
 $j.ddMM.config.datepicker_offset = '.$modx->config['datepicker_offset'].';
+
+$j.ddMM.urls.manager = "'.MODX_MANAGER_URL.'";
 
 $j.ddMM.fields = $j.parseJSON(\''.json_encode($mm_fields).'\');
 ';

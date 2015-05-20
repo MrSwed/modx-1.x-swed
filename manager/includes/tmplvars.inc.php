@@ -9,8 +9,8 @@
 		if(substr($default_text, 0, 6) === '@@EVAL' && $field_value===$default_text) {
 	     	$eval_str = trim(substr($default_text, 7));
 	    	$default_text = eval($eval_str);
-	    	$field_value = $default_text;
 	    }
+    	$field_value = ($field_value != '') ? $field_value : $default_text;
 	    
 		$field_html ='';
 
@@ -182,7 +182,7 @@
 					</script>";
 					$ResourceManagerLoaded  = true;					
 				} 
-				$field_html .='<input type="text" id="tv'.$field_id.'" name="tv'.$field_id.'"  value="'.$field_value .'" '.$field_style.' onchange="documentDirty=true;" />&nbsp;<input type="button" value="'.$_lang['insert'].'" onclick="BrowseServer(\'tv'.$field_id.'\')" />';
+				$field_html .='<input type="text" id="tv'.$field_id.'" name="tv'.$field_id.'"  value="'.htmlspecialchars($field_value) .'" '.$field_style.' onchange="documentDirty=true;" /> <input type="button" value="'.$_lang['insert'].'" onclick="BrowseServer(\'tv'.$field_id.'\')" />';
 				break;
 			case "file": // handles the input of file uploads
 			/* Modified by Timon for use with resource browser */

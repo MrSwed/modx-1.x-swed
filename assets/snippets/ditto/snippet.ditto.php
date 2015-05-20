@@ -327,8 +327,6 @@ $paginate = isset($paginate)? $paginate : 0;
     - <paginateSplitterCharacter>
     - <display>
 */
-$paginateLinksMax = isset($paginateLinksMax)?$paginateLinksMax:10;
-$paginateSkipString = isset($paginateSkipString)?$paginateSkipString:"...";
 
 $dateSource = isset($dateSource) ? $dateSource : "createdon";
 /*
@@ -826,8 +824,8 @@ if ($count > 0) {
         // set initial stop count
 
     if($paginate == 1) {
-        $max_paginate = isset($max_paginate)? $max_paginate : 50;
-        $max_previous = isset($max_previous)? $max_previous : 25;
+        $paginateLinksMax = isset($paginateLinksMax)?$paginateLinksMax:10;
+        $paginateSkipString = isset($paginateSkipString)?$paginateSkipString:"...";
         $paginateAlwaysShowLinks = isset($paginateAlwaysShowLinks)? $paginateAlwaysShowLinks : 0;
         /*
             Param: paginateAlwaysShowLinks
@@ -981,7 +979,7 @@ if ($count > 0) {
             - <paginateSplitterCharacter>
         */
         
-        $ditto->paginate($start, $stop, $total, $display, $tplPaginateNext, $tplPaginatePrevious, $tplPaginateNextOff, $tplPaginatePreviousOff, $tplPaginatePage, $tplPaginateCurrentPage, $paginateAlwaysShowLinks, $paginateSplitterCharacter, $max_paginate, $max_previous);
+        $ditto->paginate($start, $stop, $total, $display, $tplPaginateNext, $tplPaginatePrevious, $tplPaginateNextOff, $tplPaginatePreviousOff, $tplPaginatePage, $tplPaginateCurrentPage, $paginateAlwaysShowLinks, $paginateSplitterCharacter, $paginateLinksMax, $paginateSkipString);
             // generate the pagination placeholders
     }
 

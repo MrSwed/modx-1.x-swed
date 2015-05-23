@@ -41,7 +41,7 @@
  */
 
 //Подключаем modx.ddTools
-require_once $modx->config['base_path'].'assets/snippets/ddTools/modx.ddtools.class.php';
+require_once $modx->config['base_path'].'assets/plugins/managermanager/modx.ddtools.class.php';
 
 //Если задано имя поля, которое необходимо получить
 if (isset($docField)){

@@ -24,6 +24,7 @@ $p = array(
   array(0,"Нет"),array(1,"Да"),array(2,"Да, кроме контейнеров")
  )),
  "text_places" => json_encode(array(
+  array("",""),
   array("beforeText","Перед основным текстом"),
   array("afterText","После основного текста"),
  ))
@@ -40,7 +41,7 @@ mm_ddMoveFieldsToSection('hideChilds,hideFolders,depth,ditto_display,ditto_order
 mm_ddCreateSection('Дополнительные тексты', 'addTexts','settings');
 mm_ddMoveFieldsToSection('addtexts','addTexts');
 
-mm_ddMultipleFields("addtexts",'','','richtext,select,select','Текст,Месторасположение,Наследовать поле::Значение поля родителя будет передаваться дочерним ресурсам','auto','||','::',0,0,0,0,"||{$p['text_places']}||{$p['sel_ynp']}");
+mm_ddMultipleFields("addtexts",'','','richtext,select,select','Текст,Месторасположение::Если не выбрано - показываться не будет,Наследовать поле::Значение поля родителя будет передаваться дочерним ресурсам, если в них не будут заданы свои тексты для соответствующих полей','auto','||','::',0,0,0,0,"||{$p['text_places']}||{$p['sel_ynp']}");
     
 mm_ddCreateSection('Отладка', 'debug','settings');
 mm_ddMoveFieldsToSection('image_maket','debug');

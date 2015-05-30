@@ -38,7 +38,7 @@ mm_ddMultipleFields("socialwidgets",'','','select,select','Поделиться 
 mm_ddCreateSection('Параметры дочерних (наследуемые, пустое значение наследует родителя)', 'parameters_child','settings');
 mm_ddMoveFieldsToSection('hideChilds,hideFolders,depth,ditto_display,ditto_orderBy,DisplayListStyle,intalias','parameters_child');
 
-mm_ddCreateSection('Дополнительные тексты', 'addTexts','settings');
+mm_ddCreateSection('Дополнительные тексты', 'addTexts');
 mm_ddMoveFieldsToSection('addtexts','addTexts');
 
 mm_ddMultipleFields("addtexts",'','','richtext,select,select','Текст,Месторасположение::Если не выбрано - показываться не будет,Наследовать поле::Значение поля родителя будет передаваться дочерним ресурсам, если в них не будут заданы свои тексты для соответствующих полей','auto','||','::',0,0,0,0,"||{$p['text_places']}||{$p['sel_ynp']}");
@@ -54,3 +54,4 @@ mm_ddMultipleFields('photos', '', '', 'image,text,text', 'Изображение
 mm_createTab('SEO: meta','seo_params');
 mm_moveFieldsToTab('meta_title,meta_keywords,meta_description','seo_params');
 
+mm_minimizablesections("*",'','','debug');

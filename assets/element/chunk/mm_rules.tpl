@@ -46,8 +46,11 @@ mm_ddMultipleFields("addtexts",'','','richtext,select,select','Текст,Мес
 mm_ddCreateSection('Отладка', 'debug','settings');
 mm_ddMoveFieldsToSection('image_maket','debug');
 
-mm_createTab('Изображения','photos');
-mm_moveFieldsToTab('image,photos','photos');
+mm_createTab('Изображения','images');
+mm_moveFieldsToTab('image,photos','images');
+
+mm_ddCreateSection('Фотографии', 'photos', 'images');
+mm_ddMoveFieldsToSection('photos','photos');
 mm_changeFieldHelp('photos','Используйте чанк <b>{{photos}}</b> для включения фотографий в контент');
 mm_ddMultipleFields('photos', '', '', 'image,text,text', 'Изображение,Название,Описание');
 

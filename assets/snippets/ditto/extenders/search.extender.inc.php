@@ -12,7 +12,7 @@
  * www:         https://github.com/Sammyboy/MODx-Ditto-Extenders
  *
  * Installation:
- *      Copy this file into "assets/snippets/ditto/extenders/" of your MODx
+ *      Copy this file into "assets/snippets/ditto/extenders/" of your MODX
  *      installation folder
  *
  * Usage:
@@ -24,7 +24,7 @@
 // ---------------------------------------------------
 
 $searchFields = isset($searchFields) ?
-    preg_replace('/[\s|\n|\r|\t]+/', '', $searchFields) :
+    preg_replace('/\s+/', '', $searchFields) :
     "content";
 /*
     Param:      searchFields

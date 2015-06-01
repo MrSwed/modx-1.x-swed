@@ -17,8 +17,8 @@
  [+phx:input=`[*isfolder*]`:ne=`1`:and:if=`[*tags*]`:ne=``:then=`{{pageTags}}`+]
 
 
- [+phx:input=`[*isfolder*]`:is=`1`:and:if=`[!getInheritField? &id=`[*id*]` &field=`hideChilds`!]`:ne=`1`:then=`
- <div class="items [!getInheritField? &id=`[*id*]` &field=`DisplayListStyle` !] [!getInheritField? &id=`[*id*]` &field=`intalias` !]">
+ [+phx:input=`[*isfolder*]`:is=`1`:and:if=`[[getInheritField? &id=`[*id*]` &field=`hideChilds`]]`:ne=`1`:then=`
+ <div class="items [[getInheritField? &id=`[*id*]` &field=`DisplayListStyle` ]] [[getInheritField? &id=`[*id*]` &field=`intalias` ]]">
   [!Ditto?
   &tpl=`item[[getExtend? &value=`[[getInheritField? &id=`[*id*]` &field=`intalias` &out=`_%s`]][[getInheritField? &id=`[*id*]` &field=`DisplayListStyle` &out=`_%s`]]` &check=`chunk` &checkName=`item%s` ]]`
   &orderBy=`[[getInheritField? &id=`[*id*]` &field=`ditto_orderBy` &default=`menuindex asc` ]]`

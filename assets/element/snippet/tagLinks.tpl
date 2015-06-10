@@ -13,7 +13,7 @@
  *             http://scottydelicious.com | http://piratemachine.org
  * @copyright  2007 Scotty Delicious
  * @license    http://www.gnu.org/copyleft/gpl.html GPL License 2.0
- * @version    1.0.5
+ * @version    1.0.6
  * @link       http://modxcms.com/
  * @see        http://scottydelicious.com/index.html
  * @since      File available since Release 1.0
@@ -70,6 +70,8 @@
  *		Alternatively, supply a doc ID number, and it will
  * 		be converted to a path automagically.
  *
+ * &idDitto = value &id Ditto on the page &path
+ *
  ***************************************/
 
 /**
@@ -87,6 +89,7 @@ $format = isset($format) ? $format : 'a';
 $newline = isset($newline) ? $newline : '1';
 $path = isset($path) ? $path : '';
 $caseSensitive = isset($caseSensitive) ? $caseSensitive : 0;
+if (!empty($idDitto)) {$idDitto = $idDitto . '_';} else {$idDitto = '';}
 
 // If a numeric path is supplied, assume it is a modx page ID, so create a URL from it
 if (!empty($path) && is_numeric($path)) {
@@ -100,10 +103,7 @@ $amp = $modx->config['xhtml_urls'] == '1'?'&amp;':'&';
  * Get the tags from the TV the user supplied
  */
 if ($tv == '' && !isset($value)){return "No template variable for tags was declared.";}
-if (!is_array($TVAR = $modx->getTemplateVarOutput(array($tv), $page_id, 1))){
- $TVAR = $modx->getTemplateVarOutput(array($tv), $page_id, 0);
-}
-$get_tags = isset($value) ? $value : implode($delimiter,$TVAR);
+$get_tags = isset($value) ? $value : implode($delimiter,(array)$modx->getTemplateVarOutput($idname=array($tv), $page_id, $published="1"));
 
 /**
  * Make an array of all the tags associated with the specified document.
@@ -126,7 +126,7 @@ $cnt = count($tvarray);
  * Build the URL
  */
 $url_seperator = (strpos($path, '?') === false)?'?':$amp;
-$doc_path = $path.$url_seperator.'tags=';
+$doc_path = $path.$url_seperator.$idDitto.'tags=';
 
 
 /**

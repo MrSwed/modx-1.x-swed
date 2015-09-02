@@ -54,7 +54,10 @@ mm_ddMoveFieldsToSection('photos','photos');
 mm_changeFieldHelp('photos','Используйте чанк <b>{{photos}}</b> для включения фотографий в контент');
 mm_ddMultipleFields('photos', '', '', 'image,text,text', 'Изображение,Название,Описание');
 
-mm_createTab('SEO: meta','seo_params');
-mm_moveFieldsToTab('meta_title,meta_keywords,meta_description','seo_params');
+mm_createTab('SEO (meta,sitemap)','seo_params');
+mm_ddCreateSection('Meta', 'meta', 'seo_params');
+mm_ddCreateSection('Параметры Sitemap', 'sitemap', 'seo_params');
+mm_ddMoveFieldsToSection('meta_title,meta_keywords,meta_description','meta');
+mm_ddMoveFieldsToSection('sitemap_changefreq,sitemap_exclude,sitemap_priority','sitemap');
 
 mm_minimizablesections("*",'','','debug');

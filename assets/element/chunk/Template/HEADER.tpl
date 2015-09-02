@@ -2,7 +2,7 @@
 <html>
 <head>
  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
- <title>[*meta_title:ifempty=`[*longtitle:ifempty=`[*pagetitle*] - [*parent:isnot=`0`:then=`[!getDocumentField? &id=`[*parent*]`!] - `*][(site_name)]`*]`:striptags*]</title>
+ <title>[*meta_title:ifempty=`[*longtitle:ifempty=`[*pagetitle*] - [*parent:isnot=`0`:then=`[[getDocumentField? &id=`[*parent*]`]] - `*][(site_name)]`*]`:striptags*]</title>
  <meta name="description" content="[*meta_description:specialchar*]" />
  <meta name="keywords" content="[*meta_keywords:specialchar*]" />
  <base href='[(site_url)]' />
@@ -23,7 +23,7 @@
  <![endif]-->
 </head>
 
-<body[!getInheritField? &id=`[*id*]` &field=`bodyclass` &out=` class="%s"`!]>
+<body[[getInheritField? &id=`[*id*]` &field=`bodyclass` &out=` class="%s"`]]>
 <!--[if lte IE 7 ]>
 <style>
  .main, .footer {
@@ -41,6 +41,6 @@
    {{HeaderSearchForm}}
   </div>
   <div class="menu">
-   [!Wayfinder? &startId=`0` &level=`2` &useWeblinkUrl=1 &where=`isfolder = 1 or parent = 0 `!]
+   [[Wayfinder? &startId=`0` &level=`2` &useWeblinkUrl=1 &where=`isfolder = 1 or parent = 0 `]]
   </div>
  </div>

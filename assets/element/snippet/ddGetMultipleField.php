@@ -319,4 +319,5 @@ if (isset($string) && strlen($string) > 0){
 		return $result;
 	}
 }
+return false;
 ?>

@@ -1,11 +1,11 @@
 /**
- * afterContent
+ * addtexts
  *
- * Текст после содержимого
+ * настройки отображения и расположения
  *
  * @category        tv
- * @name            afterContent
- * @internal        @caption После содержимого
+ * @name            addtexts
+ * @internal        @caption Дополнительные тексты
  * @internal        @input_type textarea
  * @internal        @input_options
  * @internal        @input_default

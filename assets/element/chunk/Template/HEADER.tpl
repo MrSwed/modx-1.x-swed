@@ -5,7 +5,7 @@
  <title>[*meta_title:ifempty=`[*longtitle:ifempty=`[*pagetitle*] - [*parent:isnot=`0`:then=`[[getDocumentField? &id=`[*parent*]`]] - `*][(site_name)]`*]`:striptags*]</title>
  <meta name="description" content="[*meta_description:specialchar*]" />
  <meta name="keywords" content="[*meta_keywords:specialchar*]" />
- <base href='[(site_url)]' />
+ <base href='/' />
  <script src="/assets/js/jquery-1.9.0-min.js" type="text/javascript" charset="utf-8"></script>
 
  <script type="text/javascript" src="/assets/js/jquery.mousewheel.js"></script>

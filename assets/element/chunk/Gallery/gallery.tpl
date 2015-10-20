@@ -1,10 +1,10 @@
 [+phx:input=`[*photos*]`:ifnotempty=`
 <div class="photos">
  [[ddGetMultipleField?
- &docField=`photos`
+ &docField=`gallery`
  &docId=`[*id*]`
- &rowTpl=`photos_row`
- &outerTpl=`photos_out`
+ &rowTpl=`gallery_row`
+ &outerTpl=`gallery_out`
  ]]
 </div>
 `+]

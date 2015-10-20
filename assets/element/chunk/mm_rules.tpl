@@ -46,13 +46,13 @@ mm_ddMultipleFields("addtexts",'','','richtext,select,select','Текст,Мес
 mm_ddCreateSection('Отладка', 'debug','settings');
 mm_ddMoveFieldsToSection('image_maket','debug');
 
-mm_createTab('Изображения','images');
-mm_moveFieldsToTab('image,photos','images');
+mm_createTab('Изображения','gallery');
+mm_moveFieldsToTab('image,gallery,gallery_manual','gallery');
 
-mm_ddCreateSection('Фотографии', 'photos', 'images');
-mm_ddMoveFieldsToSection('photos','photos');
-mm_changeFieldHelp('photos','Используйте чанк <b>{{photos}}</b> для включения фотографий в контент');
-mm_ddMultipleFields('photos', '', '', 'image,text,text', 'Изображение,Название,Описание');
+mm_ddCreateSection('Фотографии', 'gallery', 'gallery');
+mm_ddMoveFieldsToSection('gallery','gallery');
+mm_changeFieldHelp('gallery','Используйте чанк <b>{{gallery}}</b> для включения фотографий в контент');
+mm_ddMultipleFields('gallery', '', '', 'image,text,text', 'Изображение,Название,Описание');
 
 mm_createTab('SEO (meta,sitemap)','seo_params');
 mm_ddCreateSection('Meta', 'meta', 'seo_params');

@@ -1,12 +1,12 @@
 /**
- * photos
+ * galllery
  *
  * Фотографии
  *
  * @category        tv
- * @name            photos
+ * @name            galllery
  * @internal        @caption Фотографии
- * @internal        @input_type image
+ * @internal        @input_type text
  * @internal        @input_options
  * @internal        @input_default
  * @internal        @output_widget

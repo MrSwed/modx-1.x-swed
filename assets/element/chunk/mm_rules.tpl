@@ -27,7 +27,8 @@ $p = array(
   array("",""),
   array("beforeText","Перед основным текстом"),
   array("afterText","После основного текста"),
- ))
+		array("none","Отключить"),
+	))
 );
 
 

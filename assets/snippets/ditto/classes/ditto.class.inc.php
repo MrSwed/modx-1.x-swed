@@ -899,7 +899,7 @@ class ditto {
     //Added by Andchir (http://modx-shopkeeper.ru/)
 		if(substr($where, 0, 5)=="@SQL:"){
       $where = ($where == "") ? "" : substr(str_replace('@eq','=',$where), 5);
-      $left_join_tvc = "LEFT JOIN $tbltvc tvc ON sc.id = tvc.contentid";
+      $left_join_tvc = "LEFT JOIN $tbltvc AS tvc ON sc.id = tvc.contentid";
     }else{
 			$where= ($where == "") ? "" : 'AND sc.' . implode('AND sc.', preg_replace("/^\s/i", "", explode('AND', $where)));
       $left_join_tvc = '';
@@ -993,22 +993,10 @@ class ditto {
 	// ---------------------------------------------------
 	
 	function cleanIDs($IDs) {
-		//Define the pattern to search for
-		$pattern = array (
-			'`(,)+`', //Multiple commas
-			'`^(,)`', //Comma on first position
-			'`(,)$`' //Comma on last position
-		);
-
-		//Define replacement parameters
-		$replace = array (
-			',',
-			'',
-			''
-		);
-
 		//Clean startID (all chars except commas and numbers are removed)
-		$IDs = preg_replace($pattern, $replace, $IDs);
+		$IDs = trim($IDs,',');
+		$IDs = preg_replace('/,+/', ',', $IDs);
+		$IDs = str_replace(' ','',$IDs);
 
 		return $IDs;
 	}
@@ -1048,16 +1036,16 @@ class ditto {
 			}
 			$queryString = "";
 			foreach ($query as $param=>$value) {
-				
-        //$queryString .= '&'.$param.'='.(is_array($value) ? implode(",",$value) : $value);
-        
-        if(!is_array($value)){
-          $queryString .= '&'.$param.'='.$value;
-        }else{
-          foreach ($value as $key=>$val){
-            $queryString .= '&'.$param.'['.$key.']='.$val;
-          }
-        }
+
+				//$queryString .= '&'.$param.'='.(is_array($value) ? implode(",",$value) : $value);
+				if (!is_array($value)) {
+					if (!($modx->config['seostrict']=='1' and $param == "start" and !$value)) $queryString .= '&'.$param.'='.$value;
+				}
+				else {
+					foreach ($value as $key=>$val) {
+						$queryString .= '&'.$param.'['.$key.']='.$val;
+					}
+				}
 			}
 			$cID = ($id !== false) ? $id : $modx->documentObject['id'];
 			$url = $modx->makeURL(trim($cID), '', $queryString);
@@ -1130,6 +1118,7 @@ class ditto {
 			if ($L_Limit<=0) $R_Limit-=$L_Limit-1;                                       // decrease right limit if left limit <=0
 			if ($R_Limit>=$totalpages-1) $L_Limit-=$R_Limit-$totalpages+2;     // decrease left limit if right limit >= numbers of names
 		}
+		$modx->setPlaceholder("dittoID", $dittoID);
 		for ($x = 0; $x <= $totalpages -1; $x++) {
 			$inc = $x * $summarize;
 			$display = $x +1;
@@ -1148,12 +1137,12 @@ class ditto {
 		}
 		$modx->setPlaceholder($dittoID."next", $nextplaceholder);
 		$modx->setPlaceholder($dittoID."previous", $previousplaceholder);
+		$modx->setPlaceholder($dittoID."pages", $pages);
 		$modx->setPlaceholder($dittoID."splitter", $split);
 		$modx->setPlaceholder($dittoID."start", $start +1);
 		$modx->setPlaceholder($dittoID."urlStart", $start);
 		$modx->setPlaceholder($dittoID."stop", $limiter);
 		$modx->setPlaceholder($dittoID."total", $total);
-		$modx->setPlaceholder($dittoID."pages", $pages);
 		$modx->setPlaceholder($dittoID."perPage", $summarize);
 		$modx->setPlaceholder($dittoID."totalPages", $totalpages);
 		$modx->setPlaceholder($dittoID."ditto_pagination_set", true);
@@ -1167,6 +1156,7 @@ class ditto {
 		global $modx, $dittoID;
 		$set = $modx->getPlaceholder($dittoID."ditto_pagination_set");
 		if ($paginate && $set !== true) {
+			$modx->setPlaceholder("dittoID", $dittoID);
 			$modx->setPlaceholder($dittoID."next", "");
 			$modx->setPlaceholder($dittoID."previous", "");
 			$modx->setPlaceholder($dittoID."splitter", "");

@@ -22,4 +22,4 @@ $data = "";
   $data = $modx->getDocument($id,$field);
   if (is_array($data)) $data = reset($data);
  }
- echo $data;
+ return $data;

@@ -8,11 +8,11 @@
    [+phx:input=`[*hidePageTitle*]`:ne=`1`:then=`<h1>[*pagetitle*]</h1>`+]
  `+]
   [+phx:input=`[*isfolder*]`:ne=`1`:and:if=`[[getInheritField? &id=`[*id*]` &field=`showDateInContent`]]`:is=`1`:then=`<div class="date">[*phx:input=`[*pub_date:ne=`0`:then=`[*pub_date*]`:else=`[*publishedon*]`*]`:dateformat=`%d.%m.%Y`*]</div>`+]
-  [+phx:input=`[[ddGetMultipleField? &docField='addtexts' &filter='1::beforeText' &columns='0']]`:ifempty=`[[getInheritField? &id=`[*parent*]` &field=`addtexts` &runSnippet=`ddGetMultipleField? &string='%s'  &filter='1::beforeText||2::1' &columns='0'`]]`+]
+  [+phx:input=`[[ddGetMultipleField? &docField='addtexts' &filter='1::beforeText||2::||2::0||2::1' &columns='0']]`:ifempty=`[[getInheritField? &id=`[*parent*]` &field=`addtexts` &runSnippet=`ddGetMultipleField? &string='%s'  &filter='1::beforeText||2::1' &columns='0'`]]`+]
  <div class="text">
   [*content*]
  </div>
-[+phx:input=`[[ddGetMultipleField? &docField='addtexts' &filter='1::afterText' &columns='0']]`:ifempty=`[[getInheritField? &id=`[*parent*]` &field=`addtexts` &runSnippet=`ddGetMultipleField? &string='%s'  &filter='1::afterText||2::1' &columns='0'`]]`+]
+[+phx:input=`[[ddGetMultipleField? &docField='addtexts' &filter='1::afterText||2::||2::0||2::1' &columns='0']]`:ifempty=`[[getInheritField? &id=`[*parent*]` &field=`addtexts` &runSnippet=`ddGetMultipleField? &string='%s'  &filter='1::afterText||2::1||2::2' &columns='0'`]]`+]
 
  [+phx:input=`[*isfolder*]`:ne=`1`:and:if=`[*tags*]`:ne=``:then=`{{pageTags}}`+]
 
@@ -44,7 +44,7 @@
  {{paginator}}
  <div class="endcol"></div>
  `+]
-
+[+phx:input=`[[ddGetMultipleField? &docField='addtexts' &filter='1::afterList||2::||2::0||2::1' &columns='0']]`:ifempty=`[[getInheritField? &id=`[*parent*]` &field=`addtexts` &runSnippet=`ddGetMultipleField? &string='%s'  &filter='1::afterList||2::1||2::2' &columns='0'`]]`+]
  [+phx:input=`[[getInheritField? &id=`[*id*]` &field=`socialwidgets`]]`:element=`0::`:math=`?+(3*[*isfolder*])`:in=`1,2,4`:then=`{{share}}`+]
  [+phx:input=`[[getInheritField? &id=`[*id*]` &field=`socialwidgets`]]`:element=`1::`:math=`?+(3*[*isfolder*])`:in=`1,2,4`:then=`{{comments}}`+]
 

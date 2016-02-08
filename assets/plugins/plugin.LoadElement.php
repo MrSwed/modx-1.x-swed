@@ -9,7 +9,7 @@ if (!defined('MODX_BASE_PATH')) { die('HACK???'); }
  * @license     GNU General Public License (GPL), http://www.gnu.org/copyleft/gpl.html
  * @author      Agel_Nash <modx@agel-nash.ru>
  * @version     0.2
- * @internal    @events         OnWebPageInit, OnManagerPageInit, OnPageNotFound
+ * @internal    @events         OnWebPageInit, OnManagerPageInit
  * @internal    @properties     &extChunk=Расширения чанков (<i>через запятую</i>);input;txt,html &extSnippet=Расширения сниппетов (<i>через запятую</i>);input;php &pathElement=Папка с элементами (<i>относительно корня сайта</i>);input;assets/element/
  */
 class LoadElement{

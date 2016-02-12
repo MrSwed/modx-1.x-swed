@@ -786,9 +786,9 @@ REPLACE INTO `{PREFIX}site_templates`
 
 REPLACE INTO `{PREFIX}site_content` VALUES (1,'document','text/html','Главная','Главная','','index','',1,0,0,0,0,'','',1,2,0,1,1,1,1130304721,1,1130304927,0,0,0,1130304721,1,'',0,0,0,0,0,0,0,0);
 
-REPLACE INTO `{PREFIX}site_content` VALUES (2,'document','text/html','Error 404. Page not found page','','','error404','',1,0,0,0,0,'','<p>404 Not Found</p>\r\n',1,2,0,1,1,1,1130304721,1,1130304927,0,0,0,1130304721,1,'',0,0,0,0,0,0,0,1);
+REPLACE INTO `{PREFIX}site_content` VALUES (2,'document','text/html','Error 404. Page not found page','','','error404','',1,0,0,0,0,'','<p>404 Not Found</p>\r\n',1,2,0,1,1,1,1130304721,1,1130304927,0,0,0,1130304721,1,'',0,0,0,0,0,0,1,1);
 
-REPLACE INTO `{PREFIX}site_content` VALUES (3, 'document','text/xml','sitemap.xml','','','sitemap.xml','',1,0,0,0,0,'','[[sitemap]]',1,1,0,1,1,1,1130304721,1,1130304927,0,0,0,1130304721,1,'',0,0,0,0,0,0,0,1);
+REPLACE INTO `{PREFIX}site_content` VALUES (3, 'document','text/xml','sitemap.xml','','','sitemap.xml','',1,0,0,0,0,'','[[sitemap]]',1,1,0,1,1,1,1130304721,1,1130304927,0,0,0,1130304721,1,'',0,0,0,0,0,0,1,1);
 
 REPLACE INTO `{PREFIX}manager_users` 
 (id, username, password)VALUES 

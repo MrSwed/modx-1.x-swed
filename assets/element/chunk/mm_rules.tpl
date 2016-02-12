@@ -67,3 +67,4 @@ mm_ddMoveFieldsToSection('meta_title,meta_keywords,meta_description,head','meta'
 mm_ddMoveFieldsToSection('sitemap_changefreq,sitemap_exclude,sitemap_priority','sitemap');
 
 mm_minimizablesections("*",'','','debug');
+mm_hideEmpty();

@@ -18,6 +18,7 @@
  * @copyright 2014
  */
 
+global $mm_version;
 $mm_version = '0.6.2';
 
 // Bring in some preferences which have been set on the configuration tab of the plugin, and normalise them
@@ -140,8 +141,7 @@ foreach ($all_tvs as $thisTv){
 	$fieldname_suffix = '';
 	
 	// What fieldtype is this TV type?
-	$thisTvI = explode(":", $thisTv['type']);	
-	switch ($thisTvI['0']){
+	switch ($thisTv['type']){
 		case 'textarea':
 		case 'rawtextarea':
 		case 'textareamini':

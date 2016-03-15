@@ -1,18 +1,18 @@
 /**
- * photos
+ * head
  *
- * Фотографии
+ *  Подключение скриптов, стилей, мета и прочее
  *
  * @category        tv
- * @name            photos
- * @internal        @caption Фотографии
- * @internal        @input_type image
+ * @name            head
+ * @internal        @caption Дополнительный код в &lt;head&gt; &lt;/head&gt;
+ * @internal        @input_type textarea
  * @internal        @input_options
  * @internal        @input_default
  * @internal        @output_widget
  * @internal        @output_widget_params
  * @internal        @lock_tv 0
  * @internal        @template_assignments Основной
- * @internal        @modx_category Изображения
+ * @internal        @modx_category Content
  * @internal        @installset sample
  */

@@ -10,7 +10,7 @@
  * @param $tvs {comma separated string} - Names of TV for which the widget is applying. @required
  * @param $roles {comma separated string} - The roles that the widget is applied to (when this parameter is empty then widget is applied to the all roles). Default: ''.
  * @param $templates {comma separated string} - Templates IDs for which the widget is applying (empty value means the widget is applying to all templates). Default: ''.
- * @param $columns {comma separated string} - Column types: field — field type column; text — text type column; textarea — multiple lines column; richtext — column with rich text editor; date — date column; id — hidden column containing unique id; select — list with options (parameter “columnsData”). Default: 'field'.
+ * @param $columns {comma separated string} - Column types: field — field type column; text — text type column; textarea — multiple lines column; richtext — column with rich text editor; date — date column; id — hidden column containing unique id; select, multiselect — list with options (parameter “columnsData”). Default: 'field'.
  * @param $columnsTitle {comma separated string} - Columns titles. Default: ''.
  * @param $colWidth {comma separated string} - Columns width (one value can be set). Default: 180;
  * @param $splY {string} - Strings separator. Default: '||'.
@@ -19,7 +19,8 @@
  * @param $imgH {integer} - Maximum value of image preview height. Default: 100.
  * @param $minRow {integer} - Minimum number of strings. Default: 0.
  * @param $maxRow {integer} - Maximum number of strings. Default: 0 (без лимита).
- * @param $columnsData {separated string} - List of valid values in json format (with “||”). Default: ''. Example: '[['','No selected'],['0','No'],['1','Yes',1]]'
+ * @param $columnsData {separated string} - List of valid values in json format (with “||”). Default: ''. Example: `[['','No selected'],['0','No'],['1','Yes',1]]`
+ * @param $options {array or JSON} - Extend options: sortable - allow sorting (default), showIndex - display line numbers (default), btnToggleRaw - show button "Raw" (not defailt)
  * 
  * @event OnDocFormPrerender
  * @event OnDocFormRender
@@ -32,7 +33,9 @@
 
 function mm_ddMultipleFields($tvs = '', $roles = '', $templates = '', $columns = 'field', $columnsTitle = '', $colWidth = '180', $splY = '||', $splX = '::', $imgW = 300, $imgH = 100, $minRow = 0, $maxRow = 0, $columnsData = '',$options = array()){
 	if (!useThisRule($roles, $templates)){return;}
-	
+	if (is_array($options)) {
+		$options = json_encode($options);
+	}
 	global $modx;
 	$e = &$modx->Event;
 	
@@ -103,7 +106,7 @@ $j("#tv'.$tv['id'].'").mm_ddMultipleFields({
 	imageStyle: "'.$stylePrewiew.'",
 	minRow: "'.$minRow.'",
 	maxRow: "'.$maxRow.'",
-	options: '.json_encode($options).'
+	options: '.$options.'
 });
 ';
 		}

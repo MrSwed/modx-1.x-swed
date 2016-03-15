@@ -5,12 +5,13 @@
  * Вернуть текст в зависимости от параметра HTTP
  *
  * @category 	snippet
- * @version 	1.2.1 (04.11.2013)
+ * @version 	1.3 (31.03.2014)
  * @license 	http://www.gnu.org/copyleft/gpl.html GNU Public License (GPL)
  * @internal	@properties
  * @internal	@modx_category Utils
  * @internal	@installset base, sample
  * @internal	@author MrSwed <webmaster@sdcollection.com>
+ * @internal	@url https://github.com/Evolution-extras/getParam
  */
 //
 /* Description:
@@ -19,19 +20,11 @@
  *  Если текст не указан, то вернет значение параметра HTTP
  *  invert - вернуть текст если условие не выполенно (нет параметра)
  *
- * Author:
- *      Sergey Davydov <webmaster@collection.com.ua> for MODx CMF
  * Примеры:
  *  Для фильтра Ditto: если есть $_GET["year"] вернет |year,<Значение>,1
  *   [[getParam? &field=`year` &text=`|year,%v,1`  &notempty=`1` &delimiter=`;`]]
  *  Для фильтра Ditto: проверяет наличие year и author и вернет строку |year,<Значение>,1;|author
  *  [[getParam? &field=`year;author` &text=`|%k,%v,1`  &notempty=`1` &delimiter=`;` ]]
- *
- * История:
- * 1.2.1
- *  [+] cookie, session
- * 1.2
- *  [+] - проверка нескольких
 */
 
 

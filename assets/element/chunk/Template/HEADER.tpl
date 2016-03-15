@@ -3,9 +3,11 @@
 <head>
  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
  <title>[*meta_title:ifempty=`[*longtitle:ifempty=`[*pagetitle*] - [*parent:isnot=`0`:then=`[[getDocumentField? &id=`[*parent*]`]] - `*][(site_name)]`*]`:striptags*]</title>
+ <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+ [!is_mobile? &out=`<meta name="viewport" content="initial-scale=1.0">`!]
  <meta name="description" content="[*meta_description:specialchar*]" />
  <meta name="keywords" content="[*meta_keywords:specialchar*]" />
- <base href='[(site_url)]' />
+ <base href='/' />
  <script src="/assets/js/jquery-1.9.0-min.js" type="text/javascript" charset="utf-8"></script>
 
  <script type="text/javascript" src="/assets/js/jquery.mousewheel.js"></script>
@@ -18,20 +20,24 @@
  <script src="/assets/templates/design/js/logic.js" type="text/javascript" charset="utf-8"></script>
  <link href="/assets/templates/design/style.css" rel="stylesheet" type="text/css"/>
 
- <!--[if lte IE 8 ]>
- <link rel="stylesheet" type="text/css" href="/assets/templates/design/ie8.css"/>
- <![endif]-->
+[*head*]
 </head>
 
 <body[[getInheritField? &id=`[*id*]` &field=`bodyclass` &out=` class="%s"`]]>
-<!--[if lte IE 7 ]>
+<!--[if lte IE 9 ]>
+
 <style>
- .main, .footer {
+ body {
+  opacity: 1 !important;
+  background: white !important;
+ }
+ body > * {
   display: none
  }
 </style>
-<div style="font-size:30px;text-align:center;padding:10em">
- Обновите Браузер. Интернет Эксплорер ниже 8-й версии не поддерживается
+<div style="font-size:30px;text-align:center;padding:10em;display:block">
+ Интернет Эксплорер ниже 10-й версии не поддерживается <br>
+ Обновите Браузер. Или воспользуйтесь алтернативными.
 </div>
 <![endif]-->
 <div class="main">{{debug_maket}}

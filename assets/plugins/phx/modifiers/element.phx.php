@@ -18,7 +18,7 @@ if (!empty($options)) preg_match("/^(\d+)(.*)$/",$options,$m);
 $id = !empty($m[1])?$m[1]:0;
 $delimiter = !empty($m[2])?$m[2]:'||';
 $a = explode($delimiter,$output);
-return !empty($a[$id])?$a[$id]:"";
+return isset($a[$id])?$a[$id]:"";
 
 
 ?>

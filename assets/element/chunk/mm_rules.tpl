@@ -19,6 +19,10 @@ $p = array(
   array("",""), // use parent setting
   array(1,"Да"),array(0,"Нет")
  )),
+ "sel_ynp_chonly" => json_encode(array(
+  array("",""), // use parent setting
+  array(1,"Да"),array(0,"Нет"),array(2,"Только для дочерних")
+ )),
  "sel_ynp_nof" => json_encode(array(
   array("",""), // use parent setting
   array(0,"Нет"),array(1,"Да"),array(2,"Да, кроме контейнеров")
@@ -27,7 +31,9 @@ $p = array(
   array("",""),
   array("beforeText","Перед основным текстом"),
   array("afterText","После основного текста"),
- ))
+  array("afterList","После списка дочерних"),
+		array("none","Отключить"),
+	))
 );
 
 
@@ -41,20 +47,24 @@ mm_ddMoveFieldsToSection('hideChilds,hideFolders,depth,ditto_display,ditto_order
 mm_ddCreateSection('Дополнительные тексты', 'addTexts');
 mm_ddMoveFieldsToSection('addtexts','addTexts');
 
-mm_ddMultipleFields("addtexts",'','','richtext,select,select','Текст,Месторасположение::Если не выбрано - показываться не будет,Наследовать поле::Значение поля родителя будет передаваться дочерним ресурсам, если в них не будут заданы свои тексты для соответствующих полей','auto','||','::',0,0,0,0,"||{$p['text_places']}||{$p['sel_ynp']}");
+mm_ddMultipleFields("addtexts",'','','richtext,select,select','Текст,Месторасположение::Если не выбрано - используются настройки родителя,Наследовать поле::Значение поля родителя будет передаваться дочерним ресурсам&sbquo; если в них не будут заданы свои тексты для соответствующих полей','auto','||','::',0,0,0,0,"||{$p['text_places']}||{$p['sel_ynp_chonly']}");
     
 mm_ddCreateSection('Отладка', 'debug','settings');
 mm_ddMoveFieldsToSection('image_maket','debug');
 
-mm_createTab('Изображения','images');
-mm_moveFieldsToTab('image,photos','images');
+mm_createTab('Изображения','gallery');
+mm_moveFieldsToTab('image,gallery,gallery_manual','gallery');
 
-mm_ddCreateSection('Фотографии', 'photos', 'images');
-mm_ddMoveFieldsToSection('photos','photos');
-mm_changeFieldHelp('photos','Используйте чанк <b>{{photos}}</b> для включения фотографий в контент');
-mm_ddMultipleFields('photos', '', '', 'image,text,text', 'Изображение,Название,Описание');
+mm_ddCreateSection('Фотографии', 'gallery', 'gallery');
+mm_ddMoveFieldsToSection('gallery','gallery');
+mm_changeFieldHelp('gallery','Используйте чанк <b>{{gallery}}</b> для включения фотографий в контент');
+mm_ddMultipleFields('gallery', '', '', 'image,text,text', 'Изображение,Название,Описание');
 
-mm_createTab('SEO: meta','seo_params');
-mm_moveFieldsToTab('meta_title,meta_keywords,meta_description','seo_params');
+mm_createTab('SEO (meta,sitemap)','seo_params');
+mm_ddCreateSection('Meta', 'meta', 'seo_params');
+mm_ddCreateSection('Параметры Sitemap', 'sitemap', 'seo_params');
+mm_ddMoveFieldsToSection('meta_title,meta_keywords,meta_description,head','meta');
+mm_ddMoveFieldsToSection('sitemap_changefreq,sitemap_exclude,sitemap_priority','sitemap');
 
 mm_minimizablesections("*",'','','debug');
+mm_hideEmpty();

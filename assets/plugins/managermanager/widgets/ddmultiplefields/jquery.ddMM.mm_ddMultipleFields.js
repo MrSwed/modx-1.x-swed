@@ -34,7 +34,8 @@ $.ddMM.mm_ddMultipleFields = {
 		//Различные опции
 		options: {
 			sortable:true,
-			showIndex:true
+			showIndex:true,
+			btnToggleRaw:false
 		}
 	},
 //	Все экземпляры (TV). Структура: {
@@ -156,7 +157,13 @@ $.ddMM.mm_ddMultipleFields = {
 			e.preventDefault();
 			_this._reset(id);
 		});
-
+		// Кнопка "Показать/скрыть исходное значение". Простая возможность скопировать и вставить значение всего поля.
+		if (_inst.options.btnToggleRaw) {
+			$('<input type="button" value="Raw" title="Показать/Скрыть оригинальное поле. Доступны стандартные копирование и вставка. После вставки, нажмите кнопку сброса. Внимание! Неправильный формат исходного поля может привести к непредсказуемым последствиям!"/>').appendTo($ddMultipleFieldControl).on("click", function (e) {
+				e.preventDefault();
+				$('#' + id).toggle();
+			});
+		}
 		//Если есть хоть один заголовок
 		if (_inst.coloumnsTitle.length > 0){
 			var _thead = [$("<th/>")];
@@ -360,6 +367,10 @@ $.ddMM.mm_ddMultipleFields = {
 			//Если селект
 				case 'select':
 				_this.makeSelect(val[key], _cTitle, _inst.coloumnsData[key], _inst.colWidth[key], $col);
+				break;
+			//Если мультиселект
+				case 'multiselect':
+				_this.makeSelect(val[key], _cTitle, _inst.coloumnsData[key], _inst.colWidth[key], $col,true);
 				break;
 			//Если дата
 				case 'date':
@@ -589,8 +600,8 @@ $.ddMM.mm_ddMultipleFields = {
 		});
 	},
 	//Функция создания списка
-	makeSelect: function(value, title, data, width, $fieldCol){
-		var $select = $('<select class="ddField" style="' + this._united(width,"width: %s") + '">');
+	makeSelect: function(value, title, data, width, $fieldCol, $multiple){
+		var $select = $('<select class="ddField" style="' + this._united(width,"width: %s") + '"' + ($multiple?' multiple size="" ':'') + '>');
 		
 		if (data){
 			var dataMas = $.parseJSON(data),
@@ -603,7 +614,7 @@ $.ddMM.mm_ddMultipleFields = {
 			$select.append(options);
 		}
 		
-		if (value){$select.val(value);}
+		if (value) {$select.val($multiple?value.split(","):value);}
 		
 		return $select.appendTo($fieldCol);
 	},

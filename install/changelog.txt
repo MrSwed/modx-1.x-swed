@@ -1,6 +1,140 @@
 This file shows the changes in recent releases of MODX. The most current release is usually the
 development release, and is only shown to give an idea of what's currently in the pipeline.
 
+
+MODX Evolution 1.1 (Feb 29, 2016)
+===================================
+--------------------------------------------
+Bugfixes:
+--------------------------------------------
+* [GitHub:#41a5bcd] Fixing #356 Loosing content in chunk after saving and already exists
+* [GitHub:#6d799af] [#364] Fixed issue for renderFormElements to provide default text (Fixed to only set value if field_value is empty) 
+* [GitHub:#90b1a91] Weblogin: - Retain remember me option …	
+* [GitHub:#dcd9656] Fix script error in View manager logs	
+* [GitHub:#3e6895d] Increase FileSource filebinding input field maxlength to prevent data loss
+* [GitHub:#da4cf8a] Prevent PHP warning 'Key cannot be empty' …	
+* [GitHub:#32f0d65] Fix #396 getUserDocGroups(true) always returns only one group name	
+* [GitHub:#3cea34d] Weblogin: doesn't always clear $_SESSION['webDocgrpNames'] on logout	
+* [GitHub:#1b0148e] Fix #394 error in description of CodeMirror …	
+* [GitHub:#6cc4467] Fix/update confirmed working MODX version in CodeMirror plugin comment.	
+* [GitHub:#1c2e755] Value of properties in GUID on module creation. This bug is active since 1.0.13. Seems to be that creating modules is not an everyday task
+* [GitHub:#8530858] Maybe missing permission check in refresh_site.dynamic.php 	
+* [GitHub:#21e1aad] ManagerManager: non-breaking space. It interferes with the use of the ddmultifield
+* [GitHub:#aca2a22] Minor fix - MODxHost template	
+* [GitHub:#30fd127] small calendar styles fix	
+* [GitHub:#7dec05a] Choose language translate	
+* [GitHub:#0dc2c0f] AjaxSarch Date format	
+* [GitHub:#395898a] fix DBAPI update( for NULL)
+* [GitHub:#5a554f7] fix session_keepalive	
+* [GitHub:#dd25766] Ditto: Fix - Deprecated PHP Code "makeList"
+* [GitHub:#75c9c0f] Fix - Slimming Paint rendering issue at Chrome …	
+* [GitHub:#14a94c6] Fix error render the default setting in the TV type date	
+* [GitHub:#cbce5e7] fix sendmail	
+* [GitHub:#175a18e] checkCache fix	
+* [GitHub:#9e09c4e] wayfinder config need include for multi use with other configs	
+* [GitHub:#a5d63f5] DB dumps do not disable foreign key checks 
+* [GitHub:#ef206b2] fix install with empty categoryes name	
+* [GitHub:#f65f4ed] Avoid double matches …	
+* [GitHub:#797bd91] fix emmet header footer for HTML5	
+* [GitHub:#b631d61] fix bad SEO when using phpthumb #434 …	
+* [GitHub:#ac0cec4] Fixing, TransAlias removes a dot in file's format …		
+* [GitHub:#4bc76c5] #391 user/pw htmlspecialchars	
+* [GitHub:#2dd47e0] #391 username/data htmlspecialchars	
+* [GitHub:#93959ac] Avoid PHP-Error "File not found"	
+* [GitHub:#640309d] fix render settings	
+* [GitHub:#c7abc69] avoid php notice: undefined index…	
+* [GitHub:#e7ea0f7] Avoid PHP-Error/Data-Loss if path not exists	
+* [GitHub:#2bb4391] Issue #385	htmlspecialchars + windows-1251 	
+* [GitHub:#62a22ba] icon message unread	
+* [GitHub:#2772903] Problem with a plus-sign in email address with forgot manager password #428
+* [GitHub:#ef7a06d] if: fix for check [*content*] Issue #480	
+* [GitHub:#8845642] export.class.inc.php #417
+* [GitHub:#9e0a1b9] makeUrl fails with site start and query string
+* [GitHub:#92f6cda] Error counting published and unpublished comments in JOT #389
+* [GitHub:#f8ea894] Template Variable Type 'date' doesn't allow manual time
+
+--------------------------------------------
+Refactor:
+--------------------------------------------
+* [GitHub:#aa2baae] Refactor manager api class: added missing return values, updated checkHashAlgorithm, removed superfluos variables, added missing variables
+* [GitHub:#dfb0ac4] Display TV name during install
+* [GitHub:#6f26656] Refactor - $modx->evalSnippets()	
+* [GitHub:#1cebc29] Refactor - $modx->getTagsFromContent()
+* [GitHub:#6c098f5] Refactor - $modx->evalSnippets()	
+* [GitHub:#4e8b8da] Refactor - $modx->mergeDocumentContent()	
+* [GitHub:#2b56d5d] Update setup.sql Increase default max upload file size to 10MB	
+* [GitHub:#fb2f868] Wayfinder: for local references - use original document fields separated by comma (useful for set active if it is current, titles, link attr)
+* [GitHub:#e77c169] Wayfinder: &useWeblinkUrl=`0` now work, no longer need to write &useWeblinkUrl=`FALSE`
+* [GitHub:#27ebbe6] Ditto: no "start=0" in links of ditto pagination depending on modx setting seostrict
+* [GitHub:#fa0348f] now we can use custom frame files from theme see (https://github.com/dmi3yy/modx.evo.custom/tree/master/manager/media/style/D3X)
+* [GitHub:#ca8bnow] you can change all action in theme without change in core		
+* [GitHub:#a842303] refactor search.static	
+* [GitHub:#c09c083] frameset to iframe	
+* [GitHub:#ed5396e] use Mysqli by default	
+* [GitHub:#1968b47] refactor MainMenu (https://github.com/modxcms/evolution/blob/develop/manager/frames/mainmenu.php)	
+* [GitHub:#6211a79] refactor cache_sync class, add some code for AliasListingFolder	
+* [GitHub:#7c6adaa] fix in postProcess	
+* [GitHub:#295ad92] Workaround for deprecated preg_replace() with /e modifier …	
+* [GitHub:#bdb542d]	refactor BackTrace	
+* [GitHub:#e612f72]	refactor getLoginUserName	
+* [GitHub:#03c5e28]	refactor getLoginUserID	
+* [GitHub:#816af9c]	refactor getChunk	
+* [GitHub:#93fa0fc]	refactor runSnippet	
+* [GitHub:#26f86d0]	refactor makeUrl for AliasListingFolder	
+* [GitHub:#7d3e99e]	refactor logEvent	
+* [GitHub:#a7fd270]	refactor getChildIds for AliasListingFolder	
+* [GitHub:#6f19c69]	refactor getParentIds for AliasListngFolder	
+* [GitHub:#fa86662]	refactor executeParser for AliasListingFolder	
+* [GitHub:#3c94596]	refactor checkPublishStatus()	
+* [GitHub:#758817d] "Show in menu" moved to new row …	
+* [GitHub:#b229ca1] #444 (Installer & PHP 5.5+ )	
+* [GitHub:#113ac4c] add php version in sysinfo	
+* [GitHub:#de360bd] autoload_register to spl_autoload_register	
+* [GitHub:#7fadc10] Create cache folder before creating .htaccess in it	
+
+--------------------------------------------
+Additional Improvements & Updates:
+--------------------------------------------
+* [GitHub:#a76c830] Add Ukrainian lang
+* [GitHub:#0ca31ad] phpthumb: determination of the original image file extension	
+* [GitHub:#46e8457] phpthumb: encode decode cyr filenames	
+* [GitHub:#70d0c84] phpthumb: &q=96 makes no sense with png and gif
+* [GitHub:#9b0a873] phpthumb: encode only returned filenames
+* [GitHub:#bc501e0] phpthumb: larger nophoto image	
+* [GitHub:#563934c] Update eform.inc.php fix adding slash by vericode for HTML5 inputs	
+* [GitHub:#d2adb9d] eForm: Adding HTML5 input types	
+* [GitHub:#7be7aca] Wayfinder. Set id of reference to original document ID if it is innerdoc
+* [GitHub:#63e6414] Starting the installation with the language of the user's browser	
+* [GitHub:#bc5a9eb] BreadCrumbs 1.0.5: add ignoreAliasVisible to BreadCrumbs
+* [GitHub:#2e56507] Eform: add phone validate in Eform
+* [GitHub:#89dc1ea] New - $modx->getField($field,$docid)	
+* [GitHub:#0c3fd0b] New - $modx->getUltimateParentId($docid,$top)
+* [GitHub:#956c9ae] Cross-references from ClipperCMS: [*pagetitle@17*], [*pagetitle@parent*], [*pagetitle@ultimateparent*] ([*pagetitle@uparent*]), [*pagetitle@ultimateparent(17)*], [*pagetitle@alias(alias/path)*],[*pagetitle@site_start*]
+* [GitHub:#5ddb8df] allow using asterisk for assign TVs to all templates
+* [GitHub:#2ed509b] Update file browser KCfinder to 2.5.4	
+* [GitHub:#eae7e74]	Update CodeMirror to 1.2b	
+* [GitHub:#b7dc20f] the ability to pass arbitrary parameters in the snippet(so you can use them in the processing of events)
+* [GitHub:#fcb6343] Wayfinder: add [+wf.iterator+]	
+* [GitHub:#907a1f2] view customTV in Select when choice tv type	
+* [GitHub:#1072d79] Add some events: OnMakePageCacheKey, OnDocFormUnDelete, onBeforeMoveDocument, onAfterMoveDocument, OnBeforeLoadDocumentObject, OnAfterLoadDocumentObject, OnBeforeLoadExtension, OnManagerMenuPrerender, OnDocFormTemplateRender, OnFileBrowserUpload, OnDocFormTemplateRender
+* [GitHub:#2770263] ManagerManger(add mm_movecategorytotab)
+* [GitHub:#] add AliasLiastingFolder in Setting -> Friendly URLs (tested with 1000000 documents, no more limits for documents)
+* [GitHub:#07bac53] add function getCacheFolder	
+* [GitHub:#9372391] add function setConditional	
+* [GitHub:#09e0ba7] add function getTpl	
+* [GitHub:#769617e] ctrl + S, cmd + S now save in Manager	
+* [GitHub:#fe5a3e7] Add MODxAPI extend MODX Api		
+* [GitHub:#bcbe26e] add DocLister (https://rtfm.modx.com/extras/evo/doclister/)	
+* [GitHub:#1bb1710] add in DBAPI $modx->db->dataSeek	
+* [GitHub:#3a1c634] update _get_snip_result	
+* [GitHub:#97326f2] Added missing CSS-ID to "actionButtons"
+* [GitHub:#95a9283] Add Extras module to core
+* [GitHub:#0d95ec6] if: Added Expression "contains"	
+* [GitHub:#3b2547b] #328 Checkbox "selectable templates" #513
+* [GitHub:#3001fc6] #323 Chunks remember last selected+saved RTE
+
+
+
 MODX Evolution 1.0.15 (Oct 31, 2014)
 ===================================
 --------------------------------------------

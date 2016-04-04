@@ -195,8 +195,8 @@ function confirmLangChange(el, lkey, elupd){
         <script type="text/javascript">tpSettings.addTabPage( document.getElementById( "tabPage2" ) );</script>
         <table border="0" cellspacing="0" cellpadding="3">
             <tr>
-              <td nowrap class="warning"><?php echo htmlspecialchars($_lang["sitename_title"]) ?></td>
-              <td ><input onchange="documentDirty=true;" type='text' maxlength='255' style="width: 200px;" name="site_name" value="<?php echo isset($site_name) ? htmlspecialchars($site_name) : "My MODX Site" ; ?>" /></td>
+              <td nowrap class="warning"><?php echo $modx->htmlspecialchars($_lang["sitename_title"]) ?></td>
+              <td ><input onchange="documentDirty=true;" type='text' maxlength='255' style="width: 200px;" name="site_name" value="<?php echo isset($site_name) ? $modx->htmlspecialchars($site_name) : "My MODX Site" ; ?>" /></td>
             </tr>
             <tr>
               <td width="200">&nbsp;</td>
@@ -589,7 +589,7 @@ function confirmLangChange(el, lkey, elupd){
             </tr>
             <tr>
               <td nowrap class="warning"><?php echo $_lang["valid_hostnames_title"] ?></td>
-              <td ><input onchange="documentDirty=true;" type='text' maxlength='255' style="width: 200px;" name="valid_hostnames" value="<?php echo isset($valid_hostnames) ? htmlspecialchars($valid_hostnames) : "" ; ?>" /></td>
+              <td ><input onchange="documentDirty=true;" type='text' maxlength='255' style="width: 200px;" name="valid_hostnames" value="<?php echo isset($valid_hostnames) ? $modx->htmlspecialchars($valid_hostnames) : "" ; ?>" /></td>
             </tr>
             <tr>
               <td width="200">&nbsp;</td>
@@ -704,6 +704,22 @@ function confirmLangChange(el, lkey, elupd){
   <tr id='furlRow55' style="display: <?php echo $friendly_urls==1 ? $displayStyle : 'none' ; ?>">
   <td colspan="2"><div class='split'></div></td>
   </tr>
+
+            <?php if(!isset($aliaslistingfolder)) $aliaslistingfolder = '0';?>
+            <tr id="furlRow56" class="furlRow row1" style="display: <?php echo $friendly_urls==1 ? $displayStyle : 'none' ; ?>">
+                <th><?php echo $_lang['aliaslistingfolder_title'] ?></th>
+                <td>
+                    <?php echo wrap_label($_lang["yes"],form_radio('aliaslistingfolder','1', $aliaslistingfolder=='1'));?><br />
+                    <?php echo wrap_label($_lang["no"],form_radio('aliaslistingfolder','0', $aliaslistingfolder=='0'));?><br />
+                </td>
+            </tr>
+            <tr id='furlRow57' class='row1' style="display: <?php echo $friendly_urls==1 ? $displayStyle : 'none' ; ?>">
+                <td width="200">&nbsp;</td>
+                <td class='comment'><?php echo $_lang["aliaslistingfolder_message"] ?></td>
+            </tr>
+            <tr id='furlRow58' style="display: <?php echo $friendly_urls==1 ? $displayStyle : 'none' ; ?>">
+                <td colspan="2"><div class='split'></div></td>
+            </tr>
 
 
           <tr id='furlRow7' class='row1' style="display: <?php echo $friendly_urls==1 ? $displayStyle : 'none' ; ?>">

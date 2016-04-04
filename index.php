@@ -69,7 +69,6 @@ session_cache_limiter('');
 header('P3P: CP="NOI NID ADMa OUR IND UNI COM NAV"'); // header for weird cookie stuff. Blame IE.
 header('Cache-Control: private, must-revalidate');
 ob_start();
-error_reporting(E_ALL & ~E_NOTICE);
 
 /**
  *	Filename: index.php
@@ -78,8 +77,9 @@ error_reporting(E_ALL & ~E_NOTICE);
 
 define("IN_ETOMITE_PARSER", "true"); // provides compatibility with etomite 0.6 and maybe later versions
 define("IN_PARSER_MODE", "true");
-define("IN_MANAGER_MODE", "false");
-
+if (!defined('IN_MANAGER_MODE')) {
+	define("IN_MANAGER_MODE", "false");
+}
 if (!defined('MODX_API_MODE')) {
     define('MODX_API_MODE', false);
 }

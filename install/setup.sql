@@ -163,6 +163,7 @@ CREATE TABLE IF NOT EXISTS `{PREFIX}site_htmlsnippets` (
   `name` varchar(50) NOT NULL default '',
   `description` varchar(255) NOT NULL default 'Chunk',
   `editor_type` integer NOT NULL DEFAULT '0' COMMENT '0-plain text,1-rich text,2-code editor',
+  `editor_name` VARCHAR(50) NOT NULL DEFAULT 'none',
   `category` integer NOT NULL DEFAULT '0' COMMENT 'category id',
   `cache_type`	tinyint(1) NOT NULL default '0' COMMENT 'Cache option',
   `snippet` mediumtext,
@@ -271,6 +272,7 @@ CREATE TABLE IF NOT EXISTS `{PREFIX}site_templates` (
   `template_type` integer NOT NULL DEFAULT '0' COMMENT '0-page,1-content',
   `content` mediumtext,
   `locked` tinyint(4) NOT NULL default '0',
+  `selectable` tinyint(4) NOT NULL default '1',
   PRIMARY KEY  (`id`)
 ) ENGINE=MyISAM COMMENT='Contains the site templates.';
 
@@ -315,7 +317,7 @@ CREATE TABLE IF NOT EXISTS `{PREFIX}site_tmplvar_templates` (
 
 CREATE TABLE IF NOT EXISTS `{PREFIX}site_tmplvars` (
 	`id` INT(11) NOT NULL auto_increment,
-	`type` varchar(20) NOT NULL default '',
+	`type` varchar(50) NOT NULL default '',
 	`name` varchar(50) NOT NULL default '',
 	`caption` varchar(80) NOT NULL default '',
 	`description` varchar(255) NOT NULL default '',
@@ -764,6 +766,14 @@ ALTER TABLE `{PREFIX}web_user_attributes`
 
 ALTER TABLE `{PREFIX}site_content` ADD COLUMN `alias_visible` INT(2) NOT NULL DEFAULT '1' COMMENT 'Hide document from alias path';
 
+#1.1
+
+ALTER TABLE `{PREFIX}site_templates`
+ ADD COLUMN `selectable` TINYINT(4) NOT NULL DEFAULT '1' AFTER `locked`;
+
+ALTER TABLE `{PREFIX}site_htmlsnippets`
+ ADD COLUMN `editor_name` VARCHAR(50) NOT NULL DEFAULT 'none' AFTER `editor_type`;
+
 # ]]upgrade-able
 
 
@@ -778,17 +788,14 @@ ALTER TABLE `{PREFIX}site_content` ADD COLUMN `alias_visible` INT(2) NOT NULL DE
 
 
 REPLACE INTO `{PREFIX}site_templates` 
-(id, templatename, description, editor_type, category, icon, template_type, content, locked) VALUES ('1','Minimal Template','Default minimal empty template (content returned only)','0','0','','0','[*content*]','0');
+(id, templatename, description, editor_type, category, icon, template_type, content, locked, selectable) VALUES ('3','Minimal Template','Default minimal empty template (content returned only)','0','0','','0','[*content*]','0','1');
 
 
 # Default Site Documents
 
 
-REPLACE INTO `{PREFIX}site_content` VALUES (1,'document','text/html','Главная','Главная','','index','',1,0,0,0,0,'','',1,2,0,1,1,1,1130304721,1,1130304927,0,0,0,1130304721,1,'',0,0,0,0,0,0,0,0);
+REPLACE INTO `{PREFIX}site_content` VALUES (1,'document','text/html','MODX CMS Install Success','Welcome to the MODX Content Management System','','minimal-base','',1,0,0,0,0,'','<h3>Install Successful!</h3>\r\n<p>You have successfully installed MODX Evolution.</p>\r\n\r\n<h3>Getting Help</h3>\r\n<p>The <a href=\"http://forums.modx.com/\" target=\"_blank\">MODX Community</a> provides a great starting point to learn all things MODX Evolution, or you can also <a href=\"http://modx.com/\">see some great learning resources</a> (books, tutorials, blogs and screencasts).</p>\r\n<p>Welcome to MODX!</p>\r\n',1,3,0,1,1,1,1130304721,1,1130304927,0,0,0,1130304721,1,'Base Install',0,0,0,0,0,0,0,1);
 
-REPLACE INTO `{PREFIX}site_content` VALUES (2,'document','text/html','Error 404. Page not found page','','','error404','',1,0,0,0,0,'','<p>404 Not Found</p>\r\n',1,2,0,1,1,1,1130304721,1,1130304927,0,0,0,1130304721,1,'',0,0,0,0,0,0,1,1);
-
-REPLACE INTO `{PREFIX}site_content` VALUES (3, 'document','text/xml','sitemap.xml','','','sitemap.xml','',1,0,0,0,0,'','[[sitemap]]',0,1,0,1,1,1,1130304721,1,1130304927,0,0,0,1130304721,1,'',0,0,0,0,0,0,1,1);
 
 REPLACE INTO `{PREFIX}manager_users` 
 (id, username, password)VALUES 
@@ -822,19 +829,19 @@ INSERT IGNORE INTO `{PREFIX}system_settings`
 ('modx_charset','UTF-8'),
 ('site_name','My MODX Site'),
 ('site_start','1'),
-('error_page','2'),
+('error_page','1'),
 ('unauthorized_page','1'),
 ('site_status','1'),
 ('site_unavailable_message','The site is currently unavailable'),
 ('track_visitors','0'),
 ('top_howmany','10'),
 ('auto_template_logic','{AUTOTEMPLATELOGIC}'),
-('default_template','2'),
+('default_template','3'),
 ('old_template',''),
-('publish_default','1'),
+('publish_default','0'),
 ('cache_default','1'),
 ('search_default','1'),
-('friendly_urls','1'),
+('friendly_urls','0'),
 ('friendly_url_prefix',''),
 ('friendly_url_suffix','.html'),
 ('friendly_alias_urls','1'),
@@ -869,7 +876,7 @@ INSERT IGNORE INTO `{PREFIX}system_settings`
 ('upload_images','bmp,ico,gif,jpeg,jpg,png,psd,tif,tiff'),
 ('upload_media','au,avi,mp3,mp4,mpeg,mpg,wav,wmv'),
 ('upload_flash','fla,flv,swf'),
-('upload_files','aac,au,avi,css,cache,doc,docx,gz,gzip,htaccess,htm,html,js,mp3,mp4,mpeg,mpg,ods,odp,odt,pdf,ppt,pptx,rar,tar,tgz,txt,wav,wmv,xls,xlsx,xml,z,zip'),
+('upload_files','bmp,ico,gif,jpeg,jpg,png,psd,tif,tiff,fla,flv,swf,aac,au,avi,css,cache,doc,docx,gz,gzip,htaccess,htm,html,js,mp3,mp4,mpeg,mpg,ods,odp,odt,pdf,ppt,pptx,rar,tar,tgz,txt,wav,wmv,xls,xlsx,xml,z,zip,JPG,JPEG,PNG,GIF'),
 ('upload_maxsize','10485760'),
 ('new_file_permissions','0644'),
 ('new_folder_permissions','0755'),
@@ -881,7 +888,7 @@ INSERT IGNORE INTO `{PREFIX}system_settings`
 ('session.cookie.lifetime','604800'),
 ('mail_check_timeperiod','60'),
 ('manager_direction','ltr'),
-('tinymce_editor_theme','full'),
+('tinymce_editor_theme','editor'),
 ('tinymce_custom_plugins','style,advimage,advlink,searchreplace,print,contextmenu,paste,fullscreen,nonbreaking,xhtmlxtras,visualchars,media'),
 ('tinymce_custom_buttons1','undo,redo,selectall,separator,pastetext,pasteword,separator,search,replace,separator,nonbreaking,hr,charmap,separator,image,link,unlink,anchor,media,separator,cleanup,removeformat,separator,fullscreen,print,code,help'),
 ('tinymce_custom_buttons2','bold,italic,underline,strikethrough,sub,sup,separator,bullist,numlist,outdent,indent,separator,justifyleft,justifycenter,justifyright,justifyfull,separator,styleselect,formatselect,separator,styleprops'),
@@ -908,10 +915,10 @@ INSERT IGNORE INTO `{PREFIX}system_settings`
 ('denyZipDownload', '0'),
 ('denyExtensionRename', '0'),
 ('showHiddenFiles', '0'),
-('docid_incrmnt_method', '1'),
+('docid_incrmnt_method', '0'),
 ('make_folders', '0'),
-('tree_page_click','27');
-
+('tree_page_click', '27'),
+('clean_uploaded_filename', '1');
 
 REPLACE INTO `{PREFIX}user_roles` 
 (id,name,description,frames,home,view_document,new_document,save_document,publish_document,delete_document,empty_trash,action_ok,logout,help,messages,new_user,edit_user,logs,edit_parser,save_parser,edit_template,settings,credits,new_template,save_template,delete_template,edit_snippet,new_snippet,save_snippet,delete_snippet,edit_chunk,new_chunk,save_chunk,delete_chunk,empty_cache,edit_document,change_password,error_dialog,about,file_manager,save_user,delete_user,save_password,edit_role,save_role,delete_role,new_role,access_permissions,bk_manager,new_plugin,edit_plugin,save_plugin,delete_plugin,new_module,edit_module,save_module,exec_module,delete_module,view_eventlog,delete_eventlog,manage_metatags,edit_doc_metatags,new_web_user,edit_web_user,save_web_user,delete_web_user,web_access_permissions,view_unpublished,import_static,export_static,remove_locks) VALUES 
@@ -942,6 +949,7 @@ REPLACE INTO `{PREFIX}system_eventnames`
 ('17','OnManagerCreateGroup','2',''),
 ('18','OnBeforeCacheUpdate','4',''),
 ('19','OnCacheUpdate','4',''),
+('107','OnMakePageCacheKey','4',''),
 ('20','OnLoadWebPageCache','4',''),
 ('21','OnBeforeSaveWebPageCache','4',''),
 ('22','OnChunkFormPrerender','1','Chunks'),
@@ -956,6 +964,9 @@ REPLACE INTO `{PREFIX}system_eventnames`
 ('31','OnDocFormSave','1','Documents'),
 ('32','OnBeforeDocFormDelete','1','Documents'),
 ('33','OnDocFormDelete','1','Documents'),
+('1033','OnDocFormUnDelete','1','Documents'),
+('1034','onBeforeMoveDocument','1','Documents'),
+('1035','onAfterMoveDocument','1','Documents'),
 ('34','OnPluginFormPrerender','1','Plugins'),
 ('35','OnPluginFormRender','1','Plugins'),
 ('36','OnBeforePluginFormSave','1','Plugins'),
@@ -1014,8 +1025,11 @@ REPLACE INTO `{PREFIX}system_eventnames`
 ('89','OnManagerPageInit','2',''),
 ('90','OnWebPageInit','5',''),
 ('101','OnLoadDocumentObject','5',''),
+('104','OnBeforeLoadDocumentObject','5',''),
+('105','OnAfterLoadDocumentObject','5',''),
 ('91','OnLoadWebDocument','5',''),
 ('92','OnParseDocument','5',''),
+('106','OnParseProperties','5',''),
 ('93','OnManagerLoginFormRender','2',''),
 ('94','OnWebPageComplete','5',''),
 ('95','OnLogPageHit','5',''),
@@ -1025,6 +1039,7 @@ REPLACE INTO `{PREFIX}system_eventnames`
 ('99','OnManagerLoginFormPrerender','2',''),
 ('100','OnStripAlias','1','Documents'),
 ('102','OnMakeDocUrl','5',''),
+('103','OnBeforeLoadExtension','5',''),
 ('200','OnCreateDocGroup','1','Documents'),
 ('201','OnManagerWelcomePrerender','2',''),
 ('202','OnManagerWelcomeHome','2',''),
@@ -1039,8 +1054,11 @@ REPLACE INTO `{PREFIX}system_eventnames`
 ('211','OnManagerTreeRender','2',''),
 ('212','OnManagerNodePrerender','2',''),
 ('213','OnManagerNodeRender','2',''),
+('214','OnManagerMenuPrerender','2',''),
+('224','OnDocFormTemplateRender','1','Documents'),
 ('999','OnPageUnauthorized','1',''),
-('1000','OnPageNotFound','1','');
+('1000','OnPageNotFound','1',''),
+('1001','OnFileBrowserUpload','1','File Browser Events');
 
 
 # ^ I don't think we need more than 1000 built-in events. Custom events will start at 1001

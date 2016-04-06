@@ -1,1 +1,1 @@
-[+phx:input=`[(site_url)]`:pregreplace=`/(http:|\/)/`+]
+[+phx:input=`[(site_url)]`:pregreplace=`/(http:|\/|www\.)/`+]

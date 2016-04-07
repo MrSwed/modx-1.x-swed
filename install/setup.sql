@@ -788,14 +788,17 @@ ALTER TABLE `{PREFIX}site_htmlsnippets`
 
 
 REPLACE INTO `{PREFIX}site_templates` 
-(id, templatename, description, editor_type, category, icon, template_type, content, locked, selectable) VALUES ('3','Minimal Template','Default minimal empty template (content returned only)','0','0','','0','[*content*]','0','1');
+(id, templatename, description, editor_type, category, icon, template_type, content, locked, selectable) VALUES ('1','Minimal Template','Default minimal empty template (content returned only)','0','0','','0','[*content*]','0','1');
 
 
 # Default Site Documents
 
 
-REPLACE INTO `{PREFIX}site_content` VALUES (1,'document','text/html','MODX CMS Install Success','Welcome to the MODX Content Management System','','minimal-base','',1,0,0,0,0,'','<h3>Install Successful!</h3>\r\n<p>You have successfully installed MODX Evolution.</p>\r\n\r\n<h3>Getting Help</h3>\r\n<p>The <a href=\"http://forums.modx.com/\" target=\"_blank\">MODX Community</a> provides a great starting point to learn all things MODX Evolution, or you can also <a href=\"http://modx.com/\">see some great learning resources</a> (books, tutorials, blogs and screencasts).</p>\r\n<p>Welcome to MODX!</p>\r\n',1,3,0,1,1,1,1130304721,1,1130304927,0,0,0,1130304721,1,'Base Install',0,0,0,0,0,0,0,1);
+REPLACE INTO `{PREFIX}site_content` VALUES (1,'document','text/html','Главная','Главная','','index','',1,0,0,0,0,'','',1,2,0,1,1,1,1130304721,1,1130304927,0,0,0,1130304721,1,'',0,0,0,0,0,0,0,0);
 
+REPLACE INTO `{PREFIX}site_content` VALUES (2,'document','text/html','Error 404. Page not found','','','error404','',1,0,0,0,0,'','<p>404 Not Found</p>\r\n',1,2,0,1,1,1,1130304721,1,1130304927,0,0,0,1130304721,1,'',0,0,0,0,0,0,1,1);
+
+REPLACE INTO `{PREFIX}site_content` VALUES (3, 'document','text/xml','sitemap.xml','','','sitemap.xml','',1,0,0,0,0,'','[[sitemap]]',0,1,0,1,1,1,1130304721,1,1130304927,0,0,0,1130304721,1,'',0,0,0,0,0,0,1,1);
 
 REPLACE INTO `{PREFIX}manager_users` 
 (id, username, password)VALUES 
@@ -829,19 +832,19 @@ INSERT IGNORE INTO `{PREFIX}system_settings`
 ('modx_charset','UTF-8'),
 ('site_name','My MODX Site'),
 ('site_start','1'),
-('error_page','1'),
+('error_page','2'),
 ('unauthorized_page','1'),
 ('site_status','1'),
 ('site_unavailable_message','The site is currently unavailable'),
 ('track_visitors','0'),
 ('top_howmany','10'),
 ('auto_template_logic','{AUTOTEMPLATELOGIC}'),
-('default_template','3'),
+('default_template','2'),
 ('old_template',''),
-('publish_default','0'),
+('publish_default','1'),
 ('cache_default','1'),
 ('search_default','1'),
-('friendly_urls','0'),
+('friendly_urls','1'),
 ('friendly_url_prefix',''),
 ('friendly_url_suffix','.html'),
 ('friendly_alias_urls','1'),
@@ -888,7 +891,7 @@ INSERT IGNORE INTO `{PREFIX}system_settings`
 ('session.cookie.lifetime','604800'),
 ('mail_check_timeperiod','60'),
 ('manager_direction','ltr'),
-('tinymce_editor_theme','editor'),
+('tinymce_editor_theme','full'),
 ('tinymce_custom_plugins','style,advimage,advlink,searchreplace,print,contextmenu,paste,fullscreen,nonbreaking,xhtmlxtras,visualchars,media'),
 ('tinymce_custom_buttons1','undo,redo,selectall,separator,pastetext,pasteword,separator,search,replace,separator,nonbreaking,hr,charmap,separator,image,link,unlink,anchor,media,separator,cleanup,removeformat,separator,fullscreen,print,code,help'),
 ('tinymce_custom_buttons2','bold,italic,underline,strikethrough,sub,sup,separator,bullist,numlist,outdent,indent,separator,justifyleft,justifycenter,justifyright,justifyfull,separator,styleselect,formatselect,separator,styleprops'),
@@ -915,7 +918,7 @@ INSERT IGNORE INTO `{PREFIX}system_settings`
 ('denyZipDownload', '0'),
 ('denyExtensionRename', '0'),
 ('showHiddenFiles', '0'),
-('docid_incrmnt_method', '0'),
+('docid_incrmnt_method', '1'),
 ('make_folders', '0'),
 ('tree_page_click', '27'),
 ('clean_uploaded_filename', '1');

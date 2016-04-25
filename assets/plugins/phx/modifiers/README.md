@@ -53,6 +53,8 @@ Modifier | Description
 **substr** | Returns a substring of a string. Example: ``[+string:substr=`0,-3`+]``
 **switchc** | Switch chunks for PHx. PHx has one big problem with (visible) chunks at the beginning of the parsing process. They would be evaluated regardless of beeing shown. Example: ``[+string:switchc=`xx:chunkname|yy:chunkname|default:chunkname+]``
 **trim** | Trims a string. Stripped characters could be specified in the options of the modifier. Example: ``[+string:trim=` `+]``
+**tvelement** | Get an element(s) names of tv select value ( for tv type dropdown, listbox, listbox-multiple with possible values like `` "1==Yes||2==No||so-so=So So" ``). Example `` [*docid:tvelement=`tvaname`*]  ``. See more examples inside.
 **utf8limit** | Returns the limited utf8 string. Example: `` [+string:utf8limit=`300`+] ``
+**out** | Return as printf if not empty. Example: `` [*content:out=`<div class="wrap">%s</div>`*] ``
 
 For more understanding see in the code of each modifier file.

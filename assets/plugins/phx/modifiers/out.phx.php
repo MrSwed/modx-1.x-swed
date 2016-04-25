@@ -2,7 +2,7 @@
 /* 
  * description: Output special as printf if not empty 
  *  
- * usage: [+docid:out=`<div class="wrap">%s</div>`+]
+ * usage: [*content:out=`<div class="wrap">%s</div>`*]
  * where %s will be replaced to output result
  *
  * author MrSwed <webmaster@sdcollection.com>

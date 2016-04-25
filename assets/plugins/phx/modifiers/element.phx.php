@@ -1,6 +1,6 @@
 <?php
 
-/* By Swed
+/* By MrSwed
  * description: Get an element of multivalue
  * usage: [+variable:element=`<number><delimiter>`+]
  *   <number> - integer, default 0

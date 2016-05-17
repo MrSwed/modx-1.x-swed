@@ -921,10 +921,6 @@ class DocumentParser {
         foreach($matches[1] as $i=>$key) {
             if(substr($key, 0, 1) == '#') $key = substr($key, 1); // remove # for QuickEdit format
             
-            if(strpos($key,':')!==false)
-                list($key,$modifiers) = explode(':', $key, 2);
-            else $modifiers = false;
-            
             if(isset($this->documentObject[$key])) $value = $this->documentObject[$key];
             elseif(strpos($key,'@')!==false)       $value = $this->_contextValue($key);
             else                                   $value = '';
@@ -934,13 +930,6 @@ class DocumentParser {
                 include_once(MODX_MANAGER_PATH . 'includes/tmplvars.commands.inc.php');
                 $value = getTVDisplayFormat($value[0], $value[1], $value[2], $value[3], $value[4]);
             }
-            
-            if($modifiers!==false)
-            {
-                $this->loadExtension('MODIFIERS');
-                $value = $this->filter->phxFilter($key,$value,$modifiers);
-            }
-            
             $content= str_replace($matches[0][$i], $value, $content);
         }
         
@@ -1002,19 +991,8 @@ class DocumentParser {
         
         $replace= array ();
         foreach($matches[1] as $i=>$key) {
-            if(strpos($key,':')!==false)
-                list($key,$modifiers) = explode(':', $key, 2);
-            else $modifiers = false;
-            
-            if(isset($this->config[$key])) {
-                $value = $this->config[$key];
-                if($modifiers!==false) {
-                    $this->loadExtension('MODIFIERS');
-                    $value = $this->filter->phxFilter($key,$value,$modifiers);
-                }
-                $replace[$i]= $value;
-            }
-            else $replace[$i]= '';
+            if(isset($this->config[$key])) $replace[$i] = $this->config[$key];
+            else                           $replace[$i] = '';
         }
         $content= str_replace($matches[0], $replace, $content);
         return $content;
@@ -1062,21 +1040,13 @@ class DocumentParser {
         $matches = $this->getTagsFromContent($content, '[+', '+]');
         if(!$matches) return $content;
         foreach($matches[1] as $i=>$key) {
-            if(strpos($key,':')!==false)
-                list($key,$modifiers) = explode(':', $key, 2);
-            else $modifiers = false;
+            $value = '';
+            if ($key && is_array($this->placeholders) && isset($this->placeholders[$key]))
+                $value = $this->placeholders[$key];
             
-            if (isset($this->placeholders[$key])) $value = $this->placeholders[$key];
-            elseif($key==='phx') $value = '';
-            else continue;
-            
-            if($modifiers!==false)
-            {
-                $this->loadExtension('MODIFIERS');
-                $modifiers = $this->mergePlaceholderContent($modifiers);
-                $value = $this->filter->phxFilter($key,$value,$modifiers);
-            }
-            $content= str_replace($matches[0][$i], $value, $content);
+            if ($value === '') contnue; // here we'll leave empty placeholders for last.
+            else
+                $content= str_replace($matches[0][$i], $value, $content);
         }
         return $content;
     }
@@ -1268,9 +1238,6 @@ class DocumentParser {
     
     function _getSGVar($value) { // Get super globals
         $key = $value;
-        if(strpos($key,':')!==false)
-            list($key,$modifiers) = explode(':', $key, 2);
-        else $modifiers = false;
         $key = str_replace(array('(',')'),array("['","']"),$key);
         if(strpos($key,'$_SESSION')!==false)
         {
@@ -1284,11 +1251,6 @@ class DocumentParser {
         elseif(0<eval("return count({$key});"))
             $value = eval("return print_r({$key},true);");
         else $value = '';
-        if($modifiers!==false)
-        {
-            $this->loadExtension('MODIFIERS');
-            $value = $this->filter->phxFilter($key,$value,$modifiers);
-        }
         return $value;
     }
     
@@ -1296,13 +1258,6 @@ class DocumentParser {
     {
         $snip_call = $this->_split_snip_call($piece);
         $snip_name = $snip_call['name'];
-        
-        if(strpos($snip_name,':')!==false)
-        {
-            list($snip_name,$modifiers) = explode(':', $snip_name, 2);
-            $snip_call['name'] = $snip_name;
-        }
-        else $modifiers = false;
         
         $snippetObject = $this->_getSnippetObject($snip_call['name']);
         $this->currentSnippet = $snippetObject['name'];
@@ -1317,11 +1272,6 @@ class DocumentParser {
         $params = array_merge($default_params,$params);
         
         $value = $this->evalSnippet($snippetObject['content'], $params);
-        if($modifiers!==false)
-        {
-            $this->loadExtension('MODIFIERS');
-            $value = $this->filter->phxFilter($snip_name,$value,$modifiers);
-        }
         
         if($this->dumpSnippets == 1)
         {
@@ -2995,17 +2945,11 @@ class DocumentParser {
             $bt = md5($content);
             $replace= array ();
             foreach($matches[1] as $i=>$key) {
-                if(strpos($key,':')!==false) list($key,$modifiers) = explode(':', $key, 2);
-                else                         $modifiers = false;
                 
                 if($cleanup=='hasModifier' && !isset($ph[$key])) $ph[$key] = '';
                 
                 if(isset($ph[$key])) {
                     $value = $ph[$key];
-                    if($modifiers!==false) {
-                        $this->loadExtension('MODIFIERS');
-                        $value = $this->filter->phxFilter($key,$value,$modifiers);
-                    }
                     $replace[$i]= $value;
                 }
                 elseif($cleanup) $replace[$i] = '';

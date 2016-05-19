@@ -6,3 +6,20 @@
   <link rel="stylesheet" type="text/css" href="/js/fancybox/jquery.fancybox.css" media="screen" />
   <link rel="stylesheet" type="text/css" href="/js/fancybox/helpers/jquery.fancybox-buttons.css" media="screen" />
   <link rel="stylesheet" type="text/css" href="/js/fancybox/helpers/jquery.fancybox-thumbs.css" media="screen" />
+<script>
+if (typeof jQuery == "function") {
+	$(function(){
+		if (typeof $.fancybox == "function") {
+			$("a:has(img)").filter(function(){
+				return (/(jp?g|bmp|gif|png)$/i).test($(this).attr("href"));
+			}).each(function(){
+				$(this).attr("rel", function(){
+					return $(this).attr("rel") ? $(this).attr("rel") : "gallery"
+				})
+			}).fancybox();
+			$("a[rel='gallelry']").fancybox();
+		}
+	});
+}
+
+</script>

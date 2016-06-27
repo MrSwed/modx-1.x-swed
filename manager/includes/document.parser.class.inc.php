@@ -364,7 +364,7 @@ class DocumentParser {
             $this->error_reporting = $this->config['error_reporting'];
             $this->config= array_merge($this->config, $usrSettings);
             $this->config['filemanager_path'] = str_replace('[(base_path)]',MODX_BASE_PATH,$this->config['filemanager_path']);
-            $this->config['rb_base_dir']      = str_replace('[(base_path)]',MODX_BASE_PATH,$this->config['rb_base_dir']);            
+            $this->config['rb_base_dir']      = str_replace('[(base_path)]',MODX_BASE_PATH,$this->config['rb_base_dir']);
         }
     }
 
@@ -1659,15 +1659,14 @@ class DocumentParser {
             // get document
             $access= ($this->isFrontend() ? "sc.privateweb=0" : "1='" . $_SESSION['mgrRole'] . "' OR sc.privatemgr=0") .
                 (!$docgrp ? "" : " OR dg.document_group IN ($docgrp)");
-            $result= $this->db->select(
+            $rs= $this->db->select(
                 'sc.*',
                 "{$tblsc} sc
                 LEFT JOIN {$tbldg} dg ON dg.document = sc.id",
                 "sc.{$method} = '{$identifier}' AND ({$access})",
                 "",
                 1);
-            $rowCount= $this->db->getRecordCount($result);
-            if ($rowCount < 1) {
+            if ($this->db->getRecordCount($rs) < 1) {
                 $seclimit = 0;
                 if ($this->config['unauthorized_page']) {
                     // method may still be alias, while identifier is not full path alias, e.g. id not found above
@@ -1689,7 +1688,7 @@ class DocumentParser {
                 }
             }
             # this is now the document :) #
-            $documentObject= $this->db->getRow($result);
+            $documentObject= $this->db->getRow($rs);
 
             if($isPrepareResponse==='prepareResponse') $this->documentObject = & $documentObject;
             $out = $this->invokeEvent('OnLoadDocumentObject', compact('method', 'identifier', 'documentObject'));
@@ -3980,13 +3979,11 @@ class DocumentParser {
      * @return array Associative array in the form property name => property value
      */
     function parseProperties($propertyString, $elementName = null, $elementType = null) {
-        
         $propertyString = trim($propertyString);
         $jsonFormat = $this->isJson($propertyString, true);
         $property = array();
-
         // old format
-        if ( !$jsonFormat ) {
+        if ( $jsonFormat === false) {
             $props= explode('&', $propertyString);
             foreach ($props as $prop) {
 
@@ -3998,22 +3995,31 @@ class DocumentParser {
                 $_ = explode('=', $prop, 2);
                 $key = trim($_[0]);
                 $p = explode(';', trim($_[1]));
-                if    ($p[1]=='list'       && $p[3]!='') $value = $p[3]; // list default
-                elseif($p[1]=='list-multi' && $p[3]!='') $value = $p[3]; // list-multi
-                elseif($p[1]=='checkbox'   && $p[3]!='') $value = $p[3]; // checkbox
-                elseif($p[1]=='radio'      && $p[3]!='') $value = $p[3]; // radio
-                elseif($p[1]!='list'       && $p[2]!='') $value = $p[2]; // text, textarea, etc..
-                else                                     $value = '';
-                $property[$key] = $value;
+                switch ($p[1]) {
+                    case 'list':
+                    case 'list-multi':
+                    case 'checkbox':
+                    case 'radio':
+                        $value = $p[3];
+                        break;
+                    default:
+                        $value = $p[2];
+                }
+                if (!empty($key) && $value != '') $property[$key] = $value;
             }
-            
         // new json-format
         } else if(!empty($jsonFormat)){
             foreach( $jsonFormat as $key=>$row ) {
-                $property[$key] = is_array($row) ? $row[0]['value'] : $row;
+                if (!empty($key)) {
+                    if (is_array($row)) {
+                        $value = empty($row[0]['value'])? '' : $row[0]['value'];
+                    } else {
+                        $value = $row;
+                    }
+                    if (!empty($value)) $property[$key] = $value;
+                }
             }
         }
-
         if(!empty($elementName) && !empty($elementType)){
             $out = $this->invokeEvent('OnParseProperties', array(
                 'element' => $elementName,

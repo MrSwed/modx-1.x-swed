@@ -33,9 +33,10 @@ $.ddMM.mm_ddMultipleFields = {
 		maxRow: 0,
 		//Различные опции
 		options: {
-			sortable:true,
-			showIndex:true,
-			btnToggleRaw:false
+			sortable: true,
+			showIndex: true,
+			btnToggleRaw: false,
+			hideCommonControl: false
 		}
 	},
 //	Все экземпляры (TV). Структура: {
@@ -144,12 +145,12 @@ $.ddMM.mm_ddMultipleFields = {
 			$ddMultipleFieldControl = $('<div class="ddMultipleField Control" id="' + id + 'ddMultipleFieldControl"></div>').appendTo(target),
 			//Делаем таблицу мульти-полей, вешаем на таблицу функцию обновления оригинального поля
 			$ddMultipleField = $('<table class="ddMultipleField" id="' + id + 'ddMultipleField"><tbody></tbody></table>').appendTo(target)/*.on('change.ddEvents', function(){_this.updateTv(id);})*/;
-
+		if (_inst.options.hideCommonControl) $ddMultipleFieldControl.hide();
 		if (!(_inst.maxRow == 1 && _inst.minRow == 1)) {
 		//Кнопка очистки
-			$('<input type="button" value="×" title="' + $.ddMM.lang.confirm_delete_record + '" class="ddDeleteButton" />').appendTo($ddMultipleFieldControl).on("click", function (e) {
+			$('<input type="button" value="×" title="Очистить" class="ddDeleteButton" />').appendTo($ddMultipleFieldControl).on("click", function (e) {
 				e.preventDefault();
-				$(".ddDeleteButton"+(_inst.minRow?":gt("+(_inst.minRow-1)+")":""), $ddMultipleField).click();
+				if(confirm($.ddMM.lang.confirm_delete_record))$(".ddDeleteButton"+(_inst.minRow?":gt("+(_inst.minRow-1)+")":""), $ddMultipleField).click();
 			});
 		}
 		//Кнопка Reset
@@ -368,6 +369,10 @@ $.ddMM.mm_ddMultipleFields = {
 				case 'select':
 				_this.makeSelect(val[key], _cTitle, _inst.coloumnsData[key], _inst.colWidth[key], $col);
 				break;
+			//Если мультиселект
+				case 'multiselect':
+				_this.makeSelect(val[key], _cTitle, _inst.coloumnsData[key], _inst.colWidth[key], $col,true);
+				break;
 			//Если дата
 				case 'date':
 				_this.makeDate(val[key], _cTitle, $col);
@@ -546,10 +551,10 @@ $.ddMM.mm_ddMultipleFields = {
 		
 		$('<div class="ddFieldCol_edit"><a class="false" href="#">' + $.ddMM.lang.edit + '</a></div>').appendTo($fieldCol).find('a').on('click', function(event){
 			_this.richtextWindow = window.open($.ddMM.config.site_url + $.ddMM.urls.mm + 'widgets/ddmultiplefields/richtext/index.php', 'mm_ddMultipleFields_richtext', new Array(
-				'width=600',
-				'height=550',
-				'left=' + (($.ddTools.windowWidth - 600) / 2),
-				'top=' + (($.ddTools.windowHeight - 550) / 2),
+				'width=900',
+				'height=560',
+				'left=' + (($.ddTools.windowWidth - 900) / 2),
+				'top=' + (($.ddTools.windowHeight - 560) / 2),
 				'menubar=no',
 				'toolbar=no',
 				'location=no',
@@ -596,8 +601,8 @@ $.ddMM.mm_ddMultipleFields = {
 		});
 	},
 	//Функция создания списка
-	makeSelect: function(value, title, data, width, $fieldCol){
-		var $select = $('<select class="ddField" style="' + this._united(width,"width: %s") + '">');
+	makeSelect: function(value, title, data, width, $fieldCol, $multiple){
+		var $select = $('<select class="ddField" style="' + this._united(width,"width: %s") + '"' + ($multiple?' multiple size="" ':'') + '>');
 		
 		if (data){
 			var dataMas = $.parseJSON(data),
@@ -610,7 +615,7 @@ $.ddMM.mm_ddMultipleFields = {
 			$select.append(options);
 		}
 		
-		if (value){$select.val(value);}
+		if (value) {$select.val($multiple?value.split(","):value);}
 		
 		return $select.appendTo($fieldCol);
 	},

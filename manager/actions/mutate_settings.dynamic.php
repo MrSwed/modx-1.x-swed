@@ -173,12 +173,12 @@ function confirmLangChange(el, lkey, elupd){
 
     <div id="actions">
           <ul class="actionButtons">
-              <li id="Button1">
+              <li id="Button1" class="transition">
                 <a href="#" onclick="documentDirty=false; document.settings.submit();">
                     <img src="<?php echo $_style["icons_save"]?>" /> <?php echo $_lang['save']; ?>
                 </a>
               </li>
-              <li id="Button5">
+              <li id="Button5" class="transition">
                 <a href="#" onclick="documentDirty=false;document.location.href='index.php?a=2';">
                     <img src="<?php echo $_style["icons_cancel"]?>" /> <?php echo $_lang['cancel']; ?>
                 </a>
@@ -597,6 +597,23 @@ function confirmLangChange(el, lkey, elupd){
             <tr>
               <td width="200">&nbsp;</td>
               <td class='comment'><?php echo $_lang["valid_hostnames_message"] ?></td>
+            </tr>
+            <tr>
+              <td colspan="2"><div class='split'></div></td>
+            </tr>
+<?php
+    if(!isset($enable_filter)) $enable_filter = 1;
+?>
+            <tr>
+              <td nowrap class="warning"><?php echo $_lang["enable_filter_title"] ?></td>
+              <td >
+                <?php echo wrap_label($_lang["yes"],form_radio('enable_filter', 1));?><br />
+                <?php echo wrap_label($_lang["no"], form_radio('enable_filter', 0));?>
+              </td>
+            </tr>
+            <tr>
+              <td width="200">&nbsp;</td>
+              <td class='comment'><?php echo $_lang["enable_filter_message"]; ?></td>
             </tr>
             <tr>
               <td colspan="2"><div class='split'></div></td>

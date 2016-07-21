@@ -337,6 +337,7 @@ $_lang["files_fileoptions"] = 'Options';
 $_lang["files_files"] = 'Files';
 $_lang["files_filesize"] = 'File size';
 $_lang["files_filetype_notok"] = 'Uploading of this kind of file is not allowed!';
+$_lang["files_management"] = 'Manage Files';
 $_lang["files_modified"] = 'Modified';
 $_lang["files_top_level"] = 'To top level';
 $_lang["files_up_level"] = 'Up one level';
@@ -390,6 +391,7 @@ $_lang["icon"] = 'Icon';
 $_lang["id"] = 'ID';
 $_lang["illegal_parent_child"] = 'Parent Assignment:\n\nResource is a child of the selected Resource.';
 $_lang["illegal_parent_self"] = 'Parent Assignment:\n\nThe selected Resource cannot be assigned to itself.';
+$_lang["images_management"] = 'Manage Images';
 $_lang["import_files_found"] = '<b>Found %s Resources for import...</b>';
 $_lang["import_params"] = 'Import Module shared parameters';
 $_lang["import_params_msg"] = 'You can import the parameters or settings of a Module by selecting the name of the Module from the above drop down menu. <b>NOTE:</b> In order for Modules to appear inside the menu, this Plugin/Snippet must be a part of the Module\'s dependency listing and the Module must have parameter sharing enabled. ';
@@ -1184,6 +1186,8 @@ $_lang["pwd_hash_algo_message"] = 'Password hash algorithm.';
 
 $_lang["enable_bindings_title"] = 'Enable @Bindings commands';
 $_lang["enable_bindings_message"] = 'Prevents the execution of PHP functions through TV @Bindings. Useful if you have Manager users who should not be able to create PHP code but need to be able to create or edit TVs. The output of any TV with an @Binding will be "@Bindings disabled".';
+$_lang["enable_filter_title"] = 'Enable filters';
+$_lang["enable_filter_message"] = 'Filters allow you to manipulate the way data is presented or parsed in a tag. They allow you to modify values from inside your templates. This is analogous to PHx. <a href="https://github.com/modxcms/evolution/issues/623" target="ext_help">More info</a>'; // todo: change link to documentation 
 
 $_lang["bkmgr_alert_mkdir"] = 'A file cannot be created in a directory.  Please check the permission of [+snapshot_path+]';
 $_lang["bkmgr_restore_msg"] = '<p>Database tables could be restored by SQL:</p>';
@@ -1218,7 +1222,7 @@ $_lang["check_files_onlogin_title"] = 'Check core files on login';
 $_lang["check_files_onlogin_message"] = 'By enabling this option, important system files will be checked for modification typical of scripted website attacks. While not a foolproof guarantee, it may alert you to a compromised MODX system file and website.';
 
 $_lang["configcheck_sysfiles_mod"] = 'Important System Files have been modified.';
-$_lang["configcheck_sysfiles_mod_msg"] = 'You have configured MODX to check important system files for possible website script attacks. This does not necessarily mean your site has been compromised, however, you should review the watched files in your installation (set in System configuration -> User -> Check core files on login). If you find your files unaltered or changes  were made by site administrators, go to System Configuration and click to re-save settings to dismiss this message.';
+$_lang["configcheck_sysfiles_mod_msg"] = 'You have configured MODX to check important system files for possible website script attacks. This warning does not necessarily mean your site has been compromised, however, you should review the watched files in your installation (set in System configuration -> User -> Check core files on login). If you find your files unaltered or changes were made by site administrators, go to System Configuration and click to re-save settings to dismiss this message. Changes in the following files have been found:';
 
 $_lang['email_method_title'] = 'Sendmail method';
 $_lang['email_method_mail'] = 'PHP mail() function';
@@ -1310,3 +1314,10 @@ $_lang["dp_startDay"]   = "1";
 $_lang["check_all"] = "Select all";
 $_lang["check_none"] = "Select none";
 $_lang["check_toggle"] = "Toggle selection";
+
+$_lang["version_notices"] = "Version Notices";
+
+$_lang["em_button_shift"] = " (Shift-Mouseclick to open multiple windows)";
+
+$_lang["reset_sysfiles_checksum_button"] = "Rebuild Checksums";
+$_lang["reset_sysfiles_checksum_alert"] = "Are you sure you want to reset the system files checksums?";

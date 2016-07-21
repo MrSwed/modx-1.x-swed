@@ -75,9 +75,9 @@ function deletedocument() {
 
 <div id="actions">
 	<ul class="actionButtons">
-		<li id="Button1"><a href="#" onclick="documentDirty=false; document.userform.save.click();"><img src="<?php echo $_style["icons_save"] ?>" /> <?php echo $_lang['save'] ?></a></li>
+		<li id="Button1" class="transition"><a href="#" onclick="documentDirty=false; document.userform.save.click();"><img src="<?php echo $_style["icons_save"] ?>" /> <?php echo $_lang['save'] ?></a></li>
 		<li id="Button3"><a href="#" onclick="deletedocument();"><img src="<?php echo $_style["icons_delete"] ?>" /> <?php echo $_lang['delete'] ?></a></li>
-		<li id="Button5"><a href="#" onclick="documentDirty=false;document.location.href='index.php?a=86';"><img src="<?php echo $_style["icons_cancel"] ?>" /> <?php echo $_lang['cancel'] ?></a></li>
+		<li id="Button5" class="transition"><a href="#" onclick="documentDirty=false;document.location.href='index.php?a=86';"><img src="<?php echo $_style["icons_cancel"] ?>" /> <?php echo $_lang['cancel'] ?></a></li>
 	</ul>
 	<?php if($_GET['a']=='38') { ?>
 	<script type="text/javascript">document.getElementById("Button3").className='disabled';</script>
@@ -107,7 +107,7 @@ table td {vertical-align:top;}
 </style>
 <table>
 <tr>
-<td>
+<td style="vertical-align: top">
 <fieldset>
 <h3><?php echo $_lang['page_data_general']; ?></h3>
 <?php
@@ -125,7 +125,7 @@ table td {vertical-align:top;}
 ?>
 </fieldset>
 </td>
-<td>
+<td style="vertical-align: top">
 <fieldset>
 <h3><?php echo $_lang['role_content_management']; ?></h3>
 <?php
@@ -148,7 +148,7 @@ table td {vertical-align:top;}
 
 <table>
 <tr>
-<td>
+<td style="vertical-align: top">
 <fieldset>
 <h3><?php echo $_lang['role_template_management']; ?></h3>
 <?php
@@ -159,7 +159,7 @@ table td {vertical-align:top;}
 ?>
 </fieldset>
 </td>
-<td>
+<td style="vertical-align: top">
 <fieldset>
 <h3><?php echo $_lang['role_snippet_management']; ?></h3>
 <?php
@@ -170,7 +170,7 @@ table td {vertical-align:top;}
 ?>
 </fieldset>
 </td>
-<td>
+<td style="vertical-align: top">
 <fieldset>
 <h3><?php echo $_lang['role_chunk_management']; ?></h3>
 <?php
@@ -181,7 +181,7 @@ table td {vertical-align:top;}
 ?>
 </fieldset>
 </td>
-<td>
+<td style="vertical-align: top">
 <fieldset>
 <h3><?php echo $_lang['role_plugin_management']; ?></h3>
 <?php
@@ -195,6 +195,9 @@ table td {vertical-align:top;}
 </tr>
 </table>
 
+<table>
+<tr>
+<td style="vertical-align: top">
 <fieldset>
 <h3><?php echo $_lang['role_module_management']; ?></h3>
 <?php
@@ -205,10 +208,13 @@ table td {vertical-align:top;}
 	echo render_form('exec_module',   $_lang['role_run_module']);
 ?>
 </fieldset>
+</td>
+</tr>
+</table>
 
 <table>
 <tr>
-<td>
+<td style="vertical-align: top">
 <fieldset>
 <h3><?php echo $_lang['role_user_management']; ?></h3>
 <?php
@@ -219,7 +225,7 @@ table td {vertical-align:top;}
 ?>
 </fieldset>
 </td>
-<td>
+<td style="vertical-align: top">
 <fieldset>
 <h3><?php echo $_lang['role_web_user_management']; ?></h3>
 <?php
@@ -230,7 +236,7 @@ table td {vertical-align:top;}
 ?>
 </fieldset>
 </td>
-<td>
+<td style="vertical-align: top">
 <fieldset>
 <h3><?php echo $_lang['role_udperms']; ?></h3>
 <?php
@@ -239,7 +245,7 @@ table td {vertical-align:top;}
 ?>
 </fieldset>
 </td>
-<td>
+<td style="vertical-align: top">
 <fieldset>
 <h3><?php echo $_lang['role_role_management']; ?></h3>
 <?php
@@ -255,7 +261,7 @@ table td {vertical-align:top;}
 
 <table>
 <tr>
-<td>
+<td style="vertical-align: top">
 <fieldset>
 <h3><?php echo $_lang['role_eventlog_management']; ?></h3>
 <?php
@@ -264,7 +270,7 @@ table td {vertical-align:top;}
 ?>
 </fieldset>
 </td>
-<td>
+<td style="vertical-align: top">
 <fieldset>
 <h3><?php echo $_lang['role_config_management']; ?></h3>
 <?php

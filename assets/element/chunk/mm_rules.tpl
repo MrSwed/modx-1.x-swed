@@ -56,7 +56,7 @@ mm_ddMoveFieldsToSection('ditto_parrent,hideChilds,hideMenuChilds,hideFolders,de
 mm_ddCreateSection('Дополнительные тексты', 'addTexts');
 mm_ddMoveFieldsToSection('addtexts', 'addTexts');
 
-mm_ddMultipleFields("addtexts", '', '', 'richtext,select,select', 'Текст,Месторасположение::Если не выбрано - используются настройки родителя,Наследовать поле::Значение поля родителя будет передаваться дочерним ресурсам&sbquo; если в них не будут заданы свои тексты для соответствующих полей', 'auto', '||', '::', 0, 0, 0, 0, "||{$p['text_places']}||{$p['sel_ynp_chonly']}");
+mm_ddMultipleFields("addtexts", '', '', 'richtext,select,select', 'Текст,Месторасположение::Если не выбрано - используются настройки родителя,Наследовать поле::Значение поля родителя будет передаваться дочерним ресурсам&sbquo; если в них не будут заданы свои тексты для соответствующих полей', 'auto', '||', '::', 0, 0, 0, 0, "||{$p['text_places']}||{$p['sel_ynp_chonly']}",'{btnToggleRaw:true}');
 
 mm_createTab('Изображения', 'gallery');
 mm_moveFieldsToTab('image,gallery,gallery_manual', 'gallery');

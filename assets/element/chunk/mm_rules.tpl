@@ -51,7 +51,7 @@ mm_ddMoveFieldsToSection('hidePageTitle,hideBreadcrumbs,showParentTitle,showDate
 mm_ddMultipleFields("socialwidgets", '', '', 'select,select', 'Поделиться {{share}},Комментарии {{comments}}', 'auto', '||', '::', '', '', 1, 1, $p["sel_ynp_nof"]);
 
 mm_ddCreateSection('Параметры дочерних (наследуемые, пустое значение наследует родителя)', 'parameters_child', 'settings');
-mm_ddMoveFieldsToSection('ditto_parrent,hideChilds,hideFolders,depth,ditto_display,ditto_orderBy,DisplayListStyle,intalias', 'parameters_child');
+mm_ddMoveFieldsToSection('ditto_parrent,hideChilds,hideMenuChilds,hideFolders,depth,ditto_display,ditto_orderBy,DisplayListStyle,intalias', 'parameters_child');
 
 mm_ddCreateSection('Дополнительные тексты', 'addTexts');
 mm_ddMoveFieldsToSection('addtexts', 'addTexts');

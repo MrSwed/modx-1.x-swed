@@ -48,6 +48,6 @@
 			{{HeaderSearchForm}}
 		</div>
 		<div class="menu">
-			[[Wayfinder? &startId=`0` &level=`2` &useWeblinkUrl=1 &where=`isfolder = 1 or parent = 0 `]]
+			[[Wayfinder? &startId=`0` &level=`2` &useWeblinkUrl=1 &rowTpl=`menurow`]]
 		</div>
 	</div>

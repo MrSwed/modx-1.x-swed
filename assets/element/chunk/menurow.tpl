@@ -1,0 +1,1 @@
+<li[+wf.id+][+wf.classes+]><a href="[+wf.link+]" title="[+wf.title+]" [+wf.attributes+]>[+wf.linktext+]</a>[+phx:input=`[+hideMenuChilds+]`:ne=`1`:then=`[+wf.wrapper+]`+]</li>

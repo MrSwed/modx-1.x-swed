@@ -19,6 +19,7 @@
 	<link rel="stylesheet" type="text/css" href="/assets/js/fancybox/helpers/jquery.fancybox-thumbs.css" media="screen"/>
 	<script src="/assets/templates/design/js/logic.js" type="text/javascript" charset="utf-8"></script>
 	<link href="/assets/templates/design/style.css" rel="stylesheet" type="text/css"/>
+	<link href="/assets/templates/design/ie.css" rel="stylesheet" type="text/css"/>
 
 	[*head*]
 </head>
@@ -36,7 +37,7 @@
 	}
 </style>
 <div style="font-size:30px;text-align:center;padding:10em;display:block">
-	Интернет Эксплорер ниже 10-й версии не поддерживается <br>
+	Интернет Эксплорер ниже 11-й версии не поддерживается <br>
 	Обновите Браузер. Или воспользуйтесь алтернативными.
 </div>
 <![endif]-->

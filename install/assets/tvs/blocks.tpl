@@ -1,11 +1,11 @@
 /**
- * addtexts
+ * blocks
  *
  * настройки отображения и расположения
  *
  * @category        tv
- * @name            addtexts
- * @internal        @caption Дополнительные тексты
+ * @name            blocks
+ * @internal        @caption Дополнительные блоки макета
  * @internal        @input_type textarea
  * @internal        @input_options
  * @internal        @input_default

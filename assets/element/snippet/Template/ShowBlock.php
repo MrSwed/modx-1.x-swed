@@ -11,6 +11,7 @@
 	* @internal    @modx_category Content
 	* @internal    @installset base, sample
 	* @internal    @author MrSwed webmaster@sdcollection.com
+	* @internal    @requirements [[ddGetMultipleField]] [[getInheritField]]
 	*/
 
 /* mm_rules example :

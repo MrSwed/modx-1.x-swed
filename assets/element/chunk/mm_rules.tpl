@@ -20,12 +20,6 @@ $p = array(
 		array(1, "Да"),
 		array(0, "Нет")
 	)),
-	"sel_ynp_chonly" => json_encode(array(
-		array("", ""), // use parent setting
-		array(1, "Да"),
-		array(0, "Нет"),
-		array(2, "Только для дочерних")
-	)),
 	"sel_ynp_nof" => json_encode(array(
 		array("", ""), // use parent setting
 		array(0, "Нет"),
@@ -42,6 +36,15 @@ $p = array(
 		array("afterList", "После списка дочерних"),
 		array("afterContent", "После блока контента"),
 		array("none", "Отключить"),
+	)),
+	"sel_inheritance" => json_encode(array(
+		array("", ""), // use parent setting
+		array(0, "Нет, отменить наследование"),
+		array(1, "Для всех"),
+		array(2, "Только для дочерних"),
+		array(3, "Для контейнеров"),
+		array(4, "Для дочерних контейнеров"),
+		array(5, "Да, кроме контейнеров")
 	))
 );
 
@@ -56,7 +59,7 @@ mm_ddMoveFieldsToSection('ditto_parrent,hideChilds,hideMenuChilds,hideFolders,de
 mm_ddCreateSection('Дополнительные блоки', 'BlocksSection');
 mm_ddMoveFieldsToSection('blocks', 'BlocksSection');
 
-mm_ddMultipleFields("blocks", '', '', 'richtext,select,select', 'Текст,Месторасположение::Если не выбрано - используются настройки родителя,Наследовать поле::Значение поля родителя будет передаваться дочерним ресурсам&sbquo; если в них не будут заданы свои тексты для соответствующих полей', 'auto', '||', '::', 0, 0, 0, 0, "||{$p['text_places']}||{$p['sel_ynp_chonly']}",'{btnToggleRaw:true}');
+mm_ddMultipleFields("blocks", '', '', 'richtext,select,select', 'Текст,Месторасположение::Если не выбрано - используются настройки родителя,Наследовать поле::Значение поля родителя будет передаваться дочерним ресурсам&sbquo; если в них не будут заданы свои тексты для соответствующих полей', 'auto', '||', '::', 0, 0, 0, 0, "||{$p['text_places']}||{$p['sel_inheritance']}",'{btnToggleRaw:true}');
 
 mm_createTab('Изображения', 'gallery');
 mm_moveFieldsToTab('image,gallery,gallery_manual', 'gallery');

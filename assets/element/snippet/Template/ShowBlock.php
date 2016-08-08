@@ -77,7 +77,7 @@ if ($id == $modx->documentObject['id']) $docData = $modx->documentObject;
 else $docData = $modx->getDocument($id, "parent,isfolder");
 
 // Ппроверка значений текущего документа
-$value = $modx->evalSnippets("[[ddGetMultipleField? &docField='$tv' &filter='1::$name||2::||2::0||2::1".((int)$docData["isfolder"] ? "||2::3" : "")."' &columns='0']]");
+$value = $modx->evalSnippets("[[ddGetMultipleField? &docId=`$id` &docField='$tv' &filter='1::$name||2::||2::0||2::1".((int)$docData["isfolder"] ? "||2::3" : "")."' &columns='0']]");
 
 // Если для текущего ничего нет, ищем родительские с разрешенным наследованием
 $cid = $id;

@@ -26,7 +26,6 @@
 
 <body [[getInheritField? &id=`[*id*]` &field=`bodyclass` &out=` class="%s"`]]>
 <!--[if lte IE 9 ]>
-
 <style>
 	body {
 		opacity: 1 !important;
@@ -43,11 +42,16 @@
 <![endif]-->
 <div class="main">{{debug_maket}}
 	<div class="header">
-		<a href="/" class="logo">[(site_name)]</a>
-		<div class="search">
-			{{HeaderSearchForm}}
-		</div>
-		<div class="menu">
-			[[Wayfinder? &startId=`0` &level=`2` &useWeblinkUrl=1 &rowTpl=`menurow`]]
+		<div class="mainw">
+			<div class="startrow">
+				<a href="/" class="logo">[(site_name)]</a>
+				<div class="contacts">
+					[[ShowBlock? &name=`tplHeaderContacts` &id=`1` &out=`%s`]]
+				</div>
+			</div>
+			<div class="menu">
+				[[Wayfinder? &startId=`0` &level=`2` &useWeblinkUrl=1 &rowTpl=`menurow` ]]
+			</div>
+			[[ShowBlock? &name=`headerPlace` ]]
 		</div>
 	</div>

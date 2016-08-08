@@ -1,7 +1,6 @@
 [[ShowBlock? &name=`beforeContent` ]]
 <div class="content">
-	[[ShowBlock? &name=`leftCol` ]]
-	<div class="inner">[+phx:input=`[[getInheritField? &id=`[*id*]` &field=`hideBreadcrumbs`]]`:ne=`1`:then=`
+	[+phx:input=`[[getInheritField? &id=`[*id*]` &field=`hideBreadcrumbs`]]`:ne=`1`:then=`
 		<div class="crumbs">[[Breadcrumbs? &showHomeCrumb=`1` &showCurrentCrumb=`1` &respectHidemenu=`0` &crumbSeparator=` / ` &currentAsLink=`1`]]</div>`+]
 			[+phx:input=`[*parent*]`:ne=`1`:and:if=`[[getInheritField? &id=`[*id*]` &field=`showParentTitle`]]`:is=`1`:then=`
 			<h1>[+phx:input=`[*parent*]`:docfield+]</h1>
@@ -9,6 +8,9 @@
 			`:else=`
 			[+phx:input=`[*hidePageTitle*]`:ne=`1`:then=`<h1>[*pagetitle*]</h1>`+]`+]
 		[+phx:input=`[*isfolder*]`:ne=`1`:and:if=`[[getInheritField? &id=`[*id*]` &field=`showDateInContent`]]`:is=`1`:then=`<div class="date">[*phx:input=`[*pub_date:ne=`0`:then=`[*pub_date*]`:else=`[*publishedon*]`*]`:dateformat=`%d.%m.%Y`*]</div>`+]
+	<div class="contentCols">
+	[[ShowBlock? &name=`leftCol` ]]
+		<div class="centerCol">
 		[[ShowBlock? &name=`beforeText` ]]
 		<div class="text">
 			[*content*]
@@ -45,12 +47,12 @@
 	{{paginator}}
 		<div class="endcol"></div>
 `+]
-	[[ShowBlock? &name=`afterList` ]]
-	[+phx:input=`[[getInheritField? &id=`[*id*]` &field=`socialwidgets`]]`:element=`0::`:math=`?+(3*[*isfolder*])`:in=`1,2,4`:then=`{{share}}`+]
-	[+phx:input=`[[getInheritField? &id=`[*id*]` &field=`socialwidgets`]]`:element=`1::`:math=`?+(3*[*isfolder*])`:in=`1,2,4`:then=`{{comments}}`+]
+			[[ShowBlock? &name=`afterList` ]]
+			[+phx:input=`[[getInheritField? &id=`[*id*]` &field=`socialwidgets`]]`:element=`0::`:math=`?+(3*[*isfolder*])`:in=`1,2,4`:then=`{{share}}`+]
+			[+phx:input=`[[getInheritField? &id=`[*id*]` &field=`socialwidgets`]]`:element=`1::`:math=`?+(3*[*isfolder*])`:in=`1,2,4`:then=`{{comments}}`+]
+		</div>
 
-	</div>
 [[ShowBlock? &name=`rightCol` ]]
- 
+ </div>
 </div>
 [[ShowBlock? &name=`afterContent` ]]

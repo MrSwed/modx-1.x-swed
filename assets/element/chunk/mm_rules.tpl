@@ -8,7 +8,7 @@ if ($modx->db->getValue("SELECT COUNT(id) FROM ".$modx->getFullTableName('site_t
 
 mm_widget_showimagetvs(); // Always give a preview of Image TVs
 
-/* Переменные для использования * /
+/* Переменные для использования */
 $cid = isset($content['id'])?$content['id']:false;
 $pid = !empty($content['parent'])?$content['parent']:$_GET["pid"];
 $tpl = $content['template'];
@@ -48,6 +48,12 @@ $p = array(
 	))
 );
 
+if ($cid==1) {
+	$p["text_places"] = json_encode(array_merge(json_decode($p["text_places"]),array(
+		array("tplHeaderContacts", "Макет: Контакты в шапке"),
+		array("tplFooterSlogan", "Макет: Слоган в подвале")
+	)));
+}
 
 mm_ddCreateSection('Параметры (наследуемые, пустое значение наследует родителя)', 'parameters', 'settings');
 mm_ddMoveFieldsToSection('hidePageTitle,hideBreadcrumbs,showParentTitle,showDateInContent,socialwidgets,bodyclass', 'parameters');

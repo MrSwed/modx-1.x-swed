@@ -1,17 +1,18 @@
 <?php
 /**
  * ddGetMultipleField.php
- * @version 3.2 (2015-06-23)
+ * @version 3.3 (2016-06-06)
  * 
  * @desc A snippet for separated by delimiters data output.
  * @note The fields formed by the mm_ddMultipleFields widget values ooutput gets more convinient with the snippet.
  * 
- * @uses The library modx.ddTools 0.11.
- * @uses The snippet ddTypograph 1.4.3 (if typographing is required).
+ * @uses MODX >= 1.0.13.
+ * @uses The library modx.ddTools 0.15.3.
+ * @uses The snippet ddTypograph 1.4.3 (if typography is required).
  * 
- * @param $string {separated string} - The input string containing separated values. @required
- * @param $docField {string} - The name of the document field/TV which value is required to get. If the parameter is passed then the input string will be taken from the field/TV and “string” will be ignored. Default: —.
- * @param $docId {integer} - ID of the document which field/TV value is required to get. “docId” equals the current document id since “docId” is unset. Default: —.
+ * @param $inputString {separated string} - The input string containing separated values. @required
+ * @param $inputString_docField {string} - The name of the document field/TV which value is required to get. If the parameter is passed then the input string will be taken from the field/TV and “inputString” will be ignored. Default: —.
+ * @param $inputString_docId {integer} - ID of the document which field/TV value is required to get. “inputString_docId” equals the current document id since “inputString_docId” is unset. Default: —.
  * @param $rowDelimiter {string; regexp} - The input string row delimiter. Default: '||'.
  * @param $colDelimiter {string; regexp} - The input string column delimiter. Default: '::'.
  * @param $startRow {integer} - The index of the initial row (indexes start at 0). Default: 0.
@@ -26,31 +27,47 @@
  * @param $outputFormat {'html'; 'JSON'; 'array'; 'htmlarray'} - Result output format. Default: 'html'.
  * @param $rowGlue {string} - The string that combines rows while rendering. It can be used along with “rowTpl”. Default: ''.
  * @param $colGlue {string} - The string that combines columns while rendering. It can be used along with “colTpl”, but not with “rowTpl” for obvious reasons. Default: ''.
- * @param $rowTpl {string: chunkName} - The template for row rendering (“outputFormat” has to be == 'html'). Available placeholders: [+rowNumber+] (index of current row, starts at 1), [+rowNumber.zeroBased+] (index of current row, starts at 0), [+total+] (total number of rows), [+resultTotal+] (total number of returned rows), [+col0+],[+col1+],… (column values). Default: ''.
- * @param $colTpl {comma separated string: chunkName; 'null'} - The comma-separated list of templates for column rendering (“outputFormat” has to be == 'html'). If the number of templates is lesser than the number of columns then the last passed template will be used to render the rest of the columns. 'null' specifies rendering without a template. Available placeholders: [+val+], [+rowNumber+] (index of current row, starts at 1), [+rowNumber.zeroBased+] (index of current row, starts at 0). Default: ''.
- * @param $outerTpl {string: chunkName} - Wrapper template (“outputFormat” has to be != 'array'). Available placeholders: [+result+], [+total+] (total number of rows), [+resultTotal+] (total number of returned rows), [+rowY.colX+] (“Y” — row number, “X” — column number). Default: ''.
- * @param $placeholders {separated string} - Additional data has to be passed into “outerTpl”. Syntax: string separated with '::' between key and value and '||' between key-value pairs. Default: ''.
+ * @param $rowTpl {string: chunkName|string} - The template for row rendering (“outputFormat” has to be == 'html'). Use inline templates starting with “@CODE:”. Available placeholders: [+rowNumber+] (index of current row, starts at 1), [+rowNumber.zeroBased+] (index of current row, starts at 0), [+total+] (total number of rows), [+resultTotal+] (total number of returned rows), [+col0+],[+col1+],… (column values). Default: ''.
+ * @param $colTpl {comma separated string: chunkName|string; 'null'} - The comma-separated list of templates for column rendering (“outputFormat” has to be == 'html'). Use inline templates starting with “@CODE:”. If the number of templates is lesser than the number of columns then the last passed template will be used to render the rest of the columns. 'null' specifies rendering without a template. Available placeholders: [+val+], [+rowNumber+] (index of current row, starts at 1), [+rowNumber.zeroBased+] (index of current row, starts at 0). Default: ''.
+ * @param $outerTpl {string: chunkName|string} - Wrapper template (“outputFormat” has to be != 'array'). Use inline templates starting with “@CODE:”. Available placeholders: [+result+], [+total+] (total number of rows), [+resultTotal+] (total number of returned rows), [+rowY.colX+] (“Y” — row number, “X” — column number). Default: ''.
+ * @param $placeholders {query string} - Additional data as query string (https://en.wikipedia.org/wiki/Query_string) has to be passed into “outerTpl”, “rowTpl” and “colTpl”. E. g. “pladeholder1=value1&pagetitle=My awesome pagetitle!”. Default: ''.
  * @param $urlencode {0; 1} - Is it required to URL encode the result? “outputFormat” has to be != 'array'. URL encoding is used according to RFC 3986. Default: 0.
  * @param $totalRowsToPlaceholder {string} - The name of the global MODX placeholder that holds the total number of rows. The placeholder won't be set if “totalRowsToPlaceholder” is empty. Default: ''.
  * @param $resultToPlaceholder {string} - The name of the global MODX placeholder that holds the snippet result. The result will be returned in a regular manner if the parameter is empty. Default: ''.
  * 
- * @link http://code.divandesign.biz/modx/ddgetmultiplefield/3.2
+ * @link http://code.divandesign.biz/modx/ddgetmultiplefield/3.3
  * 
- * @copyright 2015, DivanDesign
+ * @copyright 2009–2016 DivanDesign {@link http://www.DivanDesign.biz }
  * http://www.DivanDesign.biz
  */
 
-//Подключаем modx.ddTools
-require_once $modx->config['base_path'].'assets/plugins/managermanager/modx.ddtools.class.php';
+$ddToolsPath = $modx->getConfig('base_path').'assets/plugins/managermanager/modx.ddtools.class.php';
 
-//Если задано имя поля, которое необходимо получить
-if (isset($docField)){
-	$string = ddTools::getTemplateVarOutput(array($docField), $docId);
-	$string = $string[$docField];
+if (!file_exists($ddToolsPath)){
+	$ddToolsPath = str_replace('assets/libs/', 'assets/snippets/', $ddToolsPath);
+	$modx->logEvent(1, 2, '<p>Please update the “<a href="http://code.divandesign.biz/modx/ddtools">modx.ddTools</a>” library.</p><p>The snippet has been called in the document with id '.$modx->documentIdentifier.'.</p>', $modx->currentSnippet);
 }
 
+//Подключаем modx.ddTools
+require_once $ddToolsPath;
+
+//Для обратной совместимости
+extract(ddTools::verifyRenamedParams($params, array(
+	'inputString' => 'string',
+	'inputString_docField' => 'docField',
+	'inputString_docId' => 'docId'
+)));
+
+//Если задано имя поля, которое необходимо получить
+if (isset($inputString_docField)){
+	$inputString = ddTools::getTemplateVarOutput(array($inputString_docField), $inputString_docId);
+	$inputString = $inputString[$inputString_docField];
+}
+
+$result = '';
+
 //Если задано значение поля
-if (isset($string) && strlen($string) > 0){
+if (isset($inputString) && strlen($inputString) > 0){
 	if (!isset($rowDelimiter)){$rowDelimiter = '||';}
 	if (!isset($colDelimiter)){$colDelimiter = '::';}
 	
@@ -98,7 +115,7 @@ if (isset($string) && strlen($string) > 0){
 	$outputFormat = isset($outputFormat) ? strtolower($outputFormat) : 'html';
 	
 	//Разбиваем на строки
-	$data = $rowDelimiterIsRegexp ? preg_split($rowDelimiter, $string) : explode($rowDelimiter, $string);
+	$data = $rowDelimiterIsRegexp ? preg_split($rowDelimiter, $inputString) : explode($rowDelimiter, $inputString);
 	
 	//Общее количество строк
 	$total = count($data);
@@ -135,8 +152,6 @@ if (isset($string) && strlen($string) > 0){
 	
 	//Сбрасываем ключи массива (пригодится для выборки конкретного значения)
 	$data = array_values($data);
-	
-	$result = '';
 	
 	//Если что-то есть (могло ничего не остаться после удаления пустых и/или получения по значениям)
 	if (count($data) > 0){
@@ -203,6 +218,21 @@ if (isset($string) && strlen($string) > 0){
 		}else{
 			$resTemp = array();
 			
+			//Дополнительные данные
+			if (isset($placeholders) && trim($placeholders) != ''){
+				//If “=” exists
+				if (strpos($placeholders, '=') !== false){
+					//Parse a query string
+					parse_str($placeholders, $placeholders);
+				}else{
+					//The old format
+					$placeholders = ddTools::explodeAssoc($placeholders);
+					$modx->logEvent(1, 2, '<p>String separated by “::” && “||” in the “placeholders” parameter is deprecated. Use a <a href="https://en.wikipedia.org/wiki/Query_string)">query string</a>.</p><p>The snippet has been called in the document with id '.$modx->documentIdentifier.'.</p>', $modx->currentSnippet);
+				}
+			}else{
+				$placeholders = array();
+			}
+			
 			//Если вывод просто в формате html
 			if ($outputFormat == 'html' || $outputFormat == 'htmlarray'){
 				//Шаблоны колонок
@@ -210,6 +240,12 @@ if (isset($string) && strlen($string) > 0){
 				
 				//Если шаблоны колонок заданы, но их не хватает
 				if ($colTpl !== false){
+					//Получим содержимое шаблонов
+					foreach ($colTpl as $colTpl_itemNumber => $colTpl_itemValue){
+						//Chunk content or inline template
+						$colTpl[$colTpl_itemNumber] = (substr($colTpl[$colTpl_itemNumber], 0, 6) == '@CODE:') ? substr($colTpl[$colTpl_itemNumber], 6) : $modx->getChunk($colTpl[$colTpl_itemNumber]);
+					}
+					
 					if (($temp = count($data[0]) - count($colTpl)) > 0){
 						//Дозабьём недостающие последним
 						$colTpl = array_merge($colTpl, array_fill($temp - 1, $temp, $colTpl[count($colTpl) - 1]));
@@ -220,6 +256,9 @@ if (isset($string) && strlen($string) > 0){
 				
 				//Если задан шаблон строки
 				if (isset($rowTpl)){
+					//Chunk content or inline template
+					$rowTpl = (substr($rowTpl, 0, 6) == '@CODE:') ? substr($rowTpl, 6) : $modx->getChunk($rowTpl);
+					
 					//Перебираем строки
 					foreach ($data as $rowNumber => $row){
 						$resTemp[$rowNumber] = array(
@@ -239,18 +278,18 @@ if (isset($string) && strlen($string) > 0){
 							}else{
 								//Если есть шаблоны значений колонок
 								if ($colTpl !== false && strlen($colTpl[$columnNumber]) > 0){
-									$resTemp[$rowNumber]['col'.$columnNumber] = $modx->parseChunk($colTpl[$columnNumber], array(
+									$resTemp[$rowNumber]['col'.$columnNumber] = $modx->parseText($colTpl[$columnNumber], array_merge(array(
 										'val' => $column,
 										'rowNumber.zeroBased' => $resTemp[$rowNumber]['rowNumber.zeroBased'],
 										'rowNumber' => $resTemp[$rowNumber]['rowNumber']
-									), '[+', '+]');
+									), $placeholders));
 								}else{
 									$resTemp[$rowNumber]['col'.$columnNumber] = $column;
 								}
 							}
 						}
 						
-						$resTemp[$rowNumber] = $modx->parseChunk($rowTpl, $resTemp[$rowNumber], '[+', '+]');
+						$resTemp[$rowNumber] = $modx->parseText($rowTpl, array_merge($resTemp[$rowNumber], $placeholders));
 					}
 				}else{
 					foreach ($data as $rowNumber => $row){
@@ -260,11 +299,11 @@ if (isset($string) && strlen($string) > 0){
 								if ($removeEmptyCols && !strlen($column)){
 									unset($row[$columnNumber]);
 								}else if (strlen($colTpl[$columnNumber]) > 0){
-									$row[$columnNumber] = $modx->parseChunk($colTpl[$columnNumber], array(
+									$row[$columnNumber] = $modx->parseText($colTpl[$columnNumber], array_merge(array(
 										'val' => $column,
 										'rowNumber.zeroBased' => $rowNumber,
 										'rowNumber' => $rowNumber + 1
-									), '[+', '+]');
+									), $placeholders));
 								}
 							}
 						}
@@ -299,6 +338,9 @@ if (isset($string) && strlen($string) > 0){
 			
 			//Если оборачивающий шаблон задан (и вывод не в массив), парсим его
 			if (isset($outerTpl)){
+				//Chunk content or inline template
+				$outerTpl = (substr($outerTpl, 0, 6) == '@CODE:') ? substr($outerTpl, 6) : $modx->getChunk($outerTpl);
+				
 				$resTemp = array();
 				
 				//Элемент массива 'result' должен находиться самым первым, иначе дополнительные переданные плэйсхолдеры в тексте не найдутся! 
@@ -312,14 +354,12 @@ if (isset($string) && strlen($string) > 0){
 					 $resTemp[preg_replace('/(\d)\.(\d)/', 'row$1.col$2', $rowNumber)] = $row;
 				}
 				
-				//Если есть дополнительные данные
-				if (isset($placeholders)){
-					$resTemp = array_merge($resTemp, ddTools::explodeAssoc($placeholders));
-				}
+				$resTemp = array_merge($resTemp, $placeholders);
 				
 				$resTemp['total'] = $total;
 				$resTemp['resultTotal'] = $resultTotal;
-				$result = $modx->parseChunk($outerTpl, $resTemp, '[+','+]');
+				
+				$result = $modx->parseText($outerTpl, $resTemp);
 			}
 			
 			//Если нужно URL-кодировать строку
@@ -328,14 +368,14 @@ if (isset($string) && strlen($string) > 0){
 			}
 		}
 	}
-	
-	//Если надо, выводим в плэйсхолдер
-	if (isset($resultToPlaceholder)){
-		$modx->setPlaceholder($resultToPlaceholder, $result);
-	}else{
-		return $result;
-	}
 }
-// выдать пустой результат, еслы ранее не было завершения сниппета.
-return '';
+
+//Если надо, выводим в плэйсхолдер
+if (isset($resultToPlaceholder)){
+	$modx->setPlaceholder($resultToPlaceholder, $result);
+	
+	$result = '';
+}
+
+return $result;
 ?>

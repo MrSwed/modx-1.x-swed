@@ -1,0 +1,111 @@
+// functions 
+.convert(@param,@px,@parent:@fz,@u:1em) {
+		@{param}: @u * @px / @parent;
+}
+// vars
+
+@fzr: 16px;
+@fz: @fzr;
+@mainw: 998px;
+
+// colors
+.c {
+	&.def {
+		color: black;
+	}
+}
+// 
+
+.mainw (@width:@mainw) {
+	width: @width;
+	margin: 0 auto;
+}
+.mainw {
+	.mainw();
+}
+.pm0 {
+	margin: 0;
+	padding: 0;
+}
+.fw {
+	position: absolute;
+	width: 100vw;
+	right: 50%;
+	margin-right: ~"calc( -50vw + 8px )";
+	.noScroll & {
+		margin-right: -50vw;
+	}
+}
+.border {
+	&.none {
+		border: none;
+	}
+}
+html,
+body {
+	height: 100%;
+	width: 100%;
+	&:extend(.c.def);
+	font-size: @fzr;
+}
+.block { display: block; }
+.relativ { position: relative; }
+.endcol { clear: both; }
+.enddiv { clear: both; line-height: 0; height: 0; }
+div { position: relative; }
+* {
+	box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	-webkit-box-sizing: border-box;
+	max-width: 100%;
+}
+.hide {
+	display: none;
+}
+a {
+}
+html,
+body,
+form,
+input {
+	&:extend(.pm0);
+}
+.main {
+	min-height: 100%;
+	height: auto !important;
+	height: 100%;
+	min-width: 320px;
+}
+// headline
+.h {
+}
+.h1, h1 {
+}
+h2 {
+	//.convert(font-size, 36px, @fz);
+	&:extend(.h all);
+}
+h3 {
+	//.convert(font-size, 30px, @fz);
+	//font-weight: bold;
+	&:extend(.h all);
+}
+h4 {
+	//.convert(font-size, 24px, @fz);
+	//font-weight: bold;
+	&:extend(.h all);
+}
+.bold {
+	.convert(font-size, 25px, @fz);
+	font-weight: bold;
+	&:extend(.h);
+}
+.date {
+	&:extend(.c.gray);
+	&:extend(.f.MyriadPro);
+}
+.image {
+	img {
+		display: block;
+	}
+}

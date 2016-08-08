@@ -1,0 +1,67 @@
+input[type=text], textarea {
+	border: 1px solid rgba(113, 200, 238, 0.77);
+	padding: 0.45em;
+}
+input {
+	&[type=submit] {
+		//&:extend(.btn);
+		&:hover {
+			//&:extend(.btn:hover);
+		}
+		&:active {
+			//&:extend(.btn:active);
+		}
+	}
+}
+.form {
+	label {
+		display: block;
+		img {
+			vertical-align: middle;
+		}
+		input[type=text], textarea {
+			&:last-child {
+				width: 100%;
+			}
+			&[name='vericode'] {
+				text-align: center;
+			}
+		}
+		&[for="vericode"] {
+			&:extend(.flex);
+			&:extend(.flex.j-between);
+			&:extend(.flex.wrap);
+			.align-self(flex-start);
+			> * {
+				max-width: 49%;
+			}
+			span {
+				min-width: 100%;
+			}
+		}
+		&.required {
+			&:after {
+				color: red;
+				content: "*";
+				margin-left: -0.6em;
+				position: absolute;
+			}
+		}
+		&.invalid {
+			&:after {
+				font-weight: bold;
+			}
+			input[type=text], textarea {
+				box-shadow: 0 0 3px 0 red;
+			}
+		}
+	}
+}
+.error, .errors, .red {
+	color: red;
+}
+.requiredlist {
+	span {
+		font-weight: bold;
+	}
+}

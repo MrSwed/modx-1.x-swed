@@ -469,10 +469,7 @@ class DocumentParser {
         (!empty($qOrig)) or $qOrig = $this->config['site_start'];
         $q= $qOrig;
         /* First remove any / before or after */
-        if ($q[strlen($q) - 1] == '/')
-            $q= substr($q, 0, -1);
-        if ($q[0] == '/')
-            $q= substr($q, 1);
+        $q = trim($q,'/');
         /* Save path if any */
         /* FS#476 and FS#308: only return virtualDir if friendly paths are enabled */
         if ($this->config['use_alias_path'] == 1) {
@@ -1088,13 +1085,11 @@ class DocumentParser {
     {
         if ($this->debug) $fstart = $this->getMicroTime();
         
-        if(strpos($content,'<!--@IF ')!==false)      $content = str_replace('<!--@IF ','<!--@IF:',$content);
-        if(strpos($content,'<!--@IF:')===false)      return $content;
-        if(strpos($content,'<!--@ELSEIF')!==false)   $content = str_replace('<!--@ELSEIF',  '<@ELSEIF',  $content);
-        if(strpos($content,'<!--@ELSE-->')!==false)  $content = str_replace('<!--@ELSE-->', '<@ELSE>',   $content);
-        if(strpos($content,'<!--@ENDIF-->')!==false) $content = str_replace('<!--@ENDIF-->','<@ENDIF-->',$content);
+        if(strpos($content,'<!--@IF:')!==false)       $content = str_replace('<!--@IF:',    '<@IF:',$content);
+        if(strpos($content,'<@IF:')===false)         return $content;
+        if(strpos($content,'<@ENDIF-->')!==false)    $content = str_replace('<@ENDIF-->',   '<@ENDIF>',$content);
         
-        $s = array('<!--@IF:',        '<@ELSE',            '<@ENDIF-->');
+        $s = array('<@IF:',           '<@ELSE',            '<@ENDIF>');
         $r = array('<!--@CONDTAG@IF:','<!--@CONDTAG@ELSE', '<!--@CONDTAG@ENDIF-->');
         $content = str_replace($s, $r, $content);
         $splits = explode('<!--@CONDTAG@', $content);
@@ -1890,6 +1885,8 @@ class DocumentParser {
             $this->getSettings();
         }
 
+        $_REQUEST['q'] = $_GET['q'] = $this->setRequestQ($_SERVER['REQUEST_URI']);
+        
         // IIS friendly url fix
         if ($this->config['friendly_urls'] == 1 && strpos($_SERVER['SERVER_SOFTWARE'], 'Microsoft-IIS') !== false) {
             $url= $_SERVER['QUERY_STRING'];
@@ -1999,6 +1996,16 @@ class DocumentParser {
         $this->prepareResponse();
     }
 
+    function setRequestQ($request_uri) {
+        if(isset($_REQUEST['id'])) $q = null;
+        else {
+            $q = substr($request_uri,strlen($this->config['base_url']));
+            if(strpos($q,'?')!==false) $q = substr($q,0,strpos($q,'?'));
+            if($q=='index.php')        $q = '';
+        }
+        return $q;
+    }
+    
     /**
      * The next step called at the end of executeParser()
      *
@@ -3986,9 +3993,6 @@ class DocumentParser {
         if (!isset ($this->pluginEvent[$evtName]))
             return false;
         
-        if($evtName=='OnParseDocument' && class_exists('PHxParser'))
-            $this->config['enable_filter'] = 0;
-        
         $el= $this->pluginEvent[$evtName];
         $results= array ();
         $numEvents= count($el);
@@ -4018,6 +4022,9 @@ class DocumentParser {
 
                 // eval plugin
                 $this->evalPlugin($pluginCode, $parameter);
+
+                if(class_exists('PHxParser')) $this->config['enable_filter'] = 0;
+
                 if ($this->dumpPlugins == 1) {
                     $eventtime = $this->getMicroTime() - $eventtime;
                     $this->pluginsCode .= '<fieldset><legend><b>' . $evtName . ' / ' . $pluginName . '</b> ('.sprintf('%2.2f ms', $eventtime*1000).')</legend>';

@@ -10,71 +10,126 @@ https://github.com/duncansmart/less.js-windows
 https://github.com/useful-tools/less-convert.bat ( less v.1.3 )
 https://github.com/duncansmart/less.js-windows 
 */
+/* flexbox-extend */
+@import url("flexbox-extend.less");
+/* fonts */
+@import url("fonts.less");
+/* menu */
+@import url("menu.less");
+/* header */
+@import url("header.less");
+/* footer */
+@import url("footer.less");
+/* sprite */
+@import url("sprite.less");
+/* icons */
+@import url("icons.less");
+/* btns */
+@import url("btns.less");
+/* defaults */
+@import url("defaults.less");
+/* items */
+@import url("items.less");
+/* form */
+@import url("form.less");
+/* usersclass */
+@import url("usersclass.less");
 
-
-.pm0() {
- margin:0px;
- padding:0px;
-}
-.mainw (@width:998px) {
- width:@width;
- margin: 0 auto;
-}
-
-html,
-body,
-form,
-input{
- .pm0;
-}
-html,
-body {
- height: 100%;
- width:100%;
+// common 
+.logo {
+	@w: 101px;
+	@h: 101px;
+	background: url("/assets/images/logo.png") no-repeat;
+	.convert(width, @w, @fz);
+	background-size: 100% auto;
+	color: transparent;
+	line-height: 0;
+	position: relative;
+	display: block;
+	&:before {
+		content: "";
+		display: block;
+		.convert(padding-top, @h, @w, 100%);
+		width: 100%;
+	}
 }
 
-.block {display:block;}
-.relativ {position:relative;}
-.endcol { clear:both;}
-.enddiv { clear:both; line-height:0px; height:0px;}
-div {position:relative;}
-* {
- box-sizing:border-box;
- -moz-box-sizing:border-box;
- -webkit-box-sizing:border-box
-}
-.mainw{
- .mainw();
-}
-.main {
- min-height: 100%;
- height:auto !important;
- height:100%;
-}
-
-.menu {
- ul,li {
-  .pm0;
-  list-style:none;
- }
-}
-.header {
- .mainw;
-}
 .content {
- .mainw;
+	&:extend(.mainw);
 }
-
-
-.footer {
- background: #0099CC;
- color: #fff;
- height: 60px;
- margin-top: -60px;
+.contentCols {
+	@rcW: 200px;
+	@lcW: 200px;
+	&:extend(.flex);
+	.centerCol {
+		&:first-child:last-child {
+			width: 100%;
+		}
+		&:first-child:nth-last-child(2) {
+			.convert(width, @mainw - @rcW, @mainw, 100%);
+		}
+		&:nth-child(2):nth-last-child(2) {
+			.convert(width, @mainw - @rcW - @lcW, @mainw, 100%);
+		}
+	}
+	.rightCol {
+		.convert(width, @rcW, @mainw, 100%);
+		.convert(min-width, @rcW, @mainw, 100%);
+		.convert(margin-left, @fz, @mainw, 100%);
+		padding: 0.625rem;
+		border: 1px solid gray;
+		> * {
+			margin-bottom: 0.75em;
+		}
+	}
+	.leftCol {
+		.convert(width, @lcW, @mainw, 100%);
+		.convert(min-width, @lcW, @mainw, 100%);
+		.convert(margin-right, @fz, @mainw, 100%);
+		padding: 0.625rem;
+		border: 1px solid gray;
+		> * {
+			margin-bottom: 0.75em;
+		}
+	}
 }
-.hFooter {
- height: 60px;
+.crumbs {
+	//padding: 1.1em 0;
+	& + h1 {
+		//margin-top: 0.01em;
+	}
+	a {
+		color: inherit;
+		text-decoration: none;
+	}
+	.B_currentCrumb {
+	}
 }
-
-
+.paginator {
+	text-align: center;
+	font-weight: bold;
+	margin-top: 1em;
+	@fz: 18px;
+	.convert(font-size, @fz, @fzr);
+	//&:before {
+	//	content: 'Страницы:';
+	//	.convert(font-size, @fzr, @fz);
+	//	display: inline-block;
+	//	padding-right: 0.6em;
+	//}
+	a {
+		.convert(height, 36px, @fz);
+		.convert(line-height, 36px, @fz);
+		.convert(width, 31px, @fz);
+		display: inline-block;
+		text-decoration: none;
+		//border-radius: 1px;
+	}
+	.active {
+	}
+	.prev, .next {
+		&:active {
+		}
+	}
+}
 @import url("media.less"); // keep it ant end of file | Оставьте запись в конце файла

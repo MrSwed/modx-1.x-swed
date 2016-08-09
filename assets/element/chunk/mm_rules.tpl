@@ -8,7 +8,7 @@ if ($modx->db->getValue("SELECT COUNT(id) FROM ".$modx->getFullTableName('site_t
 
 mm_widget_showimagetvs(); // Always give a preview of Image TVs
 
-/* Переменные для использования * /
+/* Переменные для использования */
 $cid = isset($content['id'])?$content['id']:false;
 $pid = !empty($content['parent'])?$content['parent']:$_GET["pid"];
 $tpl = $content['template'];
@@ -19,12 +19,6 @@ $p = array(
 		array("", ""), // use parent setting
 		array(1, "Да"),
 		array(0, "Нет")
-	)),
-	"sel_ynp_chonly" => json_encode(array(
-		array("", ""), // use parent setting
-		array(1, "Да"),
-		array(0, "Нет"),
-		array(2, "Только для дочерних")
 	)),
 	"sel_ynp_nof" => json_encode(array(
 		array("", ""), // use parent setting
@@ -42,21 +36,36 @@ $p = array(
 		array("afterList", "После списка дочерних"),
 		array("afterContent", "После блока контента"),
 		array("none", "Отключить"),
+	)),
+	"sel_inheritance" => json_encode(array(
+		array("", ""), // use parent setting
+		array(0, "Нет, отменить наследование"),
+		array(1, "Для всех"),
+		array(2, "Только для дочерних"),
+		array(3, "Для контейнеров"),
+		array(4, "Для дочерних контейнеров"),
+		array(5, "Да, кроме контейнеров")
 	))
 );
 
+if ($cid==1) {
+	$p["text_places"] = json_encode(array_merge(json_decode($p["text_places"]),array(
+		array("tplHeaderContacts", "Макет: Контакты в шапке"),
+		array("tplFooterSlogan", "Макет: Слоган в подвале")
+	)));
+}
 
 mm_ddCreateSection('Параметры (наследуемые, пустое значение наследует родителя)', 'parameters', 'settings');
 mm_ddMoveFieldsToSection('hidePageTitle,hideBreadcrumbs,showParentTitle,showDateInContent,socialwidgets,bodyclass', 'parameters');
 mm_ddMultipleFields("socialwidgets", '', '', 'select,select', 'Поделиться {{share}},Комментарии {{comments}}', 'auto', '||', '::', '', '', 1, 1, $p["sel_ynp_nof"]);
 
 mm_ddCreateSection('Параметры дочерних (наследуемые, пустое значение наследует родителя)', 'parameters_child', 'settings');
-mm_ddMoveFieldsToSection('ditto_parrent,hideChilds,hideFolders,depth,ditto_display,ditto_orderBy,DisplayListStyle,intalias', 'parameters_child');
+mm_ddMoveFieldsToSection('ditto_parrent,hideChilds,hideMenuChilds,hideFolders,depth,ditto_display,ditto_orderBy,DisplayListStyle,intalias', 'parameters_child');
 
-mm_ddCreateSection('Дополнительные тексты', 'addTexts');
-mm_ddMoveFieldsToSection('addtexts', 'addTexts');
+mm_ddCreateSection('Дополнительные блоки', 'BlocksSection');
+mm_ddMoveFieldsToSection('blocks', 'BlocksSection');
 
-mm_ddMultipleFields("addtexts", '', '', 'richtext,select,select', 'Текст,Месторасположение::Если не выбрано - используются настройки родителя,Наследовать поле::Значение поля родителя будет передаваться дочерним ресурсам&sbquo; если в них не будут заданы свои тексты для соответствующих полей', 'auto', '||', '::', 0, 0, 0, 0, "||{$p['text_places']}||{$p['sel_ynp_chonly']}");
+mm_ddMultipleFields("blocks", '', '', 'richtext,select,select', 'Текст,Месторасположение::Если не выбрано - используются настройки родителя,Наследовать поле::Значение поля родителя будет передаваться дочерним ресурсам&sbquo; если в них не будут заданы свои тексты для соответствующих полей', 'auto', '||', '::', 0, 0, 0, 0, "||{$p['text_places']}||{$p['sel_inheritance']}",'{btnToggleRaw:true}');
 
 mm_createTab('Изображения', 'gallery');
 mm_moveFieldsToTab('image,gallery,gallery_manual', 'gallery');

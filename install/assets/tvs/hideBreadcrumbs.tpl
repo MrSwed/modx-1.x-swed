@@ -4,7 +4,7 @@
  * нет - по умолчанию
  *
  * @category        tv
- * @name            hideFolders
+ * @name            hideBreadcrumbs
  * @internal        @caption Скрыть Хлебные крошки
  * @internal        @input_type dropdown
  * @internal        @input_options ||Да==1||Нет==0

@@ -1,11 +1,11 @@
 /**
- * hideChilds
+ * hideMenuChilds
  *
  * Не выводить список дочерних ресурсов (нет - по умолчанию выводятся)
  *
  * @category        tv
- * @name            hideChilds
- * @internal        @caption Скрыть дочерние
+ * @name            hideMenuChilds
+ * @internal        @caption Скрыть дочерние в меню
  * @internal        @input_type dropdown
  * @internal        @input_options ||Да==1||Нет==0
  * @internal        @input_default

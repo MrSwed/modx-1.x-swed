@@ -1,0 +1,119 @@
+// --------------------------------------------------
+// Flexbox LESS extends
+// The spec: http://www.w3.org/TR/css3-flexbox
+// --------------------------------------------------
+// example usage as extender .mydiv:extend(.flex) {&:extend(.flex.j-center)}
+@import "flexbox";
+
+.flex {
+	display: -webkit-box;
+	display: -moz-box;
+	.flex-display();
+	&.start {
+		-webkit-box-align: start;
+		-ms-flex-align: start;
+		.align-items(flex-start);
+		.align-content(flex-start);
+	}
+	&.end {
+		-webkit-box-align: end;
+		-ms-flex-align: end;
+		.align-items(flex-end);
+		.align-content(flex-end);
+	}
+	&.center {
+		-webkit-box-align: center;
+		-ms-flex-align: center;
+		.align-items(center);
+		.align-content(center);
+		&.around {
+			.align-content(space-around);
+		}
+	}
+	&.baseline {
+		.align-items(baseline);
+	}
+	&.stretch {
+		.align-items(stretch);
+		.align-content(stretch);
+	}
+	&.inline { .flex-display(inline-flex); }
+
+	&.wrap {
+		-webkit-box-lines: multiple;
+		.flex-wrap(wrap);
+	}
+	&.nowrap {
+		-webkit-box-lines: single;
+		.flex-wrap(nowrap);
+	}
+	&.wrap-reverse {
+		.flex-wrap(wrap-reverse);
+	}
+	&.col {
+		-webkit-box-orient: vertical;
+		-webkit-box-direction: normal;
+		-moz-box-direction: normal;
+		.flex-direction(column);
+	}
+	&.col-reverse { 
+		-webkit-box-orient: vertical;
+		-webkit-box-direction: reverse;
+		-moz-box-direction: reverse;
+		.flex-direction(column-reverse;) 
+	}
+	&.row { 
+		-webkit-box-orient: horizontal;
+		-webkit-box-direction: normal;
+		-moz-box-direction: normal;
+		.flex-direction(row); 
+	}
+	&.row-reverse { 
+		-webkit-box-orient: horizontal;
+		-webkit-box-direction: reverse;
+		-moz-box-direction: reverse;
+		.flex-direction(row-reverse); 
+	}
+	&.j-start {
+		-webkit-box-pack: start;
+		-ms-flex-pack: start;
+		-moz-box-pack: start;
+		-ms-flex-align: start;
+		.justify-content(flex-start);
+	}
+	&.j-end {
+		-webkit-box-pack: end;
+		-ms-flex-pack: end;
+		-moz-box-pack: end;
+		-ms-flex-align: end;
+		.justify-content(flex-end);
+	}
+	&.j-center {
+		-webkit-box-pack: center;
+		-ms-flex-pack: center;
+		-moz-box-pack: center;
+		-ms-flex-align: center;
+		.justify-content(center);
+	}
+	&.j-around {
+		-webkit-box-pack: justify;
+		-ms-flex-pack: justify;
+		-moz-box-pack: justify;
+		.justify-content(space-around);
+	}
+	&.j-between {
+		-webkit-box-pack: justify;
+		-ms-flex-pack: justify;
+		-moz-box-pack: justify;
+		.justify-content(space-between);
+	}
+	&.j-stretch {
+		.justify-content(stretch);
+	}
+	&.vertical {
+		&:extend(.flex.col);
+	}
+	&.horisontal {
+		&:extend(.flex.row);
+	}
+}

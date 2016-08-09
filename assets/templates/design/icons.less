@@ -1,0 +1,26 @@
+.ico {
+	@fz: @fzr;
+	&:before {
+		&:extend(.sprite);
+		content: '';
+		font-size: 1em;
+		transition: font-size 350ms;
+	}
+	&.dib {
+		display: inline-block;
+		vertical-align: middle;
+	}
+	&.sq2 {
+		.convert(width, @fz*2);
+		.convert(height, @fz*2);
+		.spriteSize(auto, @fz*2);
+	}
+	&.order { // example
+		&:before {
+			&:extend(.ico.dib);
+			&:extend(.ico.sq2);
+			background-position: -2px 1%;
+		}
+	}
+}
+

@@ -1,0 +1,22 @@
+.spriteSize(@w:0,@h:0) when ( @w = 0 ) and ( @h = 0 ){
+	// set sprite size
+	@sw: 192px; 
+	@sh: 256px;
+}
+.spriteSize(@w,@h) when (@h = auto), (ispercentage(@h)) {
+	.spriteSize(0, 0);
+	background-size: (100% * @sw / @w)  @h;
+}
+.spriteSize(@w,@h) when (@w = auto), (ispercentage(@w)) {
+	.spriteSize(0, 0);
+	background-size: @w (100% * @sh / @h);
+}
+.spriteSize(@w,@h) when ( default() ) {
+	.spriteSize(0, 0);
+	background-size: (100% * @sw / @w) (100% * @sh / @h);
+}
+.sprite {
+	background-image: url(images/sprite.png);
+	background-repeat: no-repeat;
+	background-position: 100000% 100000%;
+}

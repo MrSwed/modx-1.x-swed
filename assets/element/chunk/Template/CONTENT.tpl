@@ -1,26 +1,26 @@
-[+phx:input=`[[ddGetMultipleField? &docField='addtexts' &filter='1::beforeContent||2::||2::0||2::1' &columns='0']]`:ifempty=`[[getInheritField? &id=`[*parent*]` &field=`addtexts` &runSnippet=`ddGetMultipleField? &string='%s'  &filter='1::beforeContent||2::1||2::2' &columns='0'`]]`:out=`<div class="beforeContent">%s</div>`+]
+[[ShowBlock? &name=`beforeContent` ]]
 <div class="content">
- [+phx:input=`[[ddGetMultipleField? &docField='addtexts' &filter='1::leftCol||2::||2::0||2::1' &columns='0']]`:ifempty=`[[getInheritField? &id=`[*parent*]` &field=`addtexts` &runSnippet=`ddGetMultipleField? &string='%s'  &filter='1::leftCol||2::1||2::2' &columns='0'`]]`:out=`<div class="leftCol">%s</div>`+]
- <div class="inner">[+phx:input=`[[getInheritField? &id=`[*id*]` &field=`hideBreadcrumbs`]]`:ne=`1`:then=`
-  <div class="crumbs">[[Breadcrumbs? &showHomeCrumb=`1` &showCurrentCrumb=`1` &respectHidemenu=`0` &crumbSeparator=` / ` &currentAsLink=`1`]]</div>`+]
-  [+phx:input=`[*parent*]`:ne=`1`:and:if=`[[getInheritField? &id=`[*id*]` &field=`showParentTitle`]]`:is=`1`:then=`
-   <h1>[+phx:input=`[*parent*]`:docfield+]</h1>
-   [+phx:input=`[*hidePageTitle*]`:ne=`1`:then=`<h2>[*pagetitle*]</h2>`+]
-  `:else=`
-   [+phx:input=`[*hidePageTitle*]`:ne=`1`:then=`<h1>[*pagetitle*]</h1>`+]
- `+]
-  [+phx:input=`[*isfolder*]`:ne=`1`:and:if=`[[getInheritField? &id=`[*id*]` &field=`showDateInContent`]]`:is=`1`:then=`<div class="date">[*phx:input=`[*pub_date:ne=`0`:then=`[*pub_date*]`:else=`[*publishedon*]`*]`:dateformat=`%d.%m.%Y`*]</div>`+]
-  [+phx:input=`[[ddGetMultipleField? &docField='addtexts' &filter='1::beforeText||2::||2::0||2::1' &columns='0']]`:ifempty=`[[getInheritField? &id=`[*parent*]` &field=`addtexts` &runSnippet=`ddGetMultipleField? &string='%s'  &filter='1::beforeText||2::1||2::2' &columns='0'`]]`+]
- <div class="text">
-  [*content*]
- </div>
-[+phx:input=`[[ddGetMultipleField? &docField='addtexts' &filter='1::afterText||2::||2::0||2::1' &columns='0']]`:ifempty=`[[getInheritField? &id=`[*parent*]` &field=`addtexts` &runSnippet=`ddGetMultipleField? &string='%s'  &filter='1::afterText||2::1||2::2' &columns='0'`]]`+]
+	[+phx:input=`[[getInheritField? &id=`[*id*]` &field=`hideBreadcrumbs`]]`:ne=`1`:then=`
+		<div class="crumbs">[[Breadcrumbs? &showHomeCrumb=`1` &showCurrentCrumb=`1` &respectHidemenu=`0` &crumbSeparator=` / ` &currentAsLink=`1`]]</div>`+]
+			[+phx:input=`[*parent*]`:ne=`1`:and:if=`[[getInheritField? &id=`[*id*]` &field=`showParentTitle`]]`:is=`1`:then=`
+			<h1>[+phx:input=`[*parent*]`:docfield+]</h1>
+			[+phx:input=`[*hidePageTitle*]`:ne=`1`:then=`<h2>[*pagetitle*]</h2>`+]
+			`:else=`
+			[+phx:input=`[*hidePageTitle*]`:ne=`1`:then=`<h1>[*pagetitle*]</h1>`+]`+]
+		[+phx:input=`[*isfolder*]`:ne=`1`:and:if=`[[getInheritField? &id=`[*id*]` &field=`showDateInContent`]]`:is=`1`:then=`<div class="date">[*phx:input=`[*pub_date:ne=`0`:then=`[*pub_date*]`:else=`[*publishedon*]`*]`:dateformat=`%d.%m.%Y`*]</div>`+]
+	<div class="contentCols">
+	[[ShowBlock? &name=`leftCol` ]]
+		<div class="centerCol">
+		[[ShowBlock? &name=`beforeText` ]]
+		<div class="text">
+			[*content*]
+		</div>
+		[[ShowBlock? &name=`afterText` ]]
 
- [+phx:input=`[*isfolder*]`:ne=`1`:and:if=`[*tags*]`:ne=``:then=`{{pageTags}}`+]
+		[+phx:input=`[*isfolder*]`:ne=`1`:and:if=`[*tags*]`:ne=``:then=`{{pageTags}}`+]
 
-
- [+phx:input=`[*isfolder*]`:is=`1`:and:if=`[[getInheritField? &id=`[*id*]` &field=`hideChilds`]]`:ne=`1`:then=`
- <div class="items [[getInheritField? &id=`[*id*]` &field=`DisplayListStyle` ]] [[getInheritField? &id=`[*id*]` &field=`intalias` ]]">
+[+phx:input=`[*isfolder*]`:is=`1`:and:if=`[[getInheritField? &id=`[*id*]` &field=`hideChilds`]]`:ne=`1`:then=`
+	<div class="items [[getInheritField? &id=`[*id*]` &field=`DisplayListStyle` ]] [[getInheritField? &id=`[*id*]` &field=`intalias` ]]">
   [!Ditto?
   &parents=`[*ditto_parrent:ifempty=`[*id*]`*]`
   &tpl=`item[[getExtend? &value=`[[getInheritField? &id=`[*id*]` &field=`intalias` &out=`_%s`]][[getInheritField? &id=`[*id*]` &field=`DisplayListStyle` &out=`_%s`]]` &check=`chunk` &checkName=`item%s` ]]`
@@ -43,16 +43,16 @@
   &noResults=`&nbsp;`
   &debug=`0`
   !]
- </div> <!-- /items -->
- {{paginator}}
- <div class="endcol"></div>
- `+]
-[+phx:input=`[[ddGetMultipleField? &docField='addtexts' &filter='1::afterList||2::||2::0||2::1' &columns='0']]`:ifempty=`[[getInheritField? &id=`[*parent*]` &field=`addtexts` &runSnippet=`ddGetMultipleField? &string='%s'  &filter='1::afterList||2::1||2::2' &columns='0'`]]`+]
- [+phx:input=`[[getInheritField? &id=`[*id*]` &field=`socialwidgets`]]`:element=`0::`:math=`?+(3*[*isfolder*])`:in=`1,2,4`:then=`{{share}}`+]
- [+phx:input=`[[getInheritField? &id=`[*id*]` &field=`socialwidgets`]]`:element=`1::`:math=`?+(3*[*isfolder*])`:in=`1,2,4`:then=`{{comments}}`+]
+	</div> <!-- /items -->
+	{{paginator}}
+		<div class="endcol"></div>
+`+]
+			[[ShowBlock? &name=`afterList` ]]
+			[+phx:input=`[[getInheritField? &id=`[*id*]` &field=`socialwidgets`]]`:element=`0::`:math=`?+(3*[*isfolder*])`:in=`1,2,4`:then=`{{share}}`+]
+			[+phx:input=`[[getInheritField? &id=`[*id*]` &field=`socialwidgets`]]`:element=`1::`:math=`?+(3*[*isfolder*])`:in=`1,2,4`:then=`{{comments}}`+]
+		</div>
 
+[[ShowBlock? &name=`rightCol` ]]
+ </div>
 </div>
- [+phx:input=`[[ddGetMultipleField? &docField='addtexts' &filter='1::rightCol||2::||2::0||2::1' &columns='0']]`:ifempty=`[[getInheritField? &id=`[*parent*]` &field=`addtexts` &runSnippet=`ddGetMultipleField? &string='%s'  &filter='1::rightCol||2::1||2::2' &columns='0'`]]`:out=`<div class="rightCol">%s</div>`+]
- 
-</div>
-[+phx:input=`[[ddGetMultipleField? &docField='addtexts' &filter='1::afterContent||2::||2::0||2::1' &columns='0']]`:ifempty=`[[getInheritField? &id=`[*parent*]` &field=`addtexts` &runSnippet=`ddGetMultipleField? &string='%s'  &filter='1::afterContent||2::1||2::2' &columns='0'`]]`:out=`<div class="afterContent">%s</div>`+]
+[[ShowBlock? &name=`afterContent` ]]

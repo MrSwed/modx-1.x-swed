@@ -15,12 +15,12 @@ in the MODx backend.
 
 Modifier | Description
 -------- | -----------
-**7bit** | returns the 7bit representation of a string. Example: ``[+string:7bit+]``
-**bbcode** | parse bb code (also escapes all html and MODx tags characters). Example: ``[+variable:bbcode+]`` 
-**get** | Returns the GET parameter which has been posted as a query string. Example: ``[*phx:get=`paramname`*]``
-**ifnotempty** | The opposite of the native PHX "**isempty**" function. Returns the option value ONLY if the input value is empty (excluding whitespace), Example ``[+string:ifnotempty=`String to return if not empty`+]`` 
-**nohttp** | Removes the http:// from a URL, to create a display-friendly web address. Example: ``[+string:nohttp+]``
-**parent** | Get specified document field from parent document. This one is changed from standard - it get parent even if it inactive . Example: ``[+phx=`[*id*]`:parent=`field`+]``
+**7bit** | returns the 7bit representation of a string. Example: <code>[+string:7bit+]</code>
+**bbcode** | parse bb code (also escapes all html and MODx tags characters). Example: <code>[+variable:bbcode+]</code> 
+**get** | Returns the GET parameter which has been posted as a query string. Example: <code>[\*phx:get=&#96;paramname`\*]</code>
+**ifnotempty** | The opposite of the native PHX "**isempty**" function. Returns the option value ONLY if the input value is empty (excluding whitespace), Example <code>[+string:ifnotempty=&#96;String to return if not empty&#96;+]</code> 
+**nohttp** | Removes the http:// from a URL, to create a display-friendly web address. Example: <code>[+string:nohttp+]</code>
+**parent** | Get specified document field from parent document. This one is changed from standard - it get parent even if it inactive . Example: <code>[+phx=&#96;[\*id\*]&#96;:parent=&#96;field&#96;+]</code>
 **post** | Same as **get** for POST requests
 **tidyword** |  Get the Word infested input
 
@@ -29,32 +29,32 @@ Modifier | Description
 
 Modifier | Description
 -------- | -----------
-**docfield** | Returns a document field (defaults to **pagetitle**). Example: ``[+phx=`[*id*]`:docfield=`field`+]``.
-**zeropad** | Zero-padding a string. Takes the number of total digits as the input. Example: ``[+ditto_iteration:zeropad=`3`+] [*zipcode:zeropad=`5`*]``
+**docfield** | Returns a document field (defaults to **pagetitle**). Example: <code>[+phx=&#96;[\*id\*]`:docfield=&#96;field&#96;+]</code>.
+**zeropad** | Zero-padding a string. Takes the number of total digits as the input. Example: <code>[+ditto_iteration:zeropad=&#96;3&#96;+] [\*zipcode:zeropad=&#96;5&#96;\*]</code>
 
 ##Other modifiers:
 
 Modifier | Description
 -------- | -----------
-**dateformat** | Return an formatted date. Example: from timestamp: ``[+createdon:dateformat=`%H:%M %d.%m.%Y`+]``, from date string in other format ``[+tv_var:dateformat=`%H:%M %d.%m.%Y|%d-%m-%Y %H:%M:%S`+]``
-**default** | Return an default text if variable is empty. Example ``[*variable:default=`Default text`*]``
-**doclevel** | Returns the doclevel of a given docid. Example: ``[+docid:doclevel+]``
-**element** | Get an element of multivalue. Example: first element: ``[*tv_var:element*]``, same, but delimited by "::" ``[*tv_var:element=`0::`*]``, get second, delimited by "||" ``[*tv_var:element=`1||`*]``, get thidr, delimited by comma ``[*tv_var:element=`2,`*]``, get from an resource ``[+phx:input=`1`:docfield=`tv_var`:element=`0::`+]``
-**firstitem** | returns the first item in list delimeted by comma. Example: ``[+string:firstitem+]`` 
-**in** | Check  value is in array delimited by one of: ";,".Example: ``[+variable:in=`1,2,3;4;5`:then=`This is in`+]``
-**isnotnumeric** | Check the string is not numeric. Example: ``[+string:isnotnumeric:then=`Is not numeric`:else=`Is numeric`+]``
-**isnumeric** | Check the string is numeric. Example: ``[+string:numeric:then=`Is Numeric`:else=`Is not numeric`+]``
-**jsonencode** | Returns the JSON representation of the string with or not stripouterquotes (set option 0 or 1). Example: ``[+string:jsonencode=`0`+]``
-**num_format** | format a numeric value. ``[+variable:num_format=`decimals|dec_point|thousands_sep`+]``
-**pregreplace** | Replace in string by regular expression. Example: ``[+variable:preg_replace=`/regexp/||str_replace_to`+]``
-**specialchar** | Returns the htmlspecialchars of a string. Example: ``[+string:specialchar+]`` 
-**striptags** | Remove html tags from text. Example: ``[+text:striptags+]``
-**switch** | Switch for PHx. Example: ``[+string:switch=`xx:{{Chunk}}|yy:[*DocVar*]|default:[+TemplateVar+]+]``
-**substr** | Returns a substring of a string. Example: ``[+string:substr=`0,-3`+]``
-**switchc** | Switch chunks for PHx. PHx has one big problem with (visible) chunks at the beginning of the parsing process. They would be evaluated regardless of beeing shown. Example: ``[+string:switchc=`xx:chunkname|yy:chunkname|default:chunkname+]``
-**trim** | Trims a string. Stripped characters could be specified in the options of the modifier. Example: ``[+string:trim=` `+]``
-**tvelement** | Get an element(s) names of tv select value ( for tv type dropdown, listbox, listbox-multiple with possible values like `` "1==Yes||2==No||so-so=So So" ``). Example `` [*docid:tvelement=`tvaname`*]  ``. See more examples inside.
-**utf8limit** | Returns the limited utf8 string. Example: `` [+string:utf8limit=`300`+] ``
-**out** | Return as printf if not empty. Example: `` [*content:out=`<div class="wrap">%s</div>`*] ``
+**dateformat** | Return an formatted date. Example: from timestamp: <code>[+createdon:dateformat=&#96;%H:%M %d.%m.%Y&#96;+]</code>, from date string in other format <code>[+tv_var:dateformat=&#96;%H:%M %d.%m.%Y&#124;%d-%m-%Y %H:%M:%S&#96;+]</code>
+**default** | Return an default text if variable is empty. Example <code>[\*variable:default=&#96;Default text`\*]</code>
+**doclevel** | Returns the doclevel of a given docid. Example: <code>[+docid:doclevel+]</code>
+**element** | Get an element of multivalue. Example: first element: <code>[\*tv_var:element\*]</code>, same, but delimited by "::" <code>[\*tv_var:element=&#96;0::&#96;\*]</code>, get second, delimited by "&#124;&#124;" <code>[\*tv_var:element=&#96;1&#124;&#124;&#96;\*]</code>, get thidr, delimited by comma <code>[\*tv_var:element=&#96;2,`\*]</code>, get from an resource <code>[+phx:input=&#96;1&#96;:docfield=&#96;tv_var&#96;:element=&#96;0::&#96;+]</code>
+**firstitem** | returns the first item in list delimeted by comma. Example: <code>[+string:firstitem+]</code> 
+**in** | Check  value is in array delimited by one of: ";,".Example: <code>[+variable:in=&#96;1,2,3;4;5`:then=&#96;This is in&#96;+]</code>
+**isnotnumeric** | Check the string is not numeric. Example: <code>[+string:isnotnumeric:then=&#96;Is not numeric`:else=&#96;Is numeric&#96;+]</code>
+**isnumeric** | Check the string is numeric. Example: <code>[+string:numeric:then=&#96;Is Numeric`:else=&#96;Is not numeric&#96;+]</code>
+**jsonencode** | Returns the JSON representation of the string with or not stripouterquotes (set option 0 or 1). Example: <code>[+string:jsonencode=&#96;0&#96;+]</code>
+**num_format** | format a numeric value. <code>[+variable:num_format=&#96;decimals&#124;dec_point&#124;thousands_sep&#96;+]</code>
+**pregreplace** | Replace in string by regular expression. Example: <code>[+variable:preg_replace=&#96;/regexp/&#124;&#124;str_replace_to&#96;+]</code>
+**specialchar** | Returns the htmlspecialchars of a string. Example: <code>[+string:specialchar+]</code> 
+**striptags** | Remove html tags from text. Example: <code>[+text:striptags+]</code>
+**switch** | Switch for PHx. Example: <code>[+string:switch=&#96;xx:{{Chunk}}&#124;yy:[\*DocVar\*]&#124;default:[+TemplateVar+]+]</code>
+**substr** | Returns a substring of a string. Example: <code>[+string:substr=&#96;0,-3&#96;+]</code>
+**switchc** | Switch chunks for PHx. PHx has one big problem with (visible) chunks at the beginning of the parsing process. They would be evaluated regardless of beeing shown. Example: <code>[+string:switchc=&#96;xx:chunkname&#124;yy:chunkname&#124;default:chunkname+]</code>
+**trim** | Trims a string. Stripped characters could be specified in the options of the modifier. Example: <code>[+string:trim=&#96; &#96;+]</code>
+**tvelement** | Get an element(s) names of tv select value (for tv type dropdown, listbox, listbox-multiple,checkbox with possible values like "Option name==option_value&#124;&#124;Yes==1&#124;&#124;No==2&#124;&#124;So So==so-so"). Example: <code>[+phx:input=&#96;[\*id*\]&#96;:tvelement=&#96;tvaname::&lt;div class="%v"&gt;%n&lt;/div&gt;&#96;+]</code>. See more examples inside.
+**utf8limit** | Returns the limited utf8 string. Example: <code>[+string:utf8limit=&#96;300&#96;+]</code>
+**out** | Return as printf if not empty. Example: <code>[\*content:out=&#96;&lt;div class="wrap"&gt;%s&lt;/div&gt;&#96;\*]</code>
 
 For more understanding see in the code of each modifier file.

@@ -2,7 +2,7 @@
 
 /* 
  * description: Get an element(s) names of tv select value 
- * ( for tv type dropdown, listbox, listbox-multiple with possible values like "1==Yes||2==No||so-so=So So")
+ * ( for tv type dropdown, listbox, listbox-multiple,checkbox with possible values like "Option name==option_value||Yes==1||No==2||So So==so-so")
  *  
  * usage: [+docid:tvelement=`<tvname>[[:<value by ||>]:[<out format %n %v>]:<out delimiter>]`+]
  *  <tvname>           - string, name of tvvalue
@@ -15,11 +15,12 @@
  *  [*docid:tvelement=`tvaname::<value>%v</value><name>%n</name>`*]             - formatted
  *  [*docid:tvelement=`tvaname:::;`*]                                           - standard output delimited by ";"
  *  [*docid:tvelement=`tvaname::<value>%v</value><name>%n</name>`:<br/>*]       - delim formatted output by <br/>
+ *  [+phx:input=`[*id*]`:tvelement=`tvaname::<div class="%v">%n</div>`+]        - using phx input for current doc. output div class by value
  * 
  * author MrSwed <webmaster@sdcollection.com>
 */
 
-$tvTypeCheck = explode(",","dropdown,listbox,listbox-multiple");
+$tvTypeCheck = explode(",","dropdown,listbox,listbox-multiple,checkbox");
 if (!empty($options)) {
  $options = str_replace($this->safetags[1],$this->safetags[2],$options);
  $options = explode(":",$options);

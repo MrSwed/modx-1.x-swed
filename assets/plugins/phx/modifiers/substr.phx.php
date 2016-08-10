@@ -8,9 +8,9 @@ if (strlen($options) > 0) {
 	$data = explode(",", trim($options), 2);
 	$start = (!empty($data[0])) ? intval($data[0]) : 0;
 	if (!empty($data[1])) {
-		$result = substr($output, $start, intval($data[1]));
+		$result = $this->substr($output, $start, intval($data[1]));
 	} else {
-		$result = substr($output, $start);
+		$result = $this->substr($output, $start);
 	}
 } else {
 	$result = $output;

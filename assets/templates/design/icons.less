@@ -10,6 +10,11 @@
 		display: inline-block;
 		vertical-align: middle;
 	}
+	&.sq {
+		.convert(width, @fz);
+		.convert(height, @fz);
+		.spriteSize(auto, @fz);
+	}
 	&.sq2 {
 		.convert(width, @fz*2);
 		.convert(height, @fz*2);

@@ -2,9 +2,30 @@
 .headline {
 	&:extend(.h1);
 }
-.justifyleft { text-align: left; }
-.justifyright { text-align: right; }
-.justifycenter { text-align: center; }
+.justifyleft {
+	text-align: left;
+	img& {
+		float: left;
+		margin-right: 0.5em;
+		margin-bottom: 0.3em;
+	}
+}
+.justifyright {
+	text-align: right;
+	img& {
+		float: right;
+		margin-left: 0.5em;
+		margin-bottom: 0.3em;
+	}
+}
+.justifycenter { 
+	text-align: center;
+	img& {
+		display: block;
+		margin: 0.3em auto ;
+	}
+	
+}
 .justify { text-align: justify; }
 
 

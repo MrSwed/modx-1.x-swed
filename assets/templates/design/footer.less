@@ -1,10 +1,18 @@
 @fth: 100px;
+.main:after {
+	content: '';
+	display: block;
+	.convert(height, @fth + (3rem * @fzr), @fzr, 1rem);
+}
 .footer {
 	&:extend(.flex);
 	background: #5a95b5;
 	color: #fff;
 	.convert(min-height, @fth, @fz);
 	.convert(margin-top, -@fth, @fz);
+	p {
+		margin: auto;
+	}
 	a {
 		color: inherit;
 		text-decoration: none;
@@ -33,9 +41,4 @@
 	}
 	.counters {
 	}
-}
-.main:after {
-	content: '';
-	display: block;
-	.convert(height, @fth, @fz);
 }

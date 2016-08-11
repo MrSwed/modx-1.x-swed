@@ -264,6 +264,9 @@ https://github.com/duncansmart/less.js-windows
   justify-content: stretch;
 }
 /* fonts */
+.f.Myriad {
+  font-family: Myriad Pro, Arial, Helvetica, serif;
+}
 .f.arial {
   font-family: Arial, sans-serif;
 }
@@ -273,6 +276,9 @@ https://github.com/duncansmart/less.js-windows
 }
 .f.verdana {
   font-family: Verdana, "Geneva CY", "DejaVu Sans", sans-serif;
+}
+.f.tahoma {
+  font-family: Tahoma, Verdana, sans-serif;
 }
 /* menu */
 .menu ul,
@@ -322,11 +328,19 @@ https://github.com/duncansmart/less.js-windows
 }
 /* header */
 /* footer */
+.main:after {
+  content: '';
+  display: block;
+  height: 9.25rem;
+}
 .footer {
   background: #5a95b5;
   color: #fff;
   min-height: 6.25em;
   margin-top: -6.25em;
+}
+.footer p {
+  margin: auto;
 }
 .footer a {
   color: inherit;
@@ -346,11 +360,6 @@ https://github.com/duncansmart/less.js-windows
 .footer .webmaster:hover {
   opacity: 1;
 }
-.main:after {
-  content: '';
-  display: block;
-  height: 6.25em;
-}
 /* sprite */
 .sprite,
 .ico:before {
@@ -368,6 +377,11 @@ https://github.com/duncansmart/less.js-windows
 .ico.order:before {
   display: inline-block;
   vertical-align: middle;
+}
+.ico.sq {
+  width: 1em;
+  height: 1em;
+  background-size: auto 1600%;
 }
 .ico.sq2,
 .ico.order:before {
@@ -418,6 +432,7 @@ input {
   width: 100vw;
   right: 50%;
   margin-right: calc( -50vw + 8px );
+  display: block;
 }
 .noScroll .fw {
   margin-right: -50vw;
@@ -644,11 +659,25 @@ textarea {
 .justifyleft {
   text-align: left;
 }
+img.justifyleft {
+  float: left;
+  margin-right: 0.5em;
+  margin-bottom: 0.3em;
+}
 .justifyright {
   text-align: right;
 }
+img.justifyright {
+  float: right;
+  margin-left: 0.5em;
+  margin-bottom: 0.3em;
+}
 .justifycenter {
   text-align: center;
+}
+img.justifycenter {
+  display: block;
+  margin: 0.3em auto ;
 }
 .justify {
   text-align: justify;

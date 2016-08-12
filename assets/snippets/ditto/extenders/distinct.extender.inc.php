@@ -14,8 +14,8 @@
  * 	e.g. [[Ditto? &tpl=`myTemplate` &extenders=`distinct` &distinct=`pagetitle,pub_date`]] -- will return only unique page titles for each date.
  * 
  * @Changelog:
- * 	1.0.3 (2012-04-05) by DivanDesign: Now use the DittoID (need for many Ditto calls).
- * 	1.0.2 (2011-12-30) By Sergey Davydov: Set placeholders distinctCount - common count and  distinctIds - ids of distinted items 
+ * 	1.0.3 (2011-12-30) By Sergey Davydov: Set placeholders distinctCount - common count and  distinctIds - ids of distinted items 
+ * 	1.0.2 (2012-04-05) by DivanDesign: Now use the DittoID (need for many Ditto calls).
  * 	1.0.1 by Nick Crossland: Bugfixes only.
  * 	1.0 by Nick Crossland: initial release.
  * 
@@ -104,12 +104,11 @@ if (!function_exists("makeDistinct")) {
 		}
 			
 		// Check if this string has been seen yet -- if it has, don't include it in the results
-//		if (isset($seen[$ddDittoID][$distinct_string]) && ($seen[$ddDittoID][$distinct_string])==true ) {	// If this value of the fieldname has been seen before, remove it from the list
 		if (isset($seen[$ddDittoID][$distinct_string]) && $seen[$ddDittoID][$distinct_string] ) {	// If this value of the fieldname has been seen before, remove it from the list
  $seen[$ddDittoID][$distinct_string][] = $resource["id"];
 			return false;
 		} else {
-//			$seen[$ddDittoID][$distinct_string] = true;	// Otherwise, remember the value has been seen, and allow it in the list (this time)
+// Otherwise, remember the value has been seen, and allow it in the list (this time)
    $seen[$ddDittoID][$distinct_string] = array($resource["id"]);
 			return true;
 		}	

@@ -70,6 +70,9 @@ if (empty($name)) return ""; // block name is required
 $id = isset($id) ? $id : $modx->documentObject['id'];
 $tv = isset($tv) ? $tv : "blocks";
 $out = isset($out) ? $out : "<div class='$name'>%s</div>";
+$outEmpty = isset($outEmpty)?$outEmpty:"";
+$outElse = isset($outElse)?$outElse:$outEmpty;
+
 $rootID = isset($rootID) ? $rootID : 0;
 $depth = isset($depth) ? $depth : 100;
 
@@ -90,5 +93,5 @@ while (empty($value) and (int)$cid != $rootID and --$depth > 0) {
 		break;
 	} else $value = $modx->evalSnippets("[[ddGetMultipleField? &string='$value'  &filter='1::$name||2::1||2::2".((int)$docData["isfolder"] ? "||2::3||2::4" : "||2::5")."' &columns='0']]");
 }
-return $value ? ($out ? sprintf($out, $value) : "") : "";
+return $value ? ($out ? sprintf($out, $value) : "") :  ($outEelse?sprintf($outEelse,$value):"");
 ?>

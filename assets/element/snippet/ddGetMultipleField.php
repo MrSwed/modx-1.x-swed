@@ -10,9 +10,9 @@
  * @uses The library modx.ddTools 0.15.3.
  * @uses The snippet ddTypograph 1.4.3 (if typography is required).
  * 
- * @param $inputString {separated string} - The input string containing separated values. @required
- * @param $inputString_docField {string} - The name of the document field/TV which value is required to get. If the parameter is passed then the input string will be taken from the field/TV and “inputString” will be ignored. Default: —.
- * @param $inputString_docId {integer} - ID of the document which field/TV value is required to get. “inputString_docId” equals the current document id since “inputString_docId” is unset. Default: —.
+ * @param $string {separated string} - The input string containing separated values. @required
+ * @param $docField {string} - The name of the document field/TV which value is required to get. If the parameter is passed then the input string will be taken from the field/TV and “string” will be ignored. Default: —.
+ * @param $docId {integer} - ID of the document which field/TV value is required to get. “docId” equals the current document id since “docId” is unset. Default: —.
  * @param $rowDelimiter {string; regexp} - The input string row delimiter. Default: '||'.
  * @param $colDelimiter {string; regexp} - The input string column delimiter. Default: '::'.
  * @param $startRow {integer} - The index of the initial row (indexes start at 0). Default: 0.
@@ -30,7 +30,7 @@
  * @param $rowTpl {string: chunkName|string} - The template for row rendering (“outputFormat” has to be == 'html'). Use inline templates starting with “@CODE:”. Available placeholders: [+rowNumber+] (index of current row, starts at 1), [+rowNumber.zeroBased+] (index of current row, starts at 0), [+total+] (total number of rows), [+resultTotal+] (total number of returned rows), [+col0+],[+col1+],… (column values). Default: ''.
  * @param $colTpl {comma separated string: chunkName|string; 'null'} - The comma-separated list of templates for column rendering (“outputFormat” has to be == 'html'). Use inline templates starting with “@CODE:”. If the number of templates is lesser than the number of columns then the last passed template will be used to render the rest of the columns. 'null' specifies rendering without a template. Available placeholders: [+val+], [+rowNumber+] (index of current row, starts at 1), [+rowNumber.zeroBased+] (index of current row, starts at 0). Default: ''.
  * @param $outerTpl {string: chunkName|string} - Wrapper template (“outputFormat” has to be != 'array'). Use inline templates starting with “@CODE:”. Available placeholders: [+result+], [+total+] (total number of rows), [+resultTotal+] (total number of returned rows), [+rowY.colX+] (“Y” — row number, “X” — column number). Default: ''.
- * @param $placeholders {query string} - Additional data as query string (https://en.wikipedia.org/wiki/Query_string) has to be passed into “outerTpl”, “rowTpl” and “colTpl”. E. g. “pladeholder1=value1&pagetitle=My awesome pagetitle!”. Default: ''.
+ * @param $placeholders {query string} - Additional data as query string (https://en.wikipedia.org/wiki/Query_string) has to be passed into “outerTpl”, “rowTpl” and “colTpl”. E. g. “pladeholder1=value1&pagetitle=My awesome pagetitle!”. Arrays are supported too: “some[a]=one&some[b]=two” => “[+some.a+]”, “[+some.b+]”; “some[]=one&some[]=two” => “[+some.0+]”, “[some.1]”. Default: ''.
  * @param $urlencode {0; 1} - Is it required to URL encode the result? “outputFormat” has to be != 'array'. URL encoding is used according to RFC 3986. Default: 0.
  * @param $totalRowsToPlaceholder {string} - The name of the global MODX placeholder that holds the total number of rows. The placeholder won't be set if “totalRowsToPlaceholder” is empty. Default: ''.
  * @param $resultToPlaceholder {string} - The name of the global MODX placeholder that holds the snippet result. The result will be returned in a regular manner if the parameter is empty. Default: ''.
@@ -51,23 +51,16 @@ if (!file_exists($ddToolsPath)){
 //Подключаем modx.ddTools
 require_once $ddToolsPath;
 
-//Для обратной совместимости
-extract(ddTools::verifyRenamedParams($params, array(
-	'inputString' => 'string',
-	'inputString_docField' => 'docField',
-	'inputString_docId' => 'docId'
-)));
-
 //Если задано имя поля, которое необходимо получить
-if (isset($inputString_docField)){
-	$inputString = ddTools::getTemplateVarOutput(array($inputString_docField), $inputString_docId);
-	$inputString = $inputString[$inputString_docField];
+if (isset($docField)){
+	$string = ddTools::getTemplateVarOutput(array($docField), $docId);
+	$string = $string[$docField];
 }
 
 $result = '';
 
 //Если задано значение поля
-if (isset($inputString) && strlen($inputString) > 0){
+if (isset($string) && strlen($string) > 0){
 	if (!isset($rowDelimiter)){$rowDelimiter = '||';}
 	if (!isset($colDelimiter)){$colDelimiter = '::';}
 	
@@ -115,7 +108,7 @@ if (isset($inputString) && strlen($inputString) > 0){
 	$outputFormat = isset($outputFormat) ? strtolower($outputFormat) : 'html';
 	
 	//Разбиваем на строки
-	$data = $rowDelimiterIsRegexp ? preg_split($rowDelimiter, $inputString) : explode($rowDelimiter, $inputString);
+	$data = $rowDelimiterIsRegexp ? preg_split($rowDelimiter, $string) : explode($rowDelimiter, $string);
 	
 	//Общее количество строк
 	$total = count($data);
@@ -224,6 +217,8 @@ if (isset($inputString) && strlen($inputString) > 0){
 				if (strpos($placeholders, '=') !== false){
 					//Parse a query string
 					parse_str($placeholders, $placeholders);
+					//Unfold for arrays support (e. g. “some[a]=one&some[b]=two” => “[+some.a+]”, “[+some.b+]”; “some[]=one&some[]=two” => “[+some.0+]”, “[some.1]”)
+					$placeholders = ddTools::unfoldArray($placeholders);
 				}else{
 					//The old format
 					$placeholders = ddTools::explodeAssoc($placeholders);

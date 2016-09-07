@@ -54,9 +54,9 @@ class Wayfinder {
     function buildMenu() {
         global $modx;
         //Loop through all of the menu levels
-        foreach ($this->docs as $level => $subDocs) {
+        foreach ($this->docs as $level => $subParents) {
             //Loop through each document group (grouped by parent doc)
-            foreach ($subDocs as $parentId => $subDocs) {
+            foreach ($subParents as $parentId => $subDocs) {
                 //only process document group, if starting at root, hidesubmenus is off, or is in current parenttree
                 if ($this->_config['hideSubMenus'] && !$this->isHere($parentId) && 1<$level) continue;
                 
@@ -97,7 +97,7 @@ class Wayfinder {
             }
             else {
                 $docInfo['hasChildren'] = 0;
-                $docInfo['hasChildren'] = 0;
+                $numChildren            = 0;
             }
             
             //Render the row output
@@ -202,7 +202,7 @@ class Wayfinder {
             $usedTemplate = 'parentRowTpl';
         } elseif ($resource['level'] > 1 && $this->_templates['innerRowTpl']) {
             $usedTemplate = 'innerRowTpl';
-    } elseif ($resource['last'] && $this->_templates['lastRowTpl']) {
+        } elseif ($resource['last'] && $this->_templates['lastRowTpl']) {
             $usedTemplate = 'lastRowTpl';
         } else {
             $usedTemplate = 'rowTpl';
@@ -342,6 +342,10 @@ class Wayfinder {
         global $modx;
         $depth = !empty($this->_config['level']) ? $this->_config['level'] : 10;
         $ids = array();
+        
+        if(strtolower(substr($this->_config['id'],0,1))==='p')
+            $this->_config['id'] = $this->getParentID($modx->documentIdentifier);
+        
         if (!$this->_config['hideSubMenus']) {
             $ids = $modx->getChildIds($this->_config['id'],$depth);
         } else { // then hideSubMenus is checked, we don`t need all children
@@ -403,6 +407,7 @@ class Wayfinder {
                 $access = sprintf("1='%s' OR sc.privatemgr=0", $_SESSION['mgrRole']);
                 if($docgrp) $access .= sprintf(' OR dg.document_group IN (%s)', $docgrp);
             }
+            if($access) $access = "AND({$access})";
             
             //Add the ignore hidden option to the where clause
             if ($this->_config['ignoreHidden'])  $menuWhere = '';
@@ -423,7 +428,7 @@ class Wayfinder {
             
             $fields = "DISTINCT {$fields}";
             $from   = '[+prefix+]site_content sc LEFT JOIN [+prefix+]document_groups dg ON dg.document=sc.id';
-            $where  = sprintf('sc.published=1 AND sc.deleted=0 AND (%s) %s AND sc.id IN (%s) GROUP BY sc.id', $access, $menuWhere, implode(',',$ids));
+            $where  = sprintf('sc.published=1 AND sc.deleted=0 %s %s AND sc.id IN (%s) GROUP BY sc.id', $access, $menuWhere, implode(',',$ids));
             $sort   = "{$sort} {$this->_config['sortOrder']}";
             
             //run the query
@@ -503,43 +508,11 @@ class Wayfinder {
 
     function appendTV($tvname,$docIDs){
         global $modx;
-
-        $base_path= MODX_MANAGER_PATH . 'includes';
-        include_once $base_path . '/tmplvars.format.inc.php';
-        include_once $base_path . '/tmplvars.commands.inc.php';
-
-        $tbl_site_tmplvar_contentvalues = $modx->getFullTableName('site_tmplvar_contentvalues');
-        $tbl_site_tmplvars = $modx->getFullTableName('site_tmplvars');
-
-        $rs = $modx->db->select(
-            'stv.name,stc.tmplvarid,stc.contentid,stv.type,stv.display,stv.display_params,stc.value',
-            "{$tbl_site_tmplvar_contentvalues} stc LEFT JOIN {$tbl_site_tmplvars} stv ON stv.id=stc.tmplvarid ",
-            "stv.name='{$tvname}' AND stc.contentid IN (".implode($docIDs,",").")",
-            'stc.contentid ASC'
-            );
+        
         $resourceArray = array();
-        while ($row = $modx->db->getRow($rs))  {
-            $resourceArray["#{$row['contentid']}"][$row['name']] = getTVDisplayFormat($row['name'], $row['value'], $row['display'], $row['display_params'], $row['type'],$row['contentid']);
-        }
-
-        if (count($resourceArray) != count($docIDs)) {
-            $rs = $modx->db->select('name,type,display,display_params,default_text', $tbl_site_tmplvars, "name='{$tvname}'", 1);
-            $row = $modx->db->getRow($rs);
-            if (strtoupper($row['default_text']) == '@INHERIT') {
-                foreach ($docIDs as $id) {
-                    $output = getTVDisplayFormat($row['name'], $row['default_text'], $row['display'], $row['display_params'], $row['type'], $id);
-                    if (!isset($resourceArray["#{$id}"])) {
-                        $resourceArray["#{$id}"][$tvname] = $output;
-                    }
-                }
-            } else {
-                $output = getTVDisplayFormat($row['name'], $row['default_text'], $row['display'], $row['display_params'], $row['type'], $row['contentid']);
-                foreach ($docIDs as $id) {
-                    if (!isset($resourceArray["#{$id}"])) {
-                        $resourceArray["#{$id}"][$tvname] = $output;
-                    }
-                }
-            }
+        foreach($docIDs as $id) {
+            $tv = $modx->getTemplateVarOutput($tvname, $id);
+            $resourceArray["#{$id}"][$tvname] = $tv[$tvname];
         }
         return $resourceArray;
     }
@@ -599,12 +572,12 @@ class Wayfinder {
         // based on version by Doze at http://forums.modx.com/thread/41066/support-comments-for-ditto?page=2#dis-post-237942
         global $modx;
         $template = '';
-        if ($modx->getChunk($tpl) != '') {
-            $template = $modx->getChunk($tpl);
-        } else if(substr($tpl, 0, 6) == '@FILE:') {
+        if(substr($tpl, 0, 5) == '@FILE') {
             $template = file_get_contents(substr($tpl, 6));
-        } else if(substr($tpl, 0, 6) == '@CODE:') {
+        } elseif(substr($tpl, 0, 5) == '@CODE') {
             $template = substr($tpl, 6);
+        } elseif($modx->getChunk($tpl) != '') {
+            $template = $modx->getChunk($tpl);
         } else {
             $template = FALSE;
         }
@@ -709,14 +682,19 @@ class Wayfinder {
     function modxPrep($value) {
         global $modx;
         $value = (strpos($value,'<') !== FALSE) ? htmlentities($value,ENT_NOQUOTES,$modx->config['modx_charset']) : $value;
-        $value = str_replace('[','&#091;',$value);
-        $value = str_replace(']','&#093;',$value);
-        $value = str_replace('{','&#123;',$value);
-        $value = str_replace('}','&#125;',$value);
+        $s = array('[', ']', '{', '}');
+        $r = array('&#091;', '&#093;', '&#123;', '&#125;');
+        $value = str_replace($s, $r, $value);
         return $value;
     }
     function hsc($string) {
         global $modx;
         return htmlspecialchars($string, ENT_COMPAT, $modx->config['modx_charset']);
+    }
+    function getParentID($id)
+    {
+        global $modx;
+        if($modx->documentObject['parent']==0)   return $id;
+        return $modx->documentObject['parent'];
     }
 }

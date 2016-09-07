@@ -415,7 +415,7 @@ class DocumentParser {
      * @return boolean
      */
     function checkSession() {
-        if (isset ($_SESSION['mgrValidated'])) {
+        if (isset ($_SESSION['mgrValidated']) && !empty($_SESSION['mgrValidated'])) {
             return true;
         } else {
             return false;
@@ -4787,7 +4787,7 @@ class SystemEvent {
     /**
      * @param string $name Name of the event
      */
-    function SystemEvent($name= "") {
+    function __construct($name= "") {
         $this->_resetEventObject();
         $this->name= $name;
     }

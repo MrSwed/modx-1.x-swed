@@ -1,7 +1,5 @@
-	</div>
-	<div class="footer">
-		<div class="mainw">
-			<div class="menu">{{FooterMenu}}</div>
+	<footer class="footer">
+			<menu>{{FooterMenu}}</menu>
 			<div class="wrap">
 				<div class="copy"><a href="/" class="logo" title="[(site_name)]"></a>
 					@[[currentYear]] <a href="/">{{domain}}</a>
@@ -12,7 +10,7 @@
 				<!-- /noindex -->
 				<div class="webmaster">{{WebmasterLogo}}</div>
 		 </div>
-		</div>
-	</div>
+		
+	</footer>
 </body>
 </html>

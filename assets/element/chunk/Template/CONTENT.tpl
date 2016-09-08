@@ -45,7 +45,6 @@
   !]
 	</div> <!-- /items -->
 	{{paginator}}
-		<div class="endcol"></div>
 `+]
 			[[ShowBlock? &name=`afterList` ]]
 			[+phx:input=`[[getInheritField? &id=`[*id*]` &field=`socialwidgets`]]`:element=`0::`:math=`?+(3*[*isfolder*])`:in=`1,2,4`:then=`{{share}}`+]

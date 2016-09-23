@@ -5,7 +5,7 @@
 	* Show the contents of the block specified by the user depending on the placement and inheritance
 	*
 	* @category      snippet
-	* @version       0.3
+	* @version       0.4
 	* @license       http://www.gnu.org/copyleft/gpl.html GNU Public License (GPL)
 	* @internal      @properties
 	* @internal      @modx_category Content
@@ -69,9 +69,10 @@ mm_ddMultipleFields("blocks", '', '', 'richtext,select,select', 'Текст,Ме
 if (empty($name)) return ""; // block name is required
 $id = isset($id) ? $id : $modx->documentObject['id'];
 $tv = isset($tv) ? $tv : "blocks";
-$out = isset($out) ? $out : "<div class='$name'>%s</div>";
-$outEmpty = isset($outEmpty)?$outEmpty:"";
-$outElse = isset($outElse)?$outElse:$outEmpty;
+$wrap = isset($wrap) ? $wrap : "div";
+$out = isset($out) ? str_replace("%n", $name, $out) : ($wrap ? "<$wrap class='$name'>%s</$wrap>" : "%s");
+$outEmpty = isset($outEmpty) ? $outEmpty : "";
+$outElse = isset($outElse) ? $outElse : $outEmpty;
 
 $rootID = isset($rootID) ? $rootID : 0;
 $depth = isset($depth) ? $depth : 100;
@@ -93,5 +94,5 @@ while (empty($value) and (int)$cid != $rootID and --$depth > 0) {
 		break;
 	} else $value = $modx->evalSnippets("[[ddGetMultipleField? &string='$value'  &filter='1::$name||2::1||2::2".((int)$docData["isfolder"] ? "||2::3||2::4" : "||2::5")."' &columns='0']]");
 }
-return $value ? ($out ? sprintf($out, $value) : "") :  ($outEelse?sprintf($outEelse,$value):"");
+return $value ? ($out ? sprintf($out, $value) : "") : ($outEelse ? sprintf($outEelse, $value) : "");
 ?>

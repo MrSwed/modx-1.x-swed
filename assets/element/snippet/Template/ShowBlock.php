@@ -5,7 +5,7 @@
 	* Show the contents of the block specified by the user depending on the placement and inheritance
 	*
 	* @category      snippet
-	* @version       0.4
+	* @version       0.5
 	* @license       http://www.gnu.org/copyleft/gpl.html GNU Public License (GPL)
 	* @internal      @properties
 	* @internal      @modx_category Content
@@ -81,7 +81,12 @@ if ($id == $modx->documentObject['id']) $docData = $modx->documentObject;
 else $docData = $modx->getDocument($id, "parent,isfolder");
 
 // Ппроверка значений текущего документа
-$value = $modx->evalSnippets("[[ddGetMultipleField? &docId=`$id` &docField='$tv' &filter='1::$name||2::||2::0||2::1".((int)$docData["isfolder"] ? "||2::3" : "")."' &columns='0']]");
+$value = $modx->runSnippet("ddGetMultipleField", array(
+	"docId" => $id,
+	"docField" => $tv,
+	"filter" => "1::$name||2::||2::0||2::1".((int)$docData["isfolder"] ? "||2::3" : ""),
+	"columns" => '0'
+));
 
 // Если для текущего ничего нет, ищем родительские с разрешенным наследованием
 $cid = $id;
@@ -89,10 +94,18 @@ while (empty($value) and (int)$cid != $rootID and --$depth > 0) {
 	$value = $modx->getTemplateVarOutput(array($tv, "parent"), $cid, 1);
 	$cid = $value["parent"];
 	$value = $value[$tv];
-	if ("0" == $modx->evalSnippets("[[ddGetMultipleField? &string='$value'  &filter='1::$name||2::0||2::1||2::2".((int)$docData["isfolder"] ? "||2::3||2::4" : "||2::5")."' &columns='2']]")) {
+	if ("0" == $modx->runSnippet("ddGetMultipleField", array(
+			"string" => $value,
+			"filter" => "1::$name||2::0||2::1||2::2".((int)$docData["isfolder"] ? "||2::3||2::4" : "||2::5"),
+			"columns" => '2'
+		))) {
 		$value = ""; // Наследование отменено
 		break;
-	} else $value = $modx->evalSnippets("[[ddGetMultipleField? &string='$value'  &filter='1::$name||2::1||2::2".((int)$docData["isfolder"] ? "||2::3||2::4" : "||2::5")."' &columns='0']]");
+	} else $value = $modx->runSnippet("ddGetMultipleField", array(
+		"string" => $value,
+		"filter" => "1::$name||2::1||2::2".((int)$docData["isfolder"] ? "||2::3||2::4" : "||2::5"),
+		"columns" => '0'
+	));
 }
-return $value ? ($out ? sprintf($out, $value) : "") : ($outEelse ? sprintf($outEelse, $value) : "");
+return $value ? ($out ? sprintf($out, $value) : "") : ($outElse ? sprintf($outElse, $value) : "");
 ?>

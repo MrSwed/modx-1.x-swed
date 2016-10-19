@@ -378,7 +378,7 @@ class DocumentParser {
         if (!empty ($_REQUEST['q'])) { //LANG
             return "alias";
         }
-        elseif (isset ($_REQUEST['id'])) {
+        elseif (isset ($_GET['id'])) {
             return "id";
         } else {
             return "none";
@@ -399,10 +399,10 @@ class DocumentParser {
                 $docIdentifier= $this->db->escape($_REQUEST['q']);
                 break;
             case 'id' :
-                if (!is_numeric($_REQUEST['id'])) {
+                if (!is_numeric($_GET['id'])) {
                     $this->sendErrorPage();
                 } else {
-                    $docIdentifier= intval($_REQUEST['id']);
+                    $docIdentifier= intval($_GET['id']);
                 }
                 break;
         }
@@ -1259,7 +1259,6 @@ class DocumentParser {
         
         $etomite= & $this;
         
-        if(!$this->snippetCache) $this->setSnippetCache();
         $matches = $this->getTagsFromContent($content,'[[',']]');
         
         if(!$matches) return $content;
@@ -2000,7 +1999,7 @@ class DocumentParser {
     }
 
     function setRequestQ($request_uri) {
-        if(isset($_REQUEST['id'])) $q = null;
+        if(isset($_GET['id'])) $q = null;
         else {
             $q = substr($request_uri,strlen($this->config['base_url']));
             if(strpos($q,'?')!==false) $q = substr($q,0,strpos($q,'?'));
@@ -2960,7 +2959,8 @@ class DocumentParser {
             if ($this->db->getRecordCount($result) == 1) {
                 $row = $this->db->getRow($result);
                 $snippet =  $this->snippetCache[$snippetName]= $row['snippet'];
-                $properties = $this->snippetCache[$snippetName . "Props"]= $row['properties']." ".$row['sharedproperties'];
+                $mergedProperties = array_merge($this->parseProperties($row['properties']), $this->parseProperties($row['sharedproperties']));
+                $properties = $this->snippetCache[$snippetName . "Props"]= json_encode($mergedProperties);
             } else {
                 $snippet = $this->snippetCache[$snippetName]= "return false;";
                 $properties = $this->snippetCache[$snippetName . "Props"]= '';
@@ -4085,6 +4085,9 @@ class DocumentParser {
      */
     function parseProperties($propertyString, $elementName = null, $elementType = null) {
         $propertyString = trim($propertyString);
+        if(empty($propertyString)) return array();
+        if($propertyString=='{}')  return array();
+        
         $jsonFormat = $this->isJson($propertyString, true);
         $property = array();
         // old format
@@ -4092,7 +4095,8 @@ class DocumentParser {
             $props= explode('&', $propertyString);
             foreach ($props as $prop) {
 
-                if (strpos($prop, '=')===false) {
+                if(empty($prop)) continue;
+                elseif(strpos($prop, '=')===false) {
                     $property[trim($prop)]='';
                     continue;
                 }
@@ -4105,12 +4109,12 @@ class DocumentParser {
                     case 'list-multi':
                     case 'checkbox':
                     case 'radio':
-                        $value = $p[3];
+                        $value = !isset($p[3]) ? '' : $p[3];
                         break;
                     default:
-                        $value = $p[2];
+                        $value = !isset($p[2]) ? '' : $p[2];
                 }
-                if (!empty($key) && $value != '') $property[$key] = $value;
+                if (!empty($key)) $property[$key] = $value;
             }
         // new json-format
         } else if(!empty($jsonFormat)){

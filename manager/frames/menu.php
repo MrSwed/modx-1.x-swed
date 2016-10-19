@@ -217,7 +217,12 @@ $mxla = $modx_lang_attribute ? $modx_lang_attribute : 'en';
 </head>
 
 <body id="topMenu" class="<?php echo $modx_textdir ? 'rtl':'ltr'?>">
-
+<?php
+    // invoke OnManagerTopPrerender event
+    $evtOut = $modx->invokeEvent('OnManagerTopPrerender',$_REQUEST);
+    if (is_array($evtOut))
+        echo implode("\n", $evtOut);
+?>
 <div id="tocText" <?php echo $modx_textdir ? ' class="tocTextRTL"' : '' ?>></div>
 <div id="topbar">
   <div id="topbar-container">
@@ -238,7 +243,12 @@ $mxla = $modx_lang_attribute ? $modx_lang_attribute : 'en';
 
   </div>
 </div>
-
+<div id="searchform">
+			<form  action="index.php?a=71#results" method="post" target="main">
+				<input type="hidden" value="Search" name="submitok" />
+				<input type="text" name="searchid" size="25" class="form-control input-sm" placeholder="<?php echo $_lang['search']?>">
+			</form>
+		</div>
 <form name="menuForm" action="l4mnu.php" class="clear">
     <input type="hidden" name="sessToken" id="sessTokenInput" value="<?php echo md5(session_id());?>" />
 <div id="Navcontainer">

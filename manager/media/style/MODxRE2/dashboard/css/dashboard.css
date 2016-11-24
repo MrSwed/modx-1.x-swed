@@ -1,6 +1,6 @@
 body {-moz-osx-font-smoothing: grayscale;}
 .dashboard {
-  padding-top: 15px;
+  padding-top: 5px;
 }
 .dashboard * {
   font-size: 13px;
@@ -192,6 +192,7 @@ i.icon-color-verylight {
 }
 .btn-group .panel-hide {
   margin-top : -7px;
+  padding-top: 3px;
 }
 
 .btn-action {

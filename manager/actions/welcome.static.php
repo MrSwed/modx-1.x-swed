@@ -157,9 +157,9 @@ else {
         }
         if ($modx->hasPermission('delete_document')) {
             if ($content['deleted'] == 0) {
-                $html .= '<a class="btn btn-xs btn-danger"  title="' . $_lang["delete_resource"] . '" href="index.php?a=6&amp;id=' . $content['id'] . '"><i class="fa fa-trash fa-fw"></i></a> ';
+                $html .= '<a onclick="return confirm(\''.$_lang["confirm_delete_record"].'\')" class="btn btn-xs btn-danger"  title="' . $_lang["delete_resource"] . '" href="index.php?a=6&amp;id=' . $content['id'] . '"><i class="fa fa-trash fa-fw"></i></a> ';
             } else {
-                $html .= '<a class="btn btn-xs btn-success"  title="' . $_lang["undelete_resource"] . '" href="index.php?a=63&amp;id=' . $content['id'] . '"><i class="fa fa-arrow-circle-o-up fa-fw"></i></a> ';
+                $html .= '<a onclick="return confirm(\''.$_lang["confirm_undelete"].'\')" class="btn btn-xs btn-success"  title="' . $_lang["undelete_resource"] . '" href="index.php?a=63&amp;id=' . $content['id'] . '"><i class="fa fa-arrow-circle-o-up fa-fw"></i></a> ';
             }
         }
         if ($content['deleted'] == "1" AND $content['published'] == 0) {
@@ -185,7 +185,7 @@ else {
             $html .= '' . $content['description'] . '</li> ';
         }
         $html .= '<li><b>' . $_lang["resource_summary"] . '</b>: ';
-        if ($content['resource_summary'] == "") {
+        if ($content['introtext'] == "") {
             $html .= '(<i>'.$_lang['not_set'].'</i>)';
         } else {   
             $html .= '' . $content['introtext'] . '</li> ';
@@ -197,11 +197,11 @@ else {
             $html .= '' . $_lang['resource'] . '</li>';
         }
         $html .= '<li><b>' . $_lang["resource_alias"] . '</b>: ';
-        if ($content['resource_alias'] == "") {
+        if ($content['alias'] == "") {
             $html .= '(<i>'.$_lang['not_set'].'</i>)';
         } else { 
            $html .= '' . $content['alias'] . '</li>';
-               }
+        }
         $html .= '<li><b>' . $_lang['page_data_cacheable'] . '</b>: '; 
         if ($content['cacheable'] == 0) {
             $html .= '' . $_lang['no'] . '<br/>';

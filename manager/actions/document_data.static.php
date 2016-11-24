@@ -15,8 +15,8 @@ $tbl_manager_users         = $modx->getFullTableName('manager_users');
 $tbl_site_content          = $modx->getFullTableName('site_content');
 $tbl_site_templates        = $modx->getFullTableName('site_templates');
 
-
-
+// Unlock resource
+$modx->unlockElement(7, $id);
 
 // Get access permissions
 if($_SESSION['mgrDocgroups'])
@@ -210,13 +210,13 @@ function movedocument() {
 		  <li id="Button2" class="transition">
 			<a href="#" onclick="movedocument();"><img src="<?php echo $_style["icons_move_document"] ?>" /> <?php echo $_lang['move']?></a>
 		  </li>
-		  <li id="Button4">
+		  <li id="Button6">
 		    <a href="#" onclick="duplicatedocument();"><img src="<?php echo $_style["icons_resource_duplicate"] ?>" /> <?php echo $_lang['duplicate']?></a>
 		  </li>
 		  <li id="Button3">
 		    <a href="#" onclick="deletedocument();"><img src="<?php echo $_style["icons_delete_document"] ?>" /> <?php echo $_lang['delete']?></a>
 		  </li>
-		  <li id="Button6">
+		  <li id="Button4">
 			<a href="#" onclick="<?php echo ($modx->config['friendly_urls'] == '1') ? "window.open('".$modx->makeUrl($id)."','previeWin')" : "window.open('".$modx->config['site_url']."index.php?id=$id','previeWin')"; ?>"><img src="<?php echo $_style["icons_preview_resource"]?>" /> <?php echo $_lang['preview']?></a>
 		  </li>
 	  </ul>

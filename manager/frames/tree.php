@@ -236,7 +236,7 @@ $mxla = $modx_lang_attribute ? $modx_lang_attribute : 'en';
             // check if our payload contains the login form :)
             e = $('mx_loginbox');
             if(e) {
-                // yep! the seession has timed out
+                // yep! the session has timed out
                 rpcNode.innerHTML = '';
                 top.location = 'index.php';
             }
@@ -297,6 +297,28 @@ $mxla = $modx_lang_attribute ? $modx_lang_attribute : 'en';
         treeParams = 'a=1&f=nodes&indent=1&parent=0&expandAll=2&dt=' + document.sortFrm.dt.value + '&tree_sortby=' + document.sortFrm.sortby.value + '&tree_sortdir=' + document.sortFrm.sortdir.value + '&tree_nodename=' + document.sortFrm.nodename.value;
         new Ajax('index.php?'+treeParams, {method: 'get',onComplete:rpcLoadData}).request();
     }
+    
+    <?php
+    // Prepare lang-strings
+    $unlockTranslations = array('msg'=>$_lang["unlock_element_id_warning"],
+                                'type1'=>$_lang["lock_element_type_1"], 'type2'=>$_lang["lock_element_type_2"], 'type3'=>$_lang["lock_element_type_3"], 'type4'=>$_lang["lock_element_type_4"],
+                                'type5'=>$_lang["lock_element_type_5"], 'type6'=>$_lang["lock_element_type_6"], 'type7'=>$_lang["lock_element_type_7"], 'type8'=>$_lang["lock_element_type_8"]);
+    ?>
+    
+    var lockedElementsTranslation = <?php echo json_encode($unlockTranslations); ?>;
+    
+    function unlockElement(type, id, domEl) {
+        var msg = lockedElementsTranslation.msg.replace('[+id+]',id).replace('[+element_type+]',lockedElementsTranslation['type'+type]);
+        if(confirm(msg)==true) {
+            jQuery.get( 'index.php?a=67&type='+type+'&id='+id, function( data ) {
+                if(data == 1) {
+                    jQuery(domEl).fadeOut();
+                    // top.main.document.location.href="index.php?a=27&id="+id; // Redirect to "Edit Resource" immediately
+                }
+                else alert( data );
+            });
+        }
+    }
 
     function emptyTrash() {
         if(confirm("<?php echo $_lang['confirm_empty_trash']; ?>")==true) {
@@ -315,7 +337,7 @@ $mxla = $modx_lang_attribute ? $modx_lang_attribute : 'en';
         }
     }
 
-    function treeAction(id, name, treedisp_children) {
+    function treeAction(e, id, name, treedisp_children) {
         if(ca=="move") {
             try {
                 parent.main.setMoveValue(id, name);
@@ -329,11 +351,19 @@ $mxla = $modx_lang_attribute ? $modx_lang_attribute : 'en';
                 parent.main.location.href="index.php?a=2";
             } else {
                 // parent.main.location.href="index.php?a=3&id=" + id + getFolderState(); //just added the getvar &opened=
+                var href = '';
                 if(treedisp_children==0) {
-					parent.main.location.href="index.php?a=3&id=" + id + getFolderState();
-				} else {
-					parent.main.location.href="index.php?a=<?php echo (!empty($modx->config['tree_page_click']) ? $modx->config['tree_page_click'] : '27'); ?>&id=" + id; // edit as default action
-				}
+                    href = "index.php?a=3&r=1&id=" + id + getFolderState();
+                } else {
+                    href = "index.php?a=<?php echo(!empty($modx->config['tree_page_click']) ? $modx->config['tree_page_click'] : '27'); ?>&r=1&id=" + id; // edit as default action
+                }
+                if (e.shiftKey) {
+                    window.getSelection().removeAllRanges(); // Remove unnessecary text-selection
+                    randomNum = Math.floor((Math.random()*999999)+1);
+                    window.open(href, 'res'+randomNum, 'width=960,height=720,top='+((screen.height-720)/2)+',left='+((screen.width-960)/2)+',toolbar=no,location=no,directories=no,status=no,menubar=no,scrollbars=yes,resizable=no');
+                } else {
+                    parent.main.location.href=href;
+                }
             }
         }
         if(ca=="parent") {
@@ -449,11 +479,11 @@ $mxla = $modx_lang_attribute ? $modx_lang_attribute : 'en';
 <script>
   jQuery('#Button12').click(function(e) {
       e.preventDefault();
-      var randomNum = 'gener';
+      var randomNum = 'gener1';
       if (e.shiftKey) {
           randomNum = Math.floor((Math.random()*999999)+1);
       }
-      window.open('index.php?a=76',randomNum,'width=800,height=600,top='+((screen.height-600)/2)+',left='+((screen.width-800)/2)+',toolbar=no,location=no,directories=no,status=no,menubar=no,scrollbars=yes,resizable=no')
+      window.open('index.php?a=76',randomNum,'width=960,height=720,top='+((screen.height-720)/2)+',left='+((screen.width-960)/2)+',toolbar=no,location=no,directories=no,status=no,menubar=no,scrollbars=yes,resizable=no')
   });
 </script>
 <?php } ?>
@@ -462,11 +492,11 @@ $mxla = $modx_lang_attribute ? $modx_lang_attribute : 'en';
 <script>
   jQuery('#Button13').click(function(e) {
       e.preventDefault();
-      var randomNum = 'gener';
+      var randomNum = 'gener2';
       if (e.shiftKey) {
           randomNum = Math.floor((Math.random()*999999)+1);
       }
-    window.open('media/browser/<?php echo $which_browser; ?>/browse.php?&type=images',randomNum,'width=800,height=700,top='+((screen.height-700)/2)+',left='+((screen.width-800)/2)+',toolbar=no,location=no,directories=no,status=no,menubar=no,scrollbars=yes,resizable=no')
+    window.open('media/browser/<?php echo $which_browser; ?>/browse.php?&type=images',randomNum,'width=960,height=720,top='+((screen.height-720)/2)+',left='+((screen.width-960)/2)+',toolbar=no,location=no,directories=no,status=no,menubar=no,scrollbars=yes,resizable=no')
   });
 </script>
 <?php } ?>
@@ -475,11 +505,11 @@ $mxla = $modx_lang_attribute ? $modx_lang_attribute : 'en';
 <script>
   jQuery('#Button14').click(function(e) {
       e.preventDefault();
-      var randomNum = 'gener';
+      var randomNum = 'gener3';
       if (e.shiftKey) {
           randomNum = Math.floor((Math.random()*999999)+1);
       }
-    window.open('media/browser/<?php echo $which_browser; ?>/browse.php?&type=files',randomNum,'width=800,height=700,top='+((screen.height-700)/2)+',left='+((screen.width-800)/2)+',toolbar=no,location=no,directories=no,status=no,menubar=no,scrollbars=yes,resizable=no')
+    window.open('media/browser/<?php echo $which_browser; ?>/browse.php?&type=files',randomNum,'width=960,height=720,top='+((screen.height-720)/2)+',left='+((screen.width-960)/2)+',toolbar=no,location=no,directories=no,status=no,menubar=no,scrollbars=yes,resizable=no')
   });
 </script>
 <?php } ?>

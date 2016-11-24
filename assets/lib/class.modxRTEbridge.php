@@ -365,7 +365,7 @@ class modxRTEbridge
             if ($value === NULL) { continue; }; // Skip none-allowed empty settings
 
             // Escape quotes
-            if (!is_array($value) && strpos($value, "'") !== false && $conf['type'] != 'raw')
+            if (!is_array($value) && strpos($value, "'") !== false && !in_array($conf['type'], array('raw','object','obj')) )
                 $value = str_replace("'", "\\'", $value);
 
             // Determine output-type
@@ -560,7 +560,9 @@ class modxRTEbridge
             if ($row == NULL) {
                 continue;
             };     // Skip disabled config-settings
-
+        
+            $row = array_merge($this->langArr, $row);
+        
             $row['name'] = $this->editorKey . '_' . $name;
             $row['editorKey'] = $this->editorKey;
             $row['title'] = $this->lang($row['title']);
@@ -574,9 +576,6 @@ class modxRTEbridge
             $output = $modx->parseText($settingsRowTpl, $row); // Replace general translations
             $output = $modx->parseText($output, $ph);          // Replace values / settings
             $output = $modx->parseText($output, $row);         // Replace new PHs from values / settings
-
-            // Replace missing translations
-            $output = $this->replaceTranslations($output);
 
             $ph['rows'] .= $output . "\n";
         };

@@ -2,7 +2,7 @@
 if(IN_MANAGER_MODE!="true") die("<b>INCLUDE_ORDERING_ERROR</b><br /><br />Please use the MODX Content Manager instead of accessing this file directly.");
 
 function createResourceList($resourceTable,$action,$nameField = 'name') {
-    global $modx, $_lang, $modx_textdir;
+    global $modx, $_lang, $_style, $modx_textdir;
     
     $pluginsql = $resourceTable == 'site_plugins' ? $resourceTable.'.disabled, ' : '';
     
@@ -37,7 +37,7 @@ function createResourceList($resourceTable,$action,$nameField = 'name') {
         "",
         $orderby
         );
-	$limit = $modx->db->getRecordCount($rs);
+    $limit = $modx->db->getRecordCount($rs);
     if($limit<1){
         echo $_lang['no_results'];
     } else {
@@ -52,10 +52,43 @@ function createResourceList($resourceTable,$action,$nameField = 'name') {
             $insideUl = 1;
         }
 
-        if ($resourceTable == 'site_plugins') $class = $row['disabled'] ? ' class="disabledPlugin"' : '';
-        if ($resourceTable == 'site_tmplvars') $class = $row['reltpl'] ? '' : ' class="disabledPlugin"';
-        if ($resourceTable == 'site_templates') $class = $row['selectable'] ? '' : ' class="disabledPlugin"';
-        $output .= '<li><span'.$class.'><a href="index.php?id='.$row['id'].'&amp;a='.$action.'">'.$row['name'].' <small>(' . $row['id'] . ')</small></a>'.($modx_textdir ? '&rlm;' : '').'</span>';
+        if ($resourceTable == 'site_templates') {
+            $class = $row['selectable'] ? '' : ' class="disabledPlugin"';
+            $lockElementType = 1;
+        }
+        if ($resourceTable == 'site_tmplvars') {
+            $class = $row['reltpl'] ? '' : ' class="disabledPlugin"';
+            $lockElementType = 2;
+        }
+        if ($resourceTable == 'site_htmlsnippets') {
+            $lockElementType = 3;
+        }
+        if ($resourceTable == 'site_snippets') {
+            $lockElementType = 4;
+        }
+        if ($resourceTable == 'site_plugins') {
+            $class = $row['disabled'] ? ' class="disabledPlugin"' : '';
+            $lockElementType = 5;
+        }        
+        
+        // Prepare displaying user-locks
+        $lockedByUser = '';
+        $rowLock = $modx->elementIsLocked($lockElementType, $row['id'], true);
+        if($rowLock && $modx->hasPermission('display_locks')) {
+            if($rowLock['internalKey'] == $modx->getLoginUserID()) {
+                $title = $modx->parseText($_lang["lock_element_editing"], array('element_type'=>$_lang["lock_element_type_".$lockElementType],'firsthit_df'=>$rowLock['firsthit_df']));
+                $lockedByUser = '<span title="'.$title.'" class="editResource" style="cursor:context-menu;"><img src="'.$_style['icons_preview_resource'].'" /></span>&nbsp;';
+            } else {
+                $title = $modx->parseText($_lang["lock_element_locked_by"], array('element_type'=>$_lang["lock_element_type_".$lockElementType], 'username'=>$rowLock['username'], 'firsthit_df'=>$rowLock['firsthit_df']));
+                if($modx->hasPermission('remove_locks')) {
+                    $lockedByUser = '<a href="#" onclick="unlockElement('.$lockElementType.', '.$row['id'].', this);return false;" title="'.$title.'" class="lockedResource"><img src="'.$_style['icons_secured'].'" /></a>';
+                } else {
+                    $lockedByUser = '<span title="'.$title.'" class="lockedResource" style="cursor:context-menu;"><img src="'.$_style['icons_secured'].'" /></span>';
+                }
+            }
+        }
+        
+        $output .= '<li><span'.$class.'>'.$lockedByUser.'<a href="index.php?id='.$row['id'].'&amp;a='.$action.'">'.$row['name'].' <small>(' . $row['id'] . ')</small></a>'.($modx_textdir ? '&rlm;' : '').'</span>';
         
         if ($resourceTable == 'site_tmplvars') {
              $output .= !empty($row['description']) ? ' - '.$row['caption'].' &nbsp; <small>('.$row['description'].')</small>' : ' - '.$row['caption'];
@@ -82,6 +115,44 @@ function createResourceList($resourceTable,$action,$nameField = 'name') {
 
 <script type="text/javascript" src="media/script/tabpane.js"></script>
 <script type="text/javascript" src="media/script/jquery.quicksearch.js"></script>
+<script>
+    function initQuicksearch(inputId, listId) {
+        jQuery('#'+inputId).quicksearch('#'+listId+' ul li', {
+            selector: 'a',
+            'show': function () { jQuery(this).removeClass('hide'); },
+            'hide': function () { jQuery(this).addClass('hide'); },
+            'bind':'keyup',
+            'onAfter': function() {
+                jQuery('#'+listId).find('> li > ul').each( function() {
+                    var parentLI = jQuery(this).closest('li');
+                    var totalLI  = jQuery(this).children('li').length;
+                    var hiddenLI = jQuery(this).children('li.hide').length;
+                    if (hiddenLI == totalLI) { parentLI.addClass('hide'); }
+                    else { parentLI.removeClass('hide'); }
+                });
+            }
+        });
+    }
+
+    function unlockElement(type, id, domEl) {
+    <?php
+        // Prepare lang-strings
+        $unlockTranslations = array('msg'=>$_lang["unlock_element_id_warning"],
+                                    'type1'=>$_lang["lock_element_type_1"], 'type2'=>$_lang["lock_element_type_2"], 'type3'=>$_lang["lock_element_type_3"], 'type4'=>$_lang["lock_element_type_4"],
+                                    'type5'=>$_lang["lock_element_type_5"], 'type6'=>$_lang["lock_element_type_6"], 'type7'=>$_lang["lock_element_type_7"], 'type8'=>$_lang["lock_element_type_8"]);
+        ?>
+        var trans = <?php echo json_encode($unlockTranslations); ?>;
+        var msg = trans.msg.replace('[+id+]',id).replace('[+element_type+]',trans['type'+type]);
+        if(confirm(msg)==true) {
+            jQuery.get( 'index.php?a=67&type='+type+'&id='+id, function( data ) {
+                if(data == 1) {
+                    jQuery(domEl).fadeOut();
+                }
+                else alert( data );
+            });
+        }
+    }
+</script>
 
 <h1 class="pagetitle">
   <span class="pagetitle-icon">
@@ -108,7 +179,7 @@ function createResourceList($resourceTable,$action,$nameField = 'name') {
             <p class="element-edit-message"><?php echo $_lang['template_management_msg']; ?></p>
         </div>
 
-		<ul class="actionButtons">
+        <ul class="actionButtons">
             <li>
               <form class="filterElements-form">
                 <input class="form-control" type="text" placeholder="Type here to filter list" id="site_templates_search">
@@ -121,9 +192,7 @@ function createResourceList($resourceTable,$action,$nameField = 'name') {
         <?php echo createResourceList('site_templates',16,'templatename'); ?>
     
         <script>
-          jQuery('#site_templates_search').quicksearch('#site_templates ul li', {
-            selector: 'a'
-          });
+          initQuicksearch('site_templates_search', 'site_templates');
           jQuery( "#template-help" ).click(function() {
              jQuery( '#template-info').toggle();
           });
@@ -158,9 +227,7 @@ function createResourceList($resourceTable,$action,$nameField = 'name') {
         <?php echo createResourceList('site_tmplvars',301); ?>
     
         <script>
-          jQuery('#site_tmplvars_search').quicksearch('#site_tmplvars ul li', {
-            selector: 'a'
-          });
+          initQuicksearch('site_tmplvars_search', 'site_tmplvars');
           jQuery( "#tv-help" ).click(function() {
              jQuery( '#tv-info').toggle();
           });
@@ -190,15 +257,11 @@ function createResourceList($resourceTable,$action,$nameField = 'name') {
         <?php echo createResourceList('site_htmlsnippets',78); ?>
     
         <script>
-          jQuery('#site_htmlsnippets_search').quicksearch('#site_htmlsnippets ul li', {
-            selector: 'a'
-          });
+          initQuicksearch('site_htmlsnippets_search', 'site_htmlsnippets');
           jQuery( "#chunks-help" ).click(function() {
              jQuery( '#chunks-info').toggle();
           });
         </script>
-    
-    
     </div>
 <?php } ?>
 
@@ -211,7 +274,7 @@ function createResourceList($resourceTable,$action,$nameField = 'name') {
             <p class="element-edit-message"><?php echo $_lang['snippet_management_msg']; ?></p>
         </div>
 
-		<ul class="actionButtons">
+        <ul class="actionButtons">
             <li>
               <form class="filterElements-form">
                 <input class="form-control" type="text" placeholder="Type here to filter list" id="site_snippets_search">
@@ -224,9 +287,7 @@ function createResourceList($resourceTable,$action,$nameField = 'name') {
         <?php echo createResourceList('site_snippets',22); ?>
     
         <script>
-          jQuery('#site_snippets_search').quicksearch('#site_snippets ul li', {
-            selector: 'a'
-          });
+          initQuicksearch('site_snippets_search', 'site_snippets');
           jQuery( "#snippets-help" ).click(function() {
              jQuery( '#snippets-info').toggle();
           });
@@ -243,7 +304,7 @@ function createResourceList($resourceTable,$action,$nameField = 'name') {
             <p class="element-edit-message"><?php echo $_lang['plugin_management_msg']; ?></p>
         </div>
     
-		<ul class="actionButtons">
+        <ul class="actionButtons">
             <li>
               <form class="filterElements-form">
                 <input class="form-control" type="text" placeholder="Type here to filter list" id="site_plugins_search">
@@ -263,9 +324,7 @@ function createResourceList($resourceTable,$action,$nameField = 'name') {
         <?php echo createResourceList('site_plugins',102); ?>
     
         <script>
-          jQuery('#site_plugins_search').quicksearch('#site_plugins ul li', {
-            selector: 'a'
-          });
+          initQuicksearch('site_plugins_search', 'site_plugins');
           jQuery( "#plugins-help" ).click(function() {
              jQuery( '#plugins-info').toggle();
           });
@@ -369,7 +428,7 @@ function createResourceList($resourceTable,$action,$nameField = 'name') {
                 $class = array_key_exists('disabled',$v) && $v['disabled'] ? ' class="disabledPlugin"' : '';
                 if ($v['id']) {
         ?>
-            <li><span<?php echo $class;?>><a href="index.php?id=<?php echo $v['id']. '&amp;a='.$v['action'];?>"><?php echo $v['name']; ?></a></span><?php echo ' (' . $v['type'] . ')'; echo !empty($v['description']) ? ' - '.$v['description'] : '' ; ?><?php echo $v['locked'] ? ' <em>('.$_lang['locked'].')</em>' : "" ; ?></li>
+            <li class="el-<?php echo '' . $v['action'] . '';?>"><span<?php echo $class;?>><a href="index.php?id=<?php echo $v['id']. '&amp;a='.$v['action'];?>"><?php echo $v['name']; ?></a></span><?php echo ' (' . $v['type'] . ')'; echo !empty($v['description']) ? ' - '.$v['description'] : '' ; ?><?php echo $v['locked'] ? ' <em>('.$_lang['locked'].')</em>' : "" ; ?></li>
         <?php
                 }
             $preCat = $v['category'];
@@ -381,9 +440,12 @@ function createResourceList($resourceTable,$action,$nameField = 'name') {
         ?>
         </div>
         <script>
-          jQuery('#categories_list_search').quicksearch('#categories_list ul ul li', {
-            selector: 'a'
-          });
+            initQuicksearch('categories_list_search', 'categories_list ul');
+            jQuery('.filterElements-form').keydown(function (e) {
+            if (e.keyCode == 13) {
+            e.preventDefault();
+            }
+            });
         </script>
     </div>
 <?php

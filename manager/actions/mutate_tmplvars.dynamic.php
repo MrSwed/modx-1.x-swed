@@ -1,9 +1,9 @@
 <?php
 if(IN_MANAGER_MODE!="true") die("<b>INCLUDE_ORDERING_ERROR</b><br /><br />Please use the MODX Content Manager instead of accessing this file directly.");
-if(!$modx->hasPermission('edit_template') && $_REQUEST['a']=='301') {
+if(!$modx->hasPermission('edit_template') && $modx->manager->action=='301') {
 	$modx->webAlertAndQuit($_lang["error_no_privileges"]);
 }
-if(!$modx->hasPermission('new_template') && $_REQUEST['a']=='300') {
+if(!$modx->hasPermission('new_template') && $modx->manager->action=='300') {
 	$modx->webAlertAndQuit($_lang["error_no_privileges"]);
 }
 
@@ -16,12 +16,14 @@ $tbl_site_templates         = $modx->getFullTableName('site_templates');
 $tbl_site_tmplvar_templates = $modx->getFullTableName('site_tmplvar_templates');
 $tbl_documentgroup_names    = $modx->getFullTableName('documentgroup_names');
 
-// check to see the variable editor isn't locked
-$rs = $modx->db->select('username',$modx->getFullTableName('active_users'),"action=301 AND id='{$id}' AND internalKey!='".$modx->getLoginUserID()."'");
-	if ($username = $modx->db->getValue($rs)) {
-			$modx->webAlertAndQuit(sprintf($_lang['lock_msg'], $username, 'template variable'));
-	}
+// check to see the snippet editor isn't locked
+if ($lockedEl = $modx->elementIsLocked(2, $id)) {
+        $modx->webAlertAndQuit(sprintf($_lang['lock_msg'],$lockedEl['username'],$_lang['tmplvar']));
+}
 // end check for lock
+
+// Lock snippet for other users to edit
+$modx->lockElement(2, $id);
 
 global $content;
 $content = array();
@@ -49,6 +51,11 @@ if ($modx->manager->hasFormValues()) {
 }
 
 $content = array_merge($content, $_POST);
+
+// Add lock-element JS-Script
+$lockElementId = $id;
+$lockElementType = 2;
+require_once(MODX_MANAGER_PATH.'includes/active_user_locks.inc.php');
 
 // get available RichText Editors
 $RTEditors = '';
@@ -256,15 +263,22 @@ function decode(s){
 <input type="hidden" name="a" value="302">
 <input type="hidden" name="or" value="<?php echo $origin;?>">
 <input type="hidden" name="oid" value="<?php echo $originId;?>">
-<input type="hidden" name="mode" value="<?php echo $_GET['a'];?>">
+<input type="hidden" name="mode" value="<?php echo $modx->manager->action;?>">
 <input type="hidden" name="params" value="<?php echo $modx->htmlspecialchars($content['display_params']);?>">
 
-	<h1><?php echo $_lang['tmplvars_title']; ?></h1>
+    <h1 class="pagetitle">
+      <span class="pagetitle-icon">
+        <i class="fa fa-list-alt"></i>
+      </span>
+      <span class="pagetitle-text">
+        <?php echo $_lang['tmplvars_title']; ?>
+      </span>
+    </h1>
 
     <div id="actions">
           <ul class="actionButtons">
               <li id="Button1" class="transition">
-                <a href="#" onclick="documentDirty=false; document.mutate.save.click();saveWait('mutate');">
+                <a href="#" onclick="documentDirty=false; form_save=true; document.mutate.save.click();saveWait('mutate');">
                   <img src="<?php echo $_style["icons_save"]?>" /> <?php echo $_lang['save']?>
                 </a>
                 <span class="plus"> + </span>
@@ -274,7 +288,7 @@ function decode(s){
                   <option id="stay3" value=""  <?php echo $_REQUEST['stay']=='' ? ' selected="selected"' : ''?>  ><?php echo $_lang['close']?></option>
                 </select>        
               </li>
-          <?php if ($_GET['a'] == '300') { ?>
+          <?php if ($modx->manager->action == '300') { ?>
               <li id="Button6" class="disabled"><a href="#" onclick="duplicaterecord();"><img src="<?php echo $_style["icons_resource_duplicate"] ?>" /> <?php echo $_lang["duplicate"]; ?></a></li>
               <li id="Button3" class="disabled"><a href="#" onclick="deletedocument();"><img src="<?php echo $_style["icons_delete_document"]?>" /> <?php echo $_lang['delete']?></a></li>
           <?php } else { ?>
@@ -294,7 +308,11 @@ function decode(s){
 	<div class="tab-page" id="tabGeneral">
 	<h2 class="tab"><?php echo $_lang['settings_general'];?></h2>
 	<script type="text/javascript">tpTmplvars.addTabPage( document.getElementById( "tabGeneral" ) );</script>
-<p><?php echo $_lang['tmplvars_msg']; ?></p>
+
+    <p class="element-edit-message">
+      <?php echo $_lang['tmplvars_msg']; ?>
+    </p>
+      
 <table>
   <tr>
     <th><?php echo $_lang['tmplvars_name']; ?>:</th>
@@ -303,7 +321,7 @@ function decode(s){
   <tr>
     <th><?php echo $_lang['tmplvars_caption']; ?>:</th>
     <td><input name="caption" type="text" maxlength="80" value="<?php echo $modx->htmlspecialchars($content['caption']);?>" class="inputBox" style="width:300px;" onchange="documentDirty=true;">
-    <?php if(strpos($content['caption'],'Duplicate of')!==false) echo '<script>document.getElementsByName("caption")[0].focus();</script>'?></td>
+    <script>document.getElementsByName("caption")[0].focus();</script></td>
   </tr>
 
   <tr>
@@ -419,7 +437,11 @@ function decode(s){
 <div class="sectionHeader"><?php echo $_lang['tmplvar_tmpl_access']; ?></div>
 <div class="sectionBody">
 	<p><?php echo $_lang['tmplvar_tmpl_access_msg']; ?></p>
-    <p><a href="#" onClick="check_all();return false;"><?php echo $_lang['check_all']; ?></a> <a href="#" onClick="check_none();return false;"><?php echo $_lang['check_none']; ?></a> <a href="#" onClick="check_toggle(); return false;"><?php echo $_lang['check_toggle']; ?></a></p>
+    <ul class="actionButtons">
+	    <li><a href="#" onClick="check_all();return false;"><?php echo $_lang['check_all']; ?></a></li>
+	    <li><a href="#" onClick="check_none();return false;"><?php echo $_lang['check_none']; ?></a></li>
+	    <li><a href="#" onClick="check_toggle(); return false;"><?php echo $_lang['check_toggle']; ?></a></li>
+    </ul>
 	<style type="text/css">
 		label {display:block;}
 	</style>
@@ -450,7 +472,7 @@ while ($row = $modx->db->getRow($rs)) {
         $insideUl = 1;
     }
 
-    if($_REQUEST['a']=='300' && $modx->config['default_template']==$row['id'])
+    if($modx->manager->action=='300' && $modx->config['default_template']==$row['id'])
     {
         $checked = true;
     }

@@ -34,6 +34,7 @@ class AjaxSearchConfig {
     function __construct($dcfg, $cfg) {
         global $modx;
         $this->dbCharset = $modx->db->config['charset'];
+        if($this->dbCharset=='utf8mb4') $this->dbCharset = 'utf8';
         $this->pcreModifier = ($this->dbCharset == "utf8") ? 'iu' : 'i';
         $this->dcfg = $dcfg;
         $this->cfg = $cfg;
@@ -176,7 +177,8 @@ class AjaxSearchConfig {
         preg_match_all($pattern, $strUcfg, $out);
         foreach ($out[1] as $key => $values) {
             // remove any @BINDINGS in posted user config for security reasons
-            $ucfg[$out[1][$key]] = preg_replace('/@(FILE|DIRECTORY|DOCUMENT|CHUNK|INHERIT|SELECT|EVAL|CHUNK)[: ]/i', '', $out[2][$key]);
+            $ucfg[$out[1][$key]] = preg_replace('/@(#|FILE|DIRECTORY|DOCUMENT|CHUNK|INHERIT|SELECT|EVAL|CHUNK)[: ]/i', '', $out[2][$key]);
+                                   
         }
         return $ucfg;
     }

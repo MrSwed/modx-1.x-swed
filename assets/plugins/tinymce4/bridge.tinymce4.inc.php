@@ -42,7 +42,12 @@ class tinymce4bridge extends modxRTEbridge
                 'blockFormats' => 'Paragraph=p;Header 1=h1;Header 2=h2;Header 3=h3',
                 'custom_plugins' => 'advlist autolink lists link image charmap print preview hr anchor pagebreak searchreplace wordcount visualblocks visualchars code fullscreen spellchecker insertdatetime media nonbreaking save table contextmenu directionality emoticons template paste textcolor codesample colorpicker textpattern imagetools paste modxlink youtube',
                 'custom_buttons1' => 'undo redo | cut copy paste | searchreplace | bold italic underline strikethrough | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent blockquote | styleselect',
-                'custom_buttons2' => 'link unlink anchor image media codesample table | hr removeformat | subscript superscript charmap | nonbreaking | visualchars visualblocks print preview fullscreen code'
+                'custom_buttons2' => 'link unlink anchor image media codesample table | hr removeformat | subscript superscript charmap | nonbreaking | visualchars visualblocks print preview fullscreen code',
+                // Provide empty values for parseText() #989
+                'template_docs' => '',
+                'template_chunks' => '',
+                'custom_buttons3' => '',
+                'custom_buttons4' => ''
             )
         );
         
@@ -98,25 +103,22 @@ class tinymce4bridge extends modxRTEbridge
 
     // https://www.tinymce.com/docs/configure/content-formatting/#style_formats
     public function bridge_style_formats($selector) {
-        $sfArray[] = array('title' => 'Paragraph', 'format' => 'p');
-        $sfArray[] = array('title' => 'Header 1', 'format' => 'h1');
-        $sfArray[] = array('title' => 'Header 2', 'format' => 'h2');
-        $sfArray[] = array('title' => 'Header 3', 'format' => 'h3');
-        $sfArray[] = array('title' => 'Header 4', 'format' => 'h4');
-        $sfArray[] = array('title' => 'Header 5', 'format' => 'h5');
-        $sfArray[] = array('title' => 'Header 6', 'format' => 'h6');
-        $sfArray[] = array('title' => 'Div', 'format' => 'div');
-        $sfArray[] = array('title' => 'Pre', 'format' => 'pre');
-
-        // Set in plugin-configuration, format: Title,cssClass|Title2,cssClass
-        if (isset($this->pluginParams['styleFormats'])) {
-            $styles_formats = explode('|', $this->pluginParams['styleFormats']);
-            foreach ($styles_formats as $val) {
-                $style = explode(',', $val);
-                $sfArray[] = array('title' => $style['0'], 'selector' => 'a,strong,em,p,h1,h2,h3,h4,h5,h6,td,th,div,ul,ol,li,table,tr,span,img', 'classes' => $style['1']);
+        // Set in plugin-configuration
+        if (isset($this->pluginParams['styleFormats']) && !empty($this->pluginParams['styleFormats'])) {
+            // Check for simple format: Title,cssClass|Title2,cssClass
+            if(preg_match('/^[a-zA-Z0-9,]+/', $this->pluginParams['styleFormats'])) {
+                $styles_formats = explode('|', $this->pluginParams['styleFormats']);
+                foreach ($styles_formats as $val) {
+                    $style = explode(',', $val);
+                    $sfArray[] = array('title' => $style['0'], 'inline' => 'span', 'classes' => $style['1']);
+                }
+                return $sfArray;    // return NULL would avoid bridging this parameter
+            } else {
+                // Allow full-format as seen in https://www.tinymce.com/docs/demo/format-custom/
+                $this->set('style_formats', $this->pluginParams['styleFormats'], 'object');
             }
         }
-        return $sfArray;    // return NULL would avoid bridging this parameter
+        return NULL;
     }
 
     // https://www.tinymce.com/docs/configure/editor-appearance/#resize

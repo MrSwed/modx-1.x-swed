@@ -146,8 +146,8 @@ if (!is_writable(MODX_BASE_PATH . "assets/images/")) {
 }
 
 if (count($_lang)!=$length_eng_lang) {
-    $warningspresent = 0;
-    $warnings[] = array($_lang['configcheck_lang_difference']);
+    //$warningspresent = 0;
+    //$warnings[] = array($_lang['configcheck_lang_difference']);
 }
 
 // clear file info cache
@@ -180,15 +180,12 @@ for ($i=0;$i<count($warnings);$i++) {
             $warnings[$i][1] = $_lang["configcheck_sysfiles_mod_msg"];
 			$warnings[$i][2] = '<ul><li>'. join('</li><li>', $sysfiles_check) .'</li></ul>';
 			if($modx->hasPermission('settings')) {
-				$warnings[$i][2] .= '<a href="index.php?a=2&b=resetSysfilesChecksum" style="float:right" onclick="return confirm(\'' . $_lang["reset_sysfiles_checksum_alert"] . '\')">' . $_lang["reset_sysfiles_checksum_button"] . '</a>';
+				$warnings[$i][2] .= '<ul class="actionButtons" style="float:right"><li><a href="index.php?a=2&b=resetSysfilesChecksum" onclick="return confirm(\'' . $_lang["reset_sysfiles_checksum_alert"] . '\')">' . $_lang["reset_sysfiles_checksum_button"] . '</a></li></ul>';
 			}
             if(!$_SESSION["mgrConfigCheck"]) $modx->logEvent(0,3,$warnings[$i][1]." ".join(', ',$sysfiles_check),$_lang['configcheck_sysfiles_mod']);
             break;
         case $_lang['configcheck_lang_difference'] :
             $warnings[$i][1] = $_lang['configcheck_lang_difference_msg'];
-            break;
-        case $_lang['configcheck_register_globals'] :
-            $warnings[$i][1] = $_lang['configcheck_register_globals_msg'];
             break;
         case $_lang['configcheck_php_gdzip'] :
             $warnings[$i][1] = $_lang['configcheck_php_gdzip_msg'];

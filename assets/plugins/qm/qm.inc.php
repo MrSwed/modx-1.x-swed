@@ -542,7 +542,33 @@ class Qm {
                                     $'.$jvar.'("body").css({"overflow":"hidden"});
                                     $'.$jvar.'("html").css({"overflow":"hidden"});
                                     $'.$jvar.'("#qmEditor").css({"display":"none"});
-                                });  
+                                });
+				
+                                $'.$jvar.'(document).bind("cbox_cleanup", function(){ 
+                                    //window is closing and cannot be stopped so clear dirty settings for all fields and tinyMCE
+				    var foundit;
+				    
+                                    //loop through the iframes, checking their scr
+                                    iframearray = document.getElementsByTagName(\'iframe\');
+				    
+                                    for(var i=0; i < iframearray.length; i++) {
+                                        //if the matching colorbox src, we have found the correct iframe
+                                        haystack=iframearray[i].src;
+                                        needle="'.$this->modx->config["site_url"]."manager/index.php?a=27".'";
+                                        if(haystack.substr(0, needle.length) == needle){ 
+                                            foundit=iframearray[i]; //assign it to the foundit variable created earlier
+                                            break; //no need to keep looking
+                                        }
+                                    }
+                                    if (foundit) {
+                                        foundit.contentWindow.window.documentDirty=false; //clear document dirty for fields
+                                        //loop through tinyMCE editors and clear any dirty flags
+                                        if (typeof(foundit.contentWindow.window.tinyMCE)!==\'undefined\') {   
+                                            var i, t = foundit.contentWindow.window.tinyMCE.editors;for (i in t){    
+                                            if (t.hasOwnProperty(i)){    t[i].isNotDirty=true }}  
+                                        }
+                                    }
+                                });
                                 
                             	$'.$jvar.'(document).bind("cbox_closed", function(){      
                                     $'.$jvar.'("body").css({"overflow":"auto"});
@@ -917,14 +943,10 @@ class Qm {
 	//_____________________________________________________
 	function checkLocked() {
 
-		$activeUsersTable = $this->modx->getFullTableName('active_users');
 		$pageId = $this->modx->documentIdentifier;
 		$locked = TRUE;
-		$userId = $_SESSION['mgrInternalKey'];
 
-		$result = $this->modx->db->select('count(internalKey)', $activeUsersTable, "(action = 27) AND internalKey != '{$userId}' AND `id` = '{$pageId}'");
-
-		if ($this->modx->db->getValue($result) === 0) {
+		if ($this->modx->elementIsLocked(7, $pageId) === NULL) {
 			$locked = FALSE;
 		}
 
@@ -935,29 +957,17 @@ class Qm {
 	//_____________________________________________________
 	function setLocked($locked) {
 
-		$activeUsersTable = $this->modx->getFullTableName('active_users');
 		$pageId = $this->modx->documentIdentifier;
-		$userId = $_SESSION['mgrInternalKey'];
 		
 		// Set document locked
 		if ($locked == 1) {
-    		$fields = array (
-            'id'	=> $pageId,
-    		'action'	=> 27
-    		);	
+    		$this->modx->lockElement(7, $pageId);
         }
         
         // Set document unlocked
         else {
-            $fields = array (
-            'id'	=> 'NULL',
-    		'action'	=> 2
-    		);    
+            $this->modx->unlockElement(7, $pageId);    
         }
-		
-		$where = "internalKey = '{$userId}'";
-		
-        $result = $this->modx->db->update($fields, $activeUsersTable, $where);
 	}
 	
 	// Save TV

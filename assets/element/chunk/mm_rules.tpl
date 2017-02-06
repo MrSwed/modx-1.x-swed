@@ -11,7 +11,7 @@ mm_widget_showimagetvs(); // Always give a preview of Image TVs
 /* Переменные для использования */
 $cid = isset($content['id'])?$content['id']:false;
 $pid = !empty($content['parent'])?$content['parent']:$_GET["pid"];
-$tpl = $content['template'];
+$tpl = isset($content['template'])?$content['template']:0;
 $pidAr = array_merge(array($pid),$modx->getParentIds($pid)); // родительский путь
 /**/
 $p = array(

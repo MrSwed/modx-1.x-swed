@@ -72,7 +72,7 @@ mm_moveFieldsToTab('image,gallery,gallery_manual', 'gallery');
 
 mm_ddCreateSection('Фотографии', 'gallery', 'gallery');
 mm_ddMoveFieldsToSection('gallery', 'gallery');
-mm_changeFieldHelp('gallery', 'Используйте чанк <b>{{gallery}}</b> для включения фотографий в контент');
+mm_changeFieldHelp('gallery', 'Используйте чанк <b>{{gallery}}</b> для включения фотографий в контент. Для ограниченного вывода используйте параметры <i>&start</i> (первая - 0) и <i>&count</i>. Например, вывести 3 изображения, начиная с 10-й:<br><b>{{gallery? &start=`10` &count=`3`}}</b>');
 mm_ddMultipleFields('gallery', '', '', 'image,text,text', 'Изображение,Название,Описание');
 
 mm_createTab('SEO (meta,sitemap)', 'seo_params');

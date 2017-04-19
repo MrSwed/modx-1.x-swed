@@ -5,6 +5,8 @@
  &docId=`[*id*]`
  &rowTpl=`gallery_row`
  &outerTpl=`gallery_out`
+	&startRow=`[+start+]`
+	&totalRows=`[+count+]`
  ]]
 </div>
 `+]

@@ -39,7 +39,7 @@ function mm_ddSelectDocuments($tvs = '', $roles = '', $templates = '', $parentId
 		$widgetDir = $pluginDir.'widgets/ddselectdocuments/';
 		
 		$output .= includeJsCss($widgetDir.'ddselectdocuments.css', 'html');
-		$output .= includeJsCss($pluginDir.'js/jquery-ui-1.10.3.min.js', 'html', 'jquery-ui', '1.10.3');
+		$output .= includeJsCss($pluginDir.'js/jquery-ui.min.js', 'html', 'jquery-ui', '1.12.1');
 		$output .= includeJsCss($widgetDir.'jquery.ddMultipleInput-1.2.1.min.js', 'html', 'jquery.ddMultipleInput', '1.2.1');
 		
 		$e->output($output);

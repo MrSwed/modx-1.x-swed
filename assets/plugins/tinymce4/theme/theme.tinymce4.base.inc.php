@@ -63,6 +63,7 @@ $this->set('image_caption',         true,                           'bool' );   
 $this->set('image_advtab',          'small',                        'string' );     // https://www.tinymce.com/docs/plugins/image/#image_advtab
 $this->set('image_advtab',          true,                           'bool' );       // https://www.tinymce.com/docs/plugins/image/#image_advtab // replacement for 3.x-plugin advimage
 $this->set('image_class_list', '[{title: "None", value: ""},{title: "Float left", value: "justifyleft"},{title: "Float right", value: "justifyright"},{title: "Image Responsive",value: "img-responsive"}]', 'json' );
+$this->set('image_title', true, 'bool' );
 
 // https://www.tinymce.com/docs/plugins/spellchecker/
 // https://github.com/extras-evolution/tinymce4-for-modx-evo/issues/26

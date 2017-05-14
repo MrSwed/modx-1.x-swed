@@ -50,8 +50,8 @@ $p = array(
 
 if ($cid==1) {
 	$p["text_places"] = json_encode(array_merge(json_decode($p["text_places"]),array(
-		array("tplHeaderContacts", "Макет: Контакты в шапке"),
-		array("tplFooterSlogan", "Макет: Слоган в подвале")
+		array("tplHeaderAdd", "Макет: Блок в шапке"),
+		array("tplFooterAdd", "Макет: Блок в подвале")
 	)));
 }
 
@@ -69,11 +69,17 @@ mm_ddMultipleFields("blocks", '', '', 'richtext,select,select', 'Текст,Ме
 
 mm_createTab('Изображения', 'gallery');
 mm_moveFieldsToTab('image,gallery,gallery_manual', 'gallery');
+//mm_moveFieldsToTab('headImages,image,gallery,gallery_manual', 'gallery');
 
 mm_ddCreateSection('Фотографии', 'gallery', 'gallery');
 mm_ddMoveFieldsToSection('gallery', 'gallery');
 mm_changeFieldHelp('gallery', 'Используйте чанк <b>{{gallery}}</b> для включения фотографий в контент. Для ограниченного вывода используйте параметры <i>&start</i> (первая - 0) и <i>&count</i>. Например, вывести 3 изображения, начиная с 10-й:<br><b>{{gallery? &start=`10` &count=`3`}}</b>');
 mm_ddMultipleFields('gallery', '', '', 'image,text,text', 'Изображение,Название,Описание');
+
+//mm_ddCreateSection('Изображения шапки', 'headImages', 'gallery');
+//mm_ddMoveFieldsToSection('headImages', 'headImages');
+//mm_changeFieldHelp('headImages', 'Изображения в слайдере шапки');
+//mm_ddMultipleFields('headImages', '', '', 'image,text,text', 'Изображение,Название,Описание');
 
 mm_createTab('SEO (meta,sitemap)', 'seo_params');
 mm_ddCreateSection('Meta', 'meta', 'seo_params');

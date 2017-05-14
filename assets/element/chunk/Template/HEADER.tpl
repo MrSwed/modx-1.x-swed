@@ -45,8 +45,8 @@
 		<div class="mainw">
 			<div class="startrow">
 				<a href="/" class="logo">[(site_name)]</a>
-				<div class="contacts">
-					[[ShowBlock? &name=`tplHeaderContacts` &id=`1` &out=`%s`]]
+				<div class="section">
+					[[ShowBlock? &name=`tplHeaderAdd` &id=`1` &out=`%s`]]
 				</div>
 			</div>
 			<div class="menu">

@@ -5,7 +5,7 @@
 	* Show the contents of the block specified by the user depending on the placement and inheritance
 	*
 	* @category      snippet
-	* @version       0.5
+	* @version       0.6
 	* @license       http://www.gnu.org/copyleft/gpl.html GNU Public License (GPL)
 	* @internal      @properties
 	* @internal      @modx_category Content
@@ -73,6 +73,7 @@ $wrap = isset($wrap) ? $wrap : "div";
 $out = isset($out) ? str_replace("%n", $name, $out) : ($wrap ? "<$wrap class='$name'>%s</$wrap>" : "%s");
 $outEmpty = isset($outEmpty) ? $outEmpty : "";
 $outElse = isset($outElse) ? $outElse : $outEmpty;
+$defaultId = isset($defaultId) ? $defaultId : $modx->config["site_start"];  
 
 $rootID = isset($rootID) ? $rootID : 0;
 $depth = isset($depth) ? $depth : 100;
@@ -106,6 +107,10 @@ while (empty($value) and (int)$cid != $rootID and --$depth > 0) {
 		"filter" => "1::$name||2::1||2::2".((int)$docData["isfolder"] ? "||2::3||2::4" : "||2::5"),
 		"columns" => '0'
 	));
+	if ($defaultId && $cid == $rootID) {
+		$cid = $defaultId;
+		$defaultId = false;
+	}
 }
 return $value ? ($out ? sprintf($out, $value) : "") : ($outElse ? sprintf($outElse, $value) : "");
 ?>

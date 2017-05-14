@@ -20,13 +20,15 @@ if (typeof jQuery == "function") {
 			$("a[rel='gallelry']").fancybox();
 		}
 /*
-		if ($(".slider").length) { // call slider 
-			$.getScript("/assets/js/slider.jquery.js", function(){
-				$(".slider").slider();
-			});
-		}
+		(function(s){
+			s = $(s);
+			if (s.length) { // call slider
+				$.getScript("/assets/js/Slider/slider.jquery.js", function(){
+					s.slider();
+				});
+			}
+		})(".slider");
 */
-
 /*
 		if (isMobile) { // prevent first click on mobile touch devices for show submenu 
 			$(" > ul > li:has( > ul) > a", ".header .menu").click(function(e){

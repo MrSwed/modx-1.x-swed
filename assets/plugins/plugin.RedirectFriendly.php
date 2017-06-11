@@ -8,7 +8,7 @@ if (!defined('MODX_BASE_PATH')) die('HACK???');
 	*
 	* @license     GNU General Public License (GPL), http://www.gnu.org/copyleft/gpl.html
 	* @author      MrSwed <webmaster@sdcollection.com>
-	* @version     0.1
+	* @version     0.2
 	* @internal    @events         OnPageNotFound
 	* @internal    @properties
 	*/
@@ -24,6 +24,8 @@ $id = $modx->db->getValue($rs);
 
 if ($id) {
 	$url = $modx->makeUrl($id,'',$query);
-	$modx->sendRedirect($url, 0, 'REDIRECT_HEADER', 'HTTP/1.1 301 Moved Permanently');
-	exit();
+ if ($url != $_SERVER["REQUEST_URI"]) {
+	 $modx->sendRedirect($url, 0, 'REDIRECT_HEADER', 'HTTP/1.1 301 Moved Permanently');
+	 exit();
+ }
 }

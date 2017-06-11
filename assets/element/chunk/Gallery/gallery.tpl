@@ -1,5 +1,5 @@
 [+phx:input=`[*gallery*]`:ifnotempty=`
-<div class="gallery">
+<div class="gallery [+class+]">
  [[ddGetMultipleField?
  &docField=`gallery`
  &docId=`[*id*]`

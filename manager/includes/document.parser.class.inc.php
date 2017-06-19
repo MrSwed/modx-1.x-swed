@@ -1350,7 +1350,7 @@ class DocumentParser {
         if (is_array($params)) {
             extract($params, EXTR_SKIP);
         }
-        
+        /* if uncomment incorrect work plugin, cant understend where use this code and for what?
         $lock_file_path = MODX_BASE_PATH . 'assets/cache/lock_' . str_replace(' ','-',strtolower($this->event->activePlugin)) . '.pageCache.php';
         if($this->isBackend()) {
             if(is_file($lock_file_path)) {
@@ -1359,12 +1359,12 @@ class DocumentParser {
                 return;
             }
             elseif(stripos($this->event->activePlugin,'ElementsInTree')===false) touch($lock_file_path);
-        }
+        }*/
         ob_start();
         eval($pluginCode);
         $msg = ob_get_contents();
         ob_end_clean();
-        if(is_file($lock_file_path)) unlink($lock_file_path);
+        /*if(is_file($lock_file_path)) unlink($lock_file_path);*/
         
         if ((0 < $this->config['error_reporting']) && $msg && isset($php_errormsg)) {
             $error_info = error_get_last();
@@ -2056,8 +2056,8 @@ class DocumentParser {
             $source = $this->ignoreCommentedTagsContent($source);
             $source = $this->mergeConditionalTagsContent($source);
             
-            $source = $this->mergeDocumentContent($source);
             $source = $this->mergeSettingsContent($source);
+            $source = $this->mergeDocumentContent($source);
             $source = $this->mergeChunkContent($source);
             $source = $this->mergeDocumentMETATags($source);
             $source = $this->evalSnippets($source);
@@ -2148,7 +2148,7 @@ class DocumentParser {
                         $parentId = $this->getIdFromAlias($parentAlias);
                         $parentId = ($parentId > 0) ? $parentId : '0';
 
-                        $docAlias = basename($alias, $this->config['friendly_url_suffix']);
+                        $docAlias = $this->mb_basename($alias, $this->config['friendly_url_suffix']);
 
                         $rs  = $this->db->select('id', $tbl_site_content, "deleted=0 and parent='{$parentId}' and alias='{$docAlias}'");
                         if($this->db->getRecordCount($rs)==0)
@@ -2216,6 +2216,10 @@ class DocumentParser {
         }
         if($this->config['seostrict']==='1') $this->sendStrictURI();
         $this->prepareResponse();
+    }
+    
+    function mb_basename($path, $suffix = null) {
+        return str_replace($suffix, '', end(explode('/', $path)));
     }
 
     function _IIS_furl_fix()

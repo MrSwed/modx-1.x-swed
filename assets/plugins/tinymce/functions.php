@@ -476,6 +476,7 @@ class TinyMCE
 	function build_tiny_callback()
 	{
 		global $modx,$which_browser;
+		$which_browser = !empty($which_browser)?$which_browser:$modx->config['which_browser'];
 		$params = $this->params;
 		$mce_path = $params['mce_path'];
 		$mce_url  = $params['mce_url'];

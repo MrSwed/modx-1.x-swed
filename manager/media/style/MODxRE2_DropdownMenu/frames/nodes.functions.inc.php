@@ -234,9 +234,12 @@ function makeHTML($indent, $parent, $expandAll, $theme, $hereid = '') {
 
 			// invoke OnManagerNodePrerender event
 			$prenode = $modx->invokeEvent("OnManagerNodePrerender", array('ph' => $ph));
-			$prenode = unserialize($prenode[0]);
 			if(is_array($prenode)) {
-				$ph = $prenode;
+				$phnew = array();
+				foreach($prenode as $pnode) {
+					$phnew = array_merge($phnew, unserialize($pnode));
+				}
+				$ph = (count($phnew) > 0) ? $phnew : $ph;
 			}
 
 			if($ph['contextmenu']) {
@@ -290,9 +293,12 @@ function makeHTML($indent, $parent, $expandAll, $theme, $hereid = '') {
 						'ph' => $ph,
 						'opened' => '1'
 					));
-					$prenode = unserialize($prenode[0]);
 					if(is_array($prenode)) {
-						$ph = $prenode;
+						$phnew = array();
+						foreach($prenode as $pnode) {
+							$phnew = array_merge($phnew, unserialize($pnode));
+						}
+						$ph = (count($phnew) > 0) ? $phnew : $ph;
 					}
 
 					if($ph['contextmenu']) {
@@ -325,9 +331,12 @@ function makeHTML($indent, $parent, $expandAll, $theme, $hereid = '') {
 						'ph' => $ph,
 						'opened' => '0'
 					));
-					$prenode = unserialize($prenode[0]);
 					if(is_array($prenode)) {
-						$ph = $prenode;
+						$phnew = array();
+						foreach($prenode as $pnode) {
+							$phnew = array_merge($phnew, unserialize($pnode));
+						}
+						$ph = (count($phnew) > 0) ? $phnew : $ph;
 					}
 
 					if($ph['contextmenu']) {
@@ -360,9 +369,12 @@ function makeHTML($indent, $parent, $expandAll, $theme, $hereid = '') {
 						'ph' => $ph,
 						'opened' => '1'
 					));
-					$prenode = unserialize($prenode[0]);
 					if(is_array($prenode)) {
-						$ph = $prenode;
+						$phnew = array();
+						foreach($prenode as $pnode) {
+							$phnew = array_merge($phnew, unserialize($pnode));
+						}
+						$ph = (count($phnew) > 0) ? $phnew : $ph;
 						if($ph['showChildren'] == 0) {
 							unset($opened2[$row['id']]);
 							$ph['node_toggle'] = 0;
@@ -403,9 +415,12 @@ function makeHTML($indent, $parent, $expandAll, $theme, $hereid = '') {
 						'ph' => $ph,
 						'opened' => '0'
 					));
-					$prenode = unserialize($prenode[0]);
 					if(is_array($prenode)) {
-						$ph = $prenode;
+						$phnew = array();
+						foreach($prenode as $pnode) {
+							$phnew = array_merge($phnew, unserialize($pnode));
+						}
+						$ph = (count($phnew) > 0) ? $phnew : $ph;
 						if($ph['showChildren'] == 0) {
 							$tpl = getTplFolderNodeNotChildren();
 						}
@@ -670,5 +685,7 @@ function dbug($str, $flag = false) {
 	print('<pre>');
 	print_r($str);
 	print('</pre>');
-	if($flag) exit;
+	if($flag) {
+		exit;
+	}
 }

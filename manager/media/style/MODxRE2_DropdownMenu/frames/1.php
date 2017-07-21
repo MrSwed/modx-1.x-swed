@@ -17,7 +17,7 @@ if(!isset($modx->config['manager_menu_height'])) {
 }
 
 if(!isset($modx->config['manager_tree_width'])) {
-	$modx->config['manager_tree_width'] = 25; // rem
+	$modx->config['manager_tree_width'] = 20; // rem
 }
 
 if(isset($_SESSION['onLoginForwardToAction']) && is_int($_SESSION['onLoginForwardToAction'])) {
@@ -36,22 +36,22 @@ $menu_height = $modx->config['manager_menu_height'];
 $tree_width = $modx->config['manager_tree_width'];
 $tree_min_width = 0;
 
-if(isset($_COOKIE['MODX_positionSideBar'])) {
-	$MODX_positionSideBar = $_COOKIE['MODX_positionSideBar'];
+if(isset($_COOKIE['MODX_widthSideBar'])) {
+	$MODX_widthSideBar = $_COOKIE['MODX_widthSideBar'];
 } else {
-	$MODX_positionSideBar = $tree_width;
+	$MODX_widthSideBar = $tree_width;
 }
 
-if(!$MODX_positionSideBar) {
+if(!$MODX_widthSideBar) {
 	$body_class .= 'sidebar-closed';
+}
+
+if(isset($_COOKIE['MODX_themeColor'])) {
+	$body_class .= ' ' . $_COOKIE['MODX_themeColor'];
 }
 
 if(isset($modx->pluginCache['ElementsInTree'])) {
 	$body_class .= ' ElementsInTree';
-} else {
-	if(!empty($_COOKIE['MODX_themeColor'])) {
-		$body_class .= ' ' . $_COOKIE['MODX_themeColor'];
-	}
 }
 
 $unlockTranslations = array(
@@ -75,25 +75,28 @@ if($user['which_browser'] == 'default') {
 	$user['which_browser'] = $modx->config['which_browser'];
 }
 
-$jQuery = '';
-
-if(isset($modx->pluginCache['ElementsInTree'])) {
-	$jQuery = '<script src="media/script/jquery/jquery.min.js" type="text/javascript"></script>';
-}
 ?>
 <!DOCTYPE html>
 <html <?php echo (isset($modx_textdir) && $modx_textdir ? 'dir="rtl" lang="' : 'lang="') . $mxla . '" xml:lang="' . $mxla . '"'; ?>>
 <head>
 	<title><?php echo $site_name ?>- (MODX CMS Manager)</title>
 	<meta http-equiv="Content-Type" content="text/html; charset=<?php echo $modx_manager_charset ?>" />
-	<meta name="viewport" content="initial-scale=0.9, maximum-scale=0.9, user-scalable=no" />
+	<meta name="viewport" content="initial-scale=1.0,user-scalable=no,maximum-scale=1,width=device-width">
+	<meta name="viewport" content="initial-scale=1.0,user-scalable=no,maximum-scale=1" media="(device-height: 568px)">
+	<meta name="theme-color" content="#1d2023">
 	<link rel="stylesheet" type="text/css" href="media/style/common/font-awesome/css/font-awesome.min.css" />
 	<link rel="stylesheet" type="text/css" href="media/style/<?php echo $modx->config['manager_theme']; ?>/css/page.css?v=<?php echo $modx->config['settings_version'] ?>" />
 	<style>
-		#tree { width: <?php echo $MODX_positionSideBar ?>rem }
-		#main, #resizer { left: <?php echo $MODX_positionSideBar ?>rem }
+		#tree { width: <?php echo $MODX_widthSideBar ?>rem }
+		#main, #resizer { left: <?php echo $MODX_widthSideBar ?>rem }
+		.ios #main { -webkit-overflow-scrolling: touch; overflow-y: scroll; }
 	</style>
-	<?php echo $jQuery ?>
+	<script type="text/javascript">
+		if(/iPhone|iPad|iPod/i.test(navigator.userAgent)) {
+			document.documentElement.className += ' ios'
+		}
+	</script>
+	<script src="media/script/jquery/jquery.min.js" type="text/javascript"></script>
 	<script type="text/javascript">
 		// GLOBAL variable modx
 		var modx = {
@@ -174,7 +177,7 @@ if(isset($modx->pluginCache['ElementsInTree'])) {
 
 			},
 			extend: function(a, b) {
-				for(var c in a) a[c] = a[c];
+				for(var c in a) a[c] = b[c];
 			},
 			extended: function(a) {
 				for(var b in a) this[b] = a[b];
@@ -337,7 +340,7 @@ if(isset($modx->pluginCache['ElementsInTree'])) {
 			<div class="form-group">
 				<input type="hidden" name="dt" value="<?php echo htmlspecialchars($_REQUEST['dt']); ?>" />
 				<label><?php echo $_lang["sort_tree"] ?></label>
-				<select name="sortby" class="form-control form-control-sm">
+				<select name="sortby" class="form-control">
 					<option value="isfolder" <?php echo $_SESSION['tree_sortby'] == 'isfolder' ? "selected='selected'" : "" ?>><?php echo $_lang['folder']; ?></option>
 					<option value="pagetitle" <?php echo $_SESSION['tree_sortby'] == 'pagetitle' ? "selected='selected'" : "" ?>><?php echo $_lang['pagetitle']; ?></option>
 					<option value="longtitle" <?php echo $_SESSION['tree_sortby'] == 'longtitle' ? "selected='selected'" : "" ?>><?php echo $_lang['long_title']; ?></option>
@@ -349,14 +352,14 @@ if(isset($modx->pluginCache['ElementsInTree'])) {
 				</select>
 			</div>
 			<div class="form-group">
-				<select name="sortdir" class="form-control form-control-sm">
+				<select name="sortdir" class="form-control">
 					<option value="DESC" <?php echo $_SESSION['tree_sortdir'] == 'DESC' ? "selected='selected'" : "" ?>><?php echo $_lang['sort_desc']; ?></option>
 					<option value="ASC" <?php echo $_SESSION['tree_sortdir'] == 'ASC' ? "selected='selected'" : "" ?>><?php echo $_lang['sort_asc']; ?></option>
 				</select>
 			</div>
 			<div class="form-group">
 				<label><?php echo $_lang["setting_resource_tree_node_name"] ?></label>
-				<select name="nodename" class="form-control form-control-sm">
+				<select name="nodename" class="form-control">
 					<option value="default" <?php echo $_SESSION['tree_nodename'] == 'default' ? "selected='selected'" : "" ?>><?php echo trim($_lang['default'], ':'); ?></option>
 					<option value="pagetitle" <?php echo $_SESSION['tree_nodename'] == 'pagetitle' ? "selected='selected'" : "" ?>><?php echo $_lang['pagetitle']; ?></option>
 					<option value="longtitle" <?php echo $_SESSION['tree_nodename'] == 'longtitle' ? "selected='selected'" : "" ?>><?php echo $_lang['long_title']; ?></option>
@@ -372,7 +375,7 @@ if(isset($modx->pluginCache['ElementsInTree'])) {
 					<input type="checkbox" name="showonlyfolders" value="<?php echo($_SESSION['tree_show_only_folders'] ? 1 : '') ?>" onclick="this.value = (this.value ? '' : 1);" <?php echo($_SESSION['tree_show_only_folders'] ? '' : ' checked="checked"') ?> /> <?php echo $_lang['view_child_resources_in_container'] ?></label>
 			</div>
 			<div class="text-center">
-				<a href="javascript:;" class="btn btn-primary btn-sm" onclick="modx.tree.updateTree();modx.tree.showSorter(event);" title="<?php echo $_lang['sort_tree']; ?>"><?php echo $_lang['sort_tree']; ?></a>
+				<a href="javascript:;" class="btn btn-primary" onclick="modx.tree.updateTree();modx.tree.showSorter(event);" title="<?php echo $_lang['sort_tree']; ?>"><?php echo $_lang['sort_tree']; ?></a>
 			</div>
 		</form>
 	</div>
@@ -416,6 +419,8 @@ if(isset($modx->pluginCache['ElementsInTree'])) {
 	?>
 
 	<script type="text/javascript">
+		<?php if($modx->hasPermission('edit_template') || $modx->hasPermission('edit_snippet') || $modx->hasPermission('edit_chunk') || $modx->hasPermission('edit_plugin')) { ?>
+
 		document.getElementById('treeMenu_openelements').onclick = function(e) {
 			e.preventDefault();
 			var randomNum = '<?php echo $_lang["elements"] ?>';
@@ -427,6 +432,9 @@ if(isset($modx->pluginCache['ElementsInTree'])) {
 				title: randomNum
 			})
 		};
+		<?php } ?>
+		<?php if($use_browser && $modx->hasPermission('assets_images')) { ?>
+
 		document.getElementById('treeMenu_openimages').onclick = function(e) {
 			e.preventDefault();
 			var randomNum = '<?php echo $_lang["files_files"] ?>';
@@ -438,6 +446,9 @@ if(isset($modx->pluginCache['ElementsInTree'])) {
 				title: randomNum
 			})
 		};
+		<?php } ?>
+		<?php if($use_browser && $modx->hasPermission('assets_files')) { ?>
+
 		document.getElementById('treeMenu_openfiles').onclick = function(e) {
 			e.preventDefault();
 			var randomNum = '<?php echo $_lang["files_files"] ?>';
@@ -449,6 +460,8 @@ if(isset($modx->pluginCache['ElementsInTree'])) {
 				title: randomNum
 			})
 		};
+		<?php } ?>
+
 	</script>
 
 	<?php

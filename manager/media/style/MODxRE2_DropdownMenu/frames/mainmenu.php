@@ -80,7 +80,7 @@ if($modx->hasPermission('edit_user') || $modx->hasPermission('edit_web_user') ||
 	);
 }
 
-if($modx->hasPermission('bk_manager') || $modx->hasPermission('remove_locks') || $modx->hasPermission('import_static') || $modx->hasPermission('export_static') || $modx->hasPermission('settings')) {
+if($modx->hasPermission('empty_cache') || $modx->hasPermission('bk_manager') || $modx->hasPermission('remove_locks') || $modx->hasPermission('import_static') || $modx->hasPermission('export_static')) {
 	$sitemenu['tools'] = array(
 		'tools',
 		'main',
@@ -428,11 +428,14 @@ if($modx->hasPermission('export_static')) {
 }
 
 $menu = $modx->invokeEvent("OnManagerMenuPrerender", array('menu' => $sitemenu));
-$menu = unserialize($menu[0]);
-
 if(is_array($menu)) {
-	$sitemenu = $menu;
+	$newmenu = array();
+	foreach($menu as $item){
+		$newmenu = array_merge($newmenu, unserialize($item));
+	} 
+	$sitemenu = $newmenu;
 }
+
 if(file_exists(MODX_MANAGER_PATH . 'media/style/' . $modx->config['manager_theme'] . '/includes/menu.class.inc.php')) {
 	include_once(MODX_MANAGER_PATH . 'media/style/' . $modx->config['manager_theme'] . '/includes/menu.class.inc.php');
 } else {

@@ -1,12 +1,14 @@
 <?php
 
+use FormLister\CaptchaInterface;
+use FormLister\Core;
 /**
  * Created by PhpStorm.
  * User: Pathologic
  * Date: 19.11.2016
  * Time: 0:27
  */
-class SmsCaptchaWrapper
+class SmsCaptchaWrapper implements CaptchaInterface
 {
     /**
      * @var null
@@ -20,7 +22,7 @@ class SmsCaptchaWrapper
      * @param $modx
      * @param $cfg
      */
-    public function __construct($modx, $cfg)
+    public function __construct(\DocumentParser $modx, $cfg = array())
     {
         $this->cfg = $cfg;
         $this->modx = $modx;
@@ -47,10 +49,10 @@ class SmsCaptchaWrapper
     /**
      * @param \FormLister\Core $FormLister
      * @param $value
-     * @param SmsCaptchaWrapper $captcha
-     * @return bool|mixed
+     * @param \FormLister\CaptchaInterface $captcha
+     * @return bool|string
      */
-    public static function validate(\FormLister\Core $FormLister, $value, \SmsCaptchaWrapper $captcha)
+    public static function validate(Core $FormLister, $value, CaptchaInterface $captcha)
     {
         $id = \APIhelpers::getkey($captcha->cfg, 'id');
         if (empty($value)) {
@@ -63,7 +65,7 @@ class SmsCaptchaWrapper
                 'Получите код авторизации');
         }
 
-        $sms = $FormLister->loadModel('SmsModel', 'assets/snippets/FormLister/lib/captcha/smsCaptcha/model.php');
+        $sms = $FormLister->loadModel('SmsModel');
 
         if (is_null($sms->getData($_SESSION[$id . '.smscaptcha'], $id)->getID())) {
 

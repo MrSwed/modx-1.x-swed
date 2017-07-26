@@ -74,6 +74,7 @@ class DocumentParser {
     var $time;
     var $sid;
     private $q;
+    var $decoded_request_uri;
 
     /**
      * Document constructor
@@ -993,12 +994,12 @@ class DocumentParser {
             if(substr($key, 0, 1) == '#') $key = substr($key, 1); // remove # for QuickEdit format
             
             list($key,$modifiers) = $this->splitKeyAndFilter($key);
-            list($key,$context)   = explode('@',$key,2);
+            list($key,$context)   = explode('@',$key . '@',2);
             
-            if(!isset($ph[$key]) && !$context) continue;
-            elseif($context) $value = $this->_contextValue("{$key}@{$context}");
-            else             $value = $ph[$key];
-            
+            // if(!isset($ph[$key]) && !$context) continue; // #1218 TVs/PHs will not be rendered if custom_meta_title is not assigned to template like [*custom_meta_title:ne:then=`[*custom_meta_title*]`:else=`[*pagetitle*]`*]
+            if($context) $value = $this->_contextValue("{$key}@{$context}");
+            else         $value = isset($ph[$key]) ? $ph[$key] : '';
+
             if (is_array($value)) {
                 include_once(MODX_MANAGER_PATH . 'includes/tmplvars.format.inc.php');
                 include_once(MODX_MANAGER_PATH . 'includes/tmplvars.commands.inc.php');
@@ -1350,7 +1351,7 @@ class DocumentParser {
         if (is_array($params)) {
             extract($params, EXTR_SKIP);
         }
-        
+        /* if uncomment incorrect work plugin, cant understend where use this code and for what?
         $lock_file_path = MODX_BASE_PATH . 'assets/cache/lock_' . str_replace(' ','-',strtolower($this->event->activePlugin)) . '.pageCache.php';
         if($this->isBackend()) {
             if(is_file($lock_file_path)) {
@@ -1359,12 +1360,12 @@ class DocumentParser {
                 return;
             }
             elseif(stripos($this->event->activePlugin,'ElementsInTree')===false) touch($lock_file_path);
-        }
+        }*/
         ob_start();
         eval($pluginCode);
         $msg = ob_get_contents();
         ob_end_clean();
-        if(is_file($lock_file_path)) unlink($lock_file_path);
+        /*if(is_file($lock_file_path)) unlink($lock_file_path);*/
         
         if ((0 < $this->config['error_reporting']) && $msg && isset($php_errormsg)) {
             $error_info = error_get_last();
@@ -1748,7 +1749,7 @@ class DocumentParser {
     
     function toAlias($text) {
         $suff= $this->config['friendly_url_suffix'];
-        return str_replace(array('.xml'.$suff,'.rss'.$suff,'.js'.$suff,'.css'.$suff,'.txt'.$suff,'.json'.$suff),array('.xml','.rss','.js','.css','.txt','.json'),$text);
+        return str_replace(array('.xml'.$suff,'.rss'.$suff,'.js'.$suff,'.css'.$suff,'.txt'.$suff,'.json'.$suff,'.pdf'.$suff),array('.xml','.rss','.js','.css','.txt','.json','.pdf'),$text);
     }
     
     /**
@@ -1902,7 +1903,7 @@ class DocumentParser {
                 else          $url = $site_url;
                 if ($this->config['base_url'] != $_SERVER['REQUEST_URI']){    
                     if (empty($_POST)){
-                        if (('/?'.$qstring) != $_SERVER['REQUEST_URI']) {
+                        if (($this->config['base_url'].'?'.$qstring) != $_SERVER['REQUEST_URI']) {
                             $this->sendRedirect($url,0,'REDIRECT_HEADER', 'HTTP/1.0 301 Moved Permanently');
                             exit(0);
                         }
@@ -1915,7 +1916,7 @@ class DocumentParser {
             
             if(!empty($url_query_string))
                 $qstring = preg_replace("#(^|&)(q|id)=[^&]+#", '', $url_query_string);  // Strip conflicting id/q from query string
-            if ($qstring) $url = "{$site_url}{$strictURL}?{$qstring}";
+            if (!empty($qstring)) $url = "{$site_url}{$strictURL}?{$qstring}";
             else          $url = "{$site_url}{$strictURL}";
             $this->sendRedirect($url,0,'REDIRECT_HEADER', 'HTTP/1.0 301 Moved Permanently');
             exit(0);
@@ -2056,8 +2057,8 @@ class DocumentParser {
             $source = $this->ignoreCommentedTagsContent($source);
             $source = $this->mergeConditionalTagsContent($source);
             
-            $source = $this->mergeDocumentContent($source);
             $source = $this->mergeSettingsContent($source);
+            $source = $this->mergeDocumentContent($source);
             $source = $this->mergeChunkContent($source);
             $source = $this->mergeDocumentMETATags($source);
             $source = $this->evalSnippets($source);
@@ -2148,7 +2149,7 @@ class DocumentParser {
                         $parentId = $this->getIdFromAlias($parentAlias);
                         $parentId = ($parentId > 0) ? $parentId : '0';
 
-                        $docAlias = basename($alias, $this->config['friendly_url_suffix']);
+                        $docAlias = $this->mb_basename($alias, $this->config['friendly_url_suffix']);
 
                         $rs  = $this->db->select('id', $tbl_site_content, "deleted=0 and parent='{$parentId}' and alias='{$docAlias}'");
                         if($this->db->getRecordCount($rs)==0)
@@ -2216,6 +2217,11 @@ class DocumentParser {
         }
         if($this->config['seostrict']==='1') $this->sendStrictURI();
         $this->prepareResponse();
+    }
+    
+    function mb_basename($path, $suffix = null) {
+    	$exp = explode('/', $path);
+    	return str_replace($suffix, '', end($exp));
     }
 
     function _IIS_furl_fix()
@@ -3752,43 +3758,47 @@ class DocumentParser {
         else {
             $result= array ();
             // get user defined template variables
-            $fields= ($tvfields == "") ? "tv.*" : 'tv.' . implode(',tv.', array_filter(array_map('trim', explode(',', $tvfields))));
-            $tvsort= ($tvsort == "") ? "" : 'tv.' . implode(',tv.', array_filter(array_map('trim', explode(',', $tvsort))));
+            if($tvfields) {
+                $_ = array_filter(array_map('trim', explode(',', $tvfields)));
+                foreach($_ as $i=>$v) {
+                    if($v==='value') unset($_[$i]);
+                    else             $_[$i] = 'tv.' . $v;
+                }
+                $fields = join(',', $_);
+            }
+            else $fields = "tv.*";
+            
+            if($tvsort!='') {
+                $tvsort = 'tv.' . join(',tv.', array_filter(array_map('trim', explode(',', $tvsort))));
+            }
             if ($tvidnames == "*")
                 $query= "tv.id<>0";
             else
-                $query= (is_numeric($tvidnames[0]) ? "tv.id" : "tv.name") . " IN ('" . implode("','", $tvidnames) . "')";
-            if ($docgrp= $this->getUserDocGroups())
-                $docgrp= implode(",", $docgrp);
+                $query= (is_numeric($tvidnames[0]) ? "tv.id" : "tv.name") . " IN ('" . join("','", $tvidnames) . "')";
+            
+            if ($docgrp= $this->getUserDocGroups()) $docgrp= join(',', $docgrp);
 
-            $docCount= count($docs);
-            for ($i= 0; $i < $docCount; $i++) {
+            foreach ($docs as $doc) {
 
-                $docRow= $docs[$i];
-                $docid= $docRow['id'];
+                $docid= $doc['id'];
 
                 $rs = $this->db->select(
                     "{$fields}, IF(tvc.value!='',tvc.value,tv.default_text) as value ",
-                    $this->getFullTableName('site_tmplvars') . " tv 
-                        INNER JOIN " . $this->getFullTableName('site_tmplvar_templates')." tvtpl ON tvtpl.tmplvarid = tv.id
-                        LEFT JOIN " . $this->getFullTableName('site_tmplvar_contentvalues')." tvc ON tvc.tmplvarid=tv.id AND tvc.contentid = '{$docid}'",
-                    "{$query} AND tvtpl.templateid = '{$docRow['template']}'",
+                    "[+prefix+]site_tmplvars tv 
+                        INNER JOIN [+prefix+]site_tmplvar_templates tvtpl ON tvtpl.tmplvarid = tv.id
+                        LEFT JOIN [+prefix+]site_tmplvar_contentvalues tvc ON tvc.tmplvarid=tv.id AND tvc.contentid='{$docid}'",
+                    "{$query} AND tvtpl.templateid = '{$doc['template']}'",
                     ($tvsort ? "{$tvsort} {$tvsortdir}" : "")
                     );
                 $tvs = $this->db->makeArray($rs);
 
                 // get default/built-in template variables
-                ksort($docRow);
-                foreach ($docRow as $key => $value) {
-                    if ($tvidnames == "*" || in_array($key, $tvidnames))
-                        array_push($tvs, array (
-                            "name" => $key,
-                            "value" => $value
-                        ));
+                ksort($doc);
+                foreach ($doc as $key => $value) {
+                    if ($tvidnames == '*' || in_array($key, $tvidnames))
+                        $tvs[] = array ('name'=>$key,'value'=>$value);
                 }
-
-                if (count($tvs))
-                    array_push($result, $tvs);
+                if (count($tvs)) $result[] = $tvs;
             }
             return $result;
         }
@@ -4606,10 +4616,10 @@ class DocumentParser {
      * @return array Associative array in the form property name => property value
      */
     function parseProperties($propertyString, $elementName = null, $elementType = null) {
+        if(empty($propertyString)) return array();
         $propertyString = trim($propertyString);
         $propertyString = str_replace('{}', '', $propertyString );
         $propertyString = str_replace('} {', ',', $propertyString );
-        if(empty($propertyString)) return array();
         if($propertyString=='{}')  return array();
         
         $jsonFormat = $this->isJson($propertyString, true);

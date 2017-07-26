@@ -3,14 +3,28 @@
 menu->Build('id','parent','name','link','alt','onclick','permission','target','divider 1/0','menuindex', 'class')
 */
 
+$sitemenu['bars'] = array(
+	'bars',
+	'main',
+	'<i class="fa fa-bars"></i>',
+	'javascript:;',
+	$_lang['home'],
+	'modx.resizer.toggle(); return false;',
+	' return false;',
+	'',
+	0,
+	10,
+	''
+);
+
 //mainMenu
 $sitemenu['site'] = array(
 	'site',
 	'main',
-	'<i class="fa fa-modx fa-lg"></i>' . $_lang['home'],
+	'<i class="fa fa-modx"></i>' . $_lang['home'],
 	'index.php?a=2',
 	$_lang['home'],
-	'modx.mainMenu.navToggle(this);',
+	'',
 	'',
 	'main',
 	0,
@@ -22,10 +36,10 @@ if($modx->hasPermission('edit_template') || $modx->hasPermission('edit_snippet')
 	$sitemenu['elements'] = array(
 		'elements',
 		'main',
-		'<i class="fa fa-th fa-lg"></i>' . $_lang['elements'],
-		'#elements',
+		'<i class="fa fa-th"></i>' . $_lang['elements'],
+		'javascript:;',
 		$_lang['elements'],
-		'modx.mainMenu.navToggle(this); return false;',
+		' return false;',
 		'',
 		'',
 		0,
@@ -38,10 +52,10 @@ if($modx->hasPermission('exec_module')) {
 	$sitemenu['modules'] = array(
 		'modules',
 		'main',
-		'<i class="fa fa-cogs fa-lg"></i>' . $_lang['modules'],
-		'#modules',
+		'<i class="fa fa-cogs"></i>' . $_lang['modules'],
+		'javascript:;',
 		$_lang['modules'],
-		'modx.mainMenu.navToggle(this); return false;',
+		' return false;',
 		'',
 		'',
 		0,
@@ -54,10 +68,10 @@ if($modx->hasPermission('edit_user') || $modx->hasPermission('edit_web_user') ||
 	$sitemenu['users'] = array(
 		'users',
 		'main',
-		'<i class="fa fa-users fa-lg"></i>' . $_lang['users'],
-		'#users',
+		'<i class="fa fa-users"></i>' . $_lang['users'],
+		'javascript:;',
 		$_lang['users'],
-		'modx.mainMenu.navToggle(this); return false;',
+		' return false;',
 		'edit_user',
 		'',
 		0,
@@ -66,14 +80,14 @@ if($modx->hasPermission('edit_user') || $modx->hasPermission('edit_web_user') ||
 	);
 }
 
-if($modx->hasPermission('bk_manager') || $modx->hasPermission('remove_locks') || $modx->hasPermission('import_static') || $modx->hasPermission('export_static') || $modx->hasPermission('settings')) {
+if($modx->hasPermission('empty_cache') || $modx->hasPermission('bk_manager') || $modx->hasPermission('remove_locks') || $modx->hasPermission('import_static') || $modx->hasPermission('export_static')) {
 	$sitemenu['tools'] = array(
 		'tools',
 		'main',
-		'<i class="fa fa-wrench fa-lg"></i>' . $_lang['tools'],
-		'#tools',
+		'<i class="fa fa-wrench"></i>' . $_lang['tools'],
+		'javascript:;',
 		$_lang['tools'],
-		'modx.mainMenu.navToggle(this); return false;',
+		' return false;',
 		'',
 		'',
 		0,
@@ -94,7 +108,7 @@ if($modx->hasPermission('edit_template')) {
 		'main',
 		0,
 		10,
-		''
+		'toggle-dropdown'
 	);
 }
 if($modx->hasPermission('edit_template') && $modx->hasPermission('edit_snippet') && $modx->hasPermission('edit_chunk') && $modx->hasPermission('edit_plugin')) {
@@ -109,7 +123,7 @@ if($modx->hasPermission('edit_template') && $modx->hasPermission('edit_snippet')
 		'main',
 		0,
 		20,
-		''
+		'toggle-dropdown'
 	);
 }
 if($modx->hasPermission('edit_chunk')) {
@@ -124,7 +138,7 @@ if($modx->hasPermission('edit_chunk')) {
 		'main',
 		0,
 		30,
-		''
+		'toggle-dropdown'
 	);
 }
 if($modx->hasPermission('edit_snippet')) {
@@ -139,7 +153,7 @@ if($modx->hasPermission('edit_snippet')) {
 		'main',
 		0,
 		40,
-		''
+		'toggle-dropdown'
 	);
 }
 if($modx->hasPermission('edit_plugin')) {
@@ -154,7 +168,7 @@ if($modx->hasPermission('edit_plugin')) {
 		'main',
 		0,
 		50,
-		''
+		'toggle-dropdown'
 	);
 }
 //$sitemenu['element_categories']     = array('element_categories','elements',$_lang['element_categories'],'index.php?a=76&tab=5',$_lang['element_categories'],'','new_template,edit_template,new_snippet,edit_snippet,new_chunk,edit_chunk,new_plugin,edit_plugin','main',1,60,'');
@@ -189,6 +203,7 @@ if($modx->hasPermission('category_manager')) {
 		''
 	);
 }
+
 // Modules Menu Items
 if($modx->hasPermission('new_module')) {
 	$sitemenu['new_module'] = array(
@@ -250,7 +265,7 @@ if($modx->hasPermission('edit_user')) {
 		'main',
 		0,
 		10,
-		''
+		'toggle-dropdown'
 	);
 }
 
@@ -266,7 +281,7 @@ if($modx->hasPermission('edit_web_user')) {
 		'main',
 		0,
 		20,
-		''
+		'toggle-dropdown'
 	);
 }
 
@@ -413,13 +428,19 @@ if($modx->hasPermission('export_static')) {
 }
 
 $menu = $modx->invokeEvent("OnManagerMenuPrerender", array('menu' => $sitemenu));
-$menu = unserialize($menu[0]);
-
 if(is_array($menu)) {
-	$sitemenu = $menu;
+	$newmenu = array();
+	foreach($menu as $item){
+		$newmenu = array_merge($newmenu, unserialize($item));
+	} 
+	$sitemenu = $newmenu;
 }
 
-include_once(MODX_MANAGER_PATH . 'includes/menu.class.inc.php');
+if(file_exists(MODX_MANAGER_PATH . 'media/style/' . $modx->config['manager_theme'] . '/includes/menu.class.inc.php')) {
+	include_once(MODX_MANAGER_PATH . 'media/style/' . $modx->config['manager_theme'] . '/includes/menu.class.inc.php');
+} else {
+	include_once(MODX_MANAGER_PATH . 'includes/menu.class.inc.php');
+}
 $menu = new EVOmenu();
 $menu->Build($sitemenu, array(
 	'outerClass' => 'nav',

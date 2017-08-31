@@ -10,14 +10,19 @@
   *  added by: MrSwed
 */
 
-$debug="";
+$debug = "";
+$from_default= "%d-%m-%Y %H:%i:%s";
 if (empty($options)) $options = "%H:%M %d.%m.%Y";
-$options = explode("|",$options);
-if (!is_numeric($output)) {
- if (empty($options[1])) $options[1] = "%d-%m-%Y %H:%M:%S";
- $parsed = date_parse_from_format($output,$options[1]);
- $output = mktime($parsed['hour'],$parsed['min'],$parsed['sec'],$parsed['mon']+1,$parsed['mday'],$parsed['year']+1900);
-}
-return strftime($options[0],$output);
+$options = explode("|", $options); // [0] - format-to [1] - format-from
+if (is_numeric($output) and empty($options[1])) {
+	$options[1] = "U";
+} else if (empty($options[1])) $options[1] = $from_default;
+
+foreach ($options as $k => $v) if (!empty($v)) $options[$k] = str_replace("%", "", $v);
+
+if ($outputTry = DateTime::createFromFormat($options[1],$output)) 
+		$output = $outputTry->format($options[0]);
+	
+return $output;
 
 ?>

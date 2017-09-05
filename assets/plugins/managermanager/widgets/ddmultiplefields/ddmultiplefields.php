@@ -1,7 +1,7 @@
 <?php
 /**
  * mm_ddMultipleFields
- * @version 4.6-SD (2017-01-31)
+ * @version 4.6.1-SD (2017-05-15)
  * 
  * @desc Widget for plugin ManagerManager that allows you to add any number of fields values (TV) in one document (values is written as one with using separator symbols). For example: a few images.
  * 
@@ -30,6 +30,11 @@
  * @copyright 2014, DivanDesign
  * http://www.DivanDesign.biz
  */
+
+function isJson($string) {
+ json_decode($string);
+ return (json_last_error() == JSON_ERROR_NONE);
+}
 
 function mm_ddMultipleFields($tvs = '', $roles = '', $templates = '', $columns = 'field', $columnsTitle = '', $colWidth = '180', $splY = '||', $splX = '::', $imgW = 300, $imgH = 100, $minRow = 0, $maxRow = 0, $columnsData = '',$options = array()){
 	if (!useThisRule($roles, $templates)){return;}
@@ -67,15 +72,8 @@ function mm_ddMultipleFields($tvs = '', $roles = '', $templates = '', $columns =
 			$columnsData = array();
 			
 			foreach ($columnsDataTemp as $value){
-				//Евалим знение и записываем результат или исходное значени
-				try {
-			    	$eval = eval($value);
-			    } catch (Throwable $t) {
-			    	echo $t->getMessage(), "\n";
-			    } catch (Exception $e) {
-			    	echo $e->getMessage(), "\n";
-			    }
-				$columnsData[] = $eval ? addslashes(json_encode($eval)) : addslashes($value);
+				//Проверяем значение и записываем результат или исходное значени
+				$columnsData[] = addslashes(!isJson($value) ? json_encode($value) : $value);
 			}
 			//Сливаем в строку, что бы передать на клиент
 			$columnsData = implode('||', $columnsData);

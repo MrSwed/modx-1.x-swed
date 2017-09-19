@@ -92,7 +92,7 @@ $value = $modx->runSnippet("ddGetMultipleField", array(
 // Если для текущего ничего нет, ищем родительские с разрешенным наследованием
 $cid = $id;
 while (empty($value) and (int)$cid != $rootID and --$depth > 0) {
-	$value = $modx->getTemplateVarOutput(array($tv, "parent"), $cid, 1);
+	$value = $modx->getTemplateVarOutput(array($tv, "parent"), $cid, "all");
 	$cid = $value["parent"];
 	$value = $value[$tv];
 	if ("0" == $modx->runSnippet("ddGetMultipleField", array(

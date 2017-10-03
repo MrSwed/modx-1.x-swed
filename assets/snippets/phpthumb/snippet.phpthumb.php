@@ -5,7 +5,7 @@
  * PHPThumb creates thumbnails and altered images on the fly and caches them
  *
  * @category 	snippet
- * @version 	1.3
+ * @version 	1.3.1
  * @license 	http://www.gnu.org/copyleft/gpl.html GNU Public License (GPL)
  * @internal	@properties
  * @internal	@modx_category Content
@@ -20,6 +20,16 @@
  */
 if(!defined('MODX_BASE_PATH')){die('What are you doing? Get out of here!');}
 
+if (!empty($input)) {
+	$parse_input = parse_url($input);
+	if (!empty($parse_input["host"])) return $input; // Do not handle remote images
+	$input = rawurldecode($input);
+}
+
+if (empty($input) || !file_exists(MODX_BASE_PATH . $input)) {
+	$input = isset($noImage)?$noImage:'assets/snippets/phpthumb/noimage.png';
+}
+
 $newfolderaccessmode = $modx->config['new_folder_permissions'] ? octdec($modx->config['new_folder_permissions']) : 0777;
 
 $cacheFolder=isset($cacheFolder) ? $cacheFolder : "assets/cache/images";
@@ -29,11 +39,6 @@ if(!is_dir(MODX_BASE_PATH.$cacheFolder)) {
 }
 
 $tmpFolder = 'assets/cache/tmp';
-if (!empty($input)) $input = rawurldecode($input);
-
-if(empty($input) || !file_exists(MODX_BASE_PATH . $input)){
-    $input = isset($noImage) ? $noImage : 'assets/snippets/phpthumb/noimage.png';
-}
 
 // allow read in phpthumb cache folder
 if (strpos($cacheFolder, 'assets/cache/') === 0 && $cacheFolder != 'assets/cache/' && !is_file(MODX_BASE_PATH . $cacheFolder . '/.htaccess')) {
@@ -51,7 +56,7 @@ $tmpImagesFolder=str_replace(MODX_BASE_PATH . "assets/images","",$path_parts['di
 $tmpImagesFolder=str_replace("assets/images","",$tmpImagesFolder);
 $tmpImagesFolder=explode("/",$tmpImagesFolder);
 $ext=strtolower($path_parts['extension']);
-$options = 'f='.(in_array($ext,explode(",","png,gif,jpeg"))?$ext:"jpg&q=85").'&'.strtr($options, Array("," => "&", "_" => "=", '{' => '[', '}' => ']'));
+$options = 'f='.(in_array($ext,explode(",","png,gif"))?$ext:"jpg&q=96").'&'.strtr($options, Array("," => "&", "_" => "=", '{' => '[', '}' => ']'));
 parse_str($options, $params);
 foreach ($tmpImagesFolder as $folder) {
     if (!empty($folder)) {
